@@ -1,0 +1,54 @@
+{
+  "name": "react-three",
+  "version": "0.1.0-EXPERIMENTAL",
+  "description": "Construct three.js scenes using React",
+  "keywords": [
+    "react",
+    "threejs",
+    "webGL",
+    "canvas"
+  ],
+  "author": {
+    "name": "Gary Haussmann",
+    "email": "gjhaussmann@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Izzimach/react-three"
+  },
+  "license": "Apache-2.0",
+  "main": "build/react-three.js",
+  "dependencies": {
+    "react": "0.11.1"
+  },
+  "devDependencies": {
+    "http": "0.0.0",
+    "node-static": "~0.7.3",
+    "phantomjs": "~1.9.7-1",
+    "karma": "~0.12.3",
+    "karma-phantomjs-launcher": "git://github.com/karma-runner/karma-phantomjs-launcher#master",
+    "karma-chrome-launcher": "~0.1.3",
+    "gulp": "~3.6.0",
+    "vinyl-source-stream": "~0.1.1",
+    "browserify": "~4.1.0",
+    "gulp-streamify": "0.0.5",
+    "gulp-jshint": "~1.5.1",
+    "gulp-livereload": "~1.2.0",
+    "jshint-stylish": "~0.1.5",
+    "gulp-util": "~2.2.14",
+    "react-tools": "~0.10.0",
+    "karma-firefox-launcher": "~0.1.3",
+    "gulp-header": "~1.0.2",
+    "gulp-uglify": "~0.2.1",
+    "gulp-rename": "~1.2.0",
+    "karma-jasmine": "~0.2.2",
+    "resemblejs": "~1.0.1",
+    "gulp-concat": "~2.2.0"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

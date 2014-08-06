@@ -1,0 +1,30 @@
+<!DOCTYPE html><html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+
+    <title>React-pixi Example: Spinning Sprites</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
+        #pixi-box canvas {
+            display: block;
+            margin: auto;
+            padding: 0;
+            border : 0;
+        }
+    </style>
+    <script src="../../vendor/pixi.dev.js"></script>
+    <script src="../../build/react-pixi.js"></script>
+    <script src="spinningsprite.js"></script>
+</head>
+<body>
+    <div id="pixi-box"></div>
+    <script>
+    window.onload = spinningspritestart;
+    </script>
+ </body>
+</html>

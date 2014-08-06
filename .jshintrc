@@ -1,0 +1,11 @@
+{
+	"unused": true,
+	"undef" : true,
+	"globalstrict": true,
+	"browser":true,
+	"globals" : {
+	  "module" : false,
+	  "require" : false,
+	  "THREE" : false
+	}
+}

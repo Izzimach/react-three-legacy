@@ -1,4 +1,7 @@
 react-three
 ===========
 
-React bindings to create and control a 3D scene using three.js
+Create/control a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
+
+
+![Sample Cupcake component](docs/react-pixi-devshot.png)
