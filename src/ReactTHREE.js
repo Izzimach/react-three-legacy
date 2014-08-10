@@ -90,6 +90,16 @@ var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
     }
   },
 
+  transferTHREEObject3DPropsByName: function(oldProps, newProps, propnames) {
+    var THREEObject3D = this._THREEObject3D;
+
+    propnames.forEach(function(propname) {
+      if (typeof newProps[propname] !== 'undefined') {
+        THREEObject3D[propname] = newProps[propname];
+      }
+    });
+  },
+
   mountComponentIntoNode: function() {
     throw new Error(
       'You cannot render a three.js component standalone. ' +
@@ -345,39 +355,6 @@ var THREEScene = defineTHREEComponent(
   }
 );
 
-var MeshObjectMixin = {
-  createTHREEObject: function() {
-    return new THREE.Mesh(new THREE.Geometry(), new THREE.Material()); // starts out empty
-  },
-
-  applySpecificTHREEProps: function (oldProps, newProps) {
-    var THREEObject3D = this._THREEObject3D;
-    if ((typeof newProps.geometry !== 'undefined') &&
-        (newProps.geometry !== oldProps.geometry))
-    {
-      // make a local copy unless it's shared
-      if (newProps.shared === true) {
-        THREEObject3D.geometry = newProps.geometry;
-      }
-      else {
-        THREEObject3D.geometry = newProps.geometry.clone();
-      }
-
-    }
-
-    if ((typeof newProps.material !== 'undefined') &&
-        (newProps.material !== oldProps.material))
-    {
-      if (newProps.shared === true) {
-        THREEObject3D.material = newProps.material;
-      }
-      else {
-        THREEObject3D.material = newProps.material.clone(THREEObject3D.material);
-      }
-    }
-
-  }
-};
 
 var THREEObject3D = defineTHREEComponent(
   'Object3D',
@@ -388,14 +365,298 @@ var THREEMesh = defineTHREEComponent(
   'Mesh',
   ReactComponentMixin,
   THREEObject3DMixin,
-  MeshObjectMixin);
+  {
+    createTHREEObject: function() {
+      return new THREE.Mesh(new THREE.Geometry(), new THREE.Material()); // starts out empty
+    },
 
-// module data
+    applySpecificTHREEProps: function (oldProps, newProps) {
+      var THREEObject3D = this._THREEObject3D;
+      if ((typeof newProps.geometry !== 'undefined') &&
+          (newProps.geometry !== oldProps.geometry))
+      {
+        // make a local copy unless it's shared
+        if (newProps.shared === true) {
+          THREEObject3D.geometry = newProps.geometry;
+        }
+        else {
+          THREEObject3D.geometry = newProps.geometry.clone();
+        }
 
-module.exports =  {
-  Scene: THREEScene,
-  Object3D: THREEObject3D,
-  Mesh: THREEMesh
+      }
+
+      if ((typeof newProps.material !== 'undefined') &&
+          (newProps.material !== oldProps.material))
+      {
+        if (newProps.shared === true) {
+          THREEObject3D.material = newProps.material;
+        }
+        else {
+          THREEObject3D.material = newProps.material.clone(THREEObject3D.material);
+        }
+      }
+
+    }
+  }
+);
+
+var LightObjectMixin = {
+  applySpecificTHREEProps: function (oldProps, newProps) {
+    var THREEObject3D = this._THREEObject3D;
+    if ((typeof newProps.color !== 'undefined') &&
+        (newProps.color !== oldProps.color))
+    {
+      THREEObject3D.color = newProps.color;
+    }
+  }
 };
 
+var THREEAmbientLight = defineTHREEComponent(
+  'AmbientLight',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.AmbientLight(0x000000);
+    },
 
+    applySpecificTHREEProps: function (oldProps, newProps) {
+      LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
+    }
+  }
+);
+
+var THREEPointLight = defineTHREEComponent(
+  'PointLight',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.PointLight(0xffffff, 1, 100);
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
+
+      this.transferTHREEObject3DPropsByName(oldProps, newProps, ['intensity','distance']);
+    }
+  }
+);
+
+var THREEAreaLight = defineTHREEComponent(
+  'AreaLight',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.AreaLight(0xffffff, 1);
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
+
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                            ['right',
+                                             'normal',
+                                             'height',
+                                             'width',
+                                             'intensity',
+                                             'constantAttenuation',
+                                             'linearAttenuation',
+                                             'quadraticAttenuation']);
+    }
+  }
+);
+
+var CommonShadowmapProps = [
+  'shadowCameraNear',
+  'shadowCameraFar',
+  'shadowCameraVisible',
+  'shadowBias',
+  'shadowDarkness',
+  'shadowMapWidth',
+  'shadowMapHeight',
+  'shadowMap',
+  'shadowMapSize',
+  'shadowCamera',
+  'shadowMatrix'
+];
+
+var THREEDirectionalLight = defineTHREEComponent(
+  'DirectionalLight',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.DirectionalLight(0xffffff,1);
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
+
+      this.transferTHREEObject3DPropsByName(oldProps, newProps, CommonShadowmapProps);
+
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                            ['target',
+                                             'intensity',
+                                             'onlyShadow',
+                                             'shadowCameraLeft',
+                                             'shadowCameraRight',
+                                             'shadowCameraTop',
+                                             'shadowCameraBottom',
+                                             'shadowCascade',
+                                             'shadowCascadeOffset',
+                                             'shadowCascadeCount',
+                                             'shadowCascadeBias',
+                                             'shadowCascadeWidth',
+                                             'shadowCascadeHeight',
+                                             'shadowCascadeNearZ',
+                                             'shadowCascadeFarZ',
+                                             'shadowCascadeArray']);
+
+    }
+  }
+);
+
+
+
+var THREEHemisphereLight = defineTHREEComponent(
+  'HemisphereLight',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.HemisphereLight(0x8888ff, 0x000000, 1);
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
+
+      // sky color gets mapped to 'color'
+      if (typeof newProps.skyColor !== 'undefined') {
+        this._THREEObject3D.color = newProps.skyColor;
+      }
+
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                            ['groundColor',
+                                             'intensity']);
+    }
+  }
+);
+
+
+var THREESpotLight = defineTHREEComponent(
+  'SpotLight',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.SpotLight(0xffffff, 1);
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
+
+      this.transferTHREEObject3DPropsByName(oldProps, newProps, CommonShadowmapProps);
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                            ['target',
+                                             'intensity',
+                                             'distance',
+                                             'angle',
+                                             'exponent',
+                                             'castShadow',
+                                             'onlyShadow',
+                                             'shadowCameraFov']);
+    }
+  }
+);
+
+var THREELine = defineTHREEComponent(
+  'Line',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.Line(new THREE.Geometry());
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      this.transferTHREEObject3DPropsByName(oldProps,newProps,
+                                           ['geometry','material','type']);
+    }
+  }
+);
+
+var THREEPointCloud = defineTHREEComponent(
+  'PointCloud',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.PointCloud(new THREE.Geometry());
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                           ['geometry','material','frustumCulled','sortParticles']);
+    }
+  }
+);
+
+var THREESkinnedMesh = defineTHREEComponent(
+  'SkinnedMesh',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    // skinned mesh is special since it needs the geometry and material data upon construction
+    mountComponent: function(transaction) {
+      ReactComponentMixin.mountComponent.apply(this, arguments);
+      this._THREEObject3D = new THREE.SkinnedMesh(this.props.geometry, this.props.material);
+      this.applyTHREEObject3DProps({}, this.props);
+      this.applySpecificTHREEProps({}, this.props);
+
+      this.mountAndAddChildren(this.props.children, transaction);
+      return this._THREEObject3D;
+    },
+
+    applySpecificTHREEProps: function(/*oldProps, newProps*/) {
+    }
+  }
+);
+
+var THREESprite = defineTHREEComponent(
+  'Sprite',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.Sprite();
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                           ['material']);
+    }
+  }
+);
+
+//
+// module data
+//
+
+module.exports =  {
+  Scene : THREEScene,
+  Object3D : THREEObject3D,
+  Line : THREELine,
+  PointCloud : THREEPointCloud,
+  Mesh : THREEMesh,
+  SkinnedMesh : THREESkinnedMesh,
+  Sprite : THREESprite,
+  AmbientLight : THREEAmbientLight,
+  PointLight : THREEPointLight,
+  AreaLight: THREEAreaLight,
+  DirectionalLight: THREEDirectionalLight,
+  HemisphereLight: THREEHemisphereLight,
+  SpotLight: THREESpotLight
+
+};
