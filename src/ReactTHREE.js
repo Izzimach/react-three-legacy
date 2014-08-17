@@ -23,15 +23,21 @@
 
 //var React = require('react/react.js');
 
-var DOMPropertyOperations = require('react/lib/DOMPropertyOperations');
+var ReactMount = require('react/lib/ReactMount');
 var ReactComponent = require('react/lib/ReactComponent');
+var ReactComponentMixin = ReactComponent.Mixin;
 var ReactUpdates = require('react/lib/ReactUpdates');
-//var ReactMount = require('react/lib/ReactMount');
 var ReactMultiChild = require('react/lib/ReactMultiChild');
 var ReactBrowserComponentMixin = require('react/lib/ReactBrowserComponentMixin');
 var ReactDescriptor = require('react/lib/ReactDescriptor');
+
 var ReactDOMComponent = require('react/lib/ReactDOMComponent');
-var ReactComponentMixin = ReactComponent.Mixin;
+var ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
+
+//var DOMPropertyOperations = require('react/lib/DOMPropertyOperations');
+var ReactBrowserEventEmitter = require('react/lib/ReactBrowserEventEmitter');
+var putListener = ReactBrowserEventEmitter.putListener;
+var listenTo = ReactBrowserEventEmitter.listenTo;
 
 var mixInto = require('react/lib/mixInto');
 var merge = require('react/lib/merge');
@@ -88,6 +94,10 @@ var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
     } else {
       THREEObject3D.scale.set(1,1,1);
     }
+
+    if (typeof props.name !== 'undefined') {
+      THREEObject3D.name = props.name;
+    }
   },
 
   transferTHREEObject3DPropsByName: function(oldProps, newProps, propnames) {
@@ -119,6 +129,7 @@ var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
   mountComponent: function(transaction) {
     ReactComponentMixin.mountComponent.apply(this, arguments);
     this._THREEObject3D = this.createTHREEObject(arguments);
+    this._THREEObject3D.userData = this;
     this.applyTHREEObject3DProps({}, this.props);
     this.applySpecificTHREEProps({}, this.props);
 
@@ -232,6 +243,9 @@ var THREEScene = defineTHREEComponent(
   ReactComponentMixin,
   THREESceneMixin, {
 
+    _tagOpen: '<canvas',
+    _tagClose: '</canvas>',
+
     mountComponent: function(rootID, transaction, mountDepth) {
       ReactComponentMixin.mountComponent.call(
         this,
@@ -240,9 +254,13 @@ var THREEScene = defineTHREEComponent(
         mountDepth
       );
       transaction.getReactMountReady().enqueue(this.componentDidMount, this);
-      // Temporary placeholder
-      var idMarkup = DOMPropertyOperations.createMarkupForID(rootID);
-      return '<canvas ' + idMarkup + '></canvas>';
+
+      // this registers listeners so users can handle onClick etc.
+      return (
+        this._createOpenTagMarkupAndPutListeners(transaction) +
+        this._createContentMarkup(transaction) +
+        this._tagClose
+      );
     },
 
     setApprovedDOMProperties: function(nextProps) {
@@ -289,6 +307,8 @@ var THREEScene = defineTHREEComponent(
       this._THREErenderer = new THREE.WebGLRenderer({canvas:renderelement});
       this._THREErenderer.setSize(+props.width, +props.height);
       this._THREEcamera = camera;
+      this._THREEprojector = new THREE.Projector();
+      this._THREEraycaster = new THREE.Raycaster();
       this.setApprovedDOMProperties(props);
       this.applyTHREEObject3DProps({},this.props);
 
@@ -314,6 +334,15 @@ var THREEScene = defineTHREEComponent(
         that.renderScene();
       }
 
+      var container = ReactMount.findReactContainerForID(this._rootNodeID);
+      if (container) {
+        var doc = container.nodeType === ELEMENT_NODE_TYPE ?
+            container.ownerDocument :
+        container;
+        listenTo('onClick', doc);
+      }
+      putListener(this._rootNodeID, 'onClick', function(event) { that.projectClick(event);});
+
       this.props = props;
     },
 
@@ -337,21 +366,48 @@ var THREEScene = defineTHREEComponent(
       this.applyTHREEObject3DProps(this.props, props);
 
       this.updateChildren(props.children, transaction);
+      this.props = props;
       this.renderScene();
     },
 
     unmountComponent: function() {
-      ReactComponentMixin.unmountComponent.call(this);
+      this.unmountChildren();
+      ReactBrowserEventEmitter.deleteAllListeners(this._rootNodeID);
+      ReactComponent.Mixin.unmountComponent.call(this);
       if (typeof this._rAFID !== 'undefined') {
         window.cancelAnimationFrame(this._rAFID);
       }
-      this.unmountChildren();
     },
 
     renderScene: function() {
       this._THREErenderer.render(this._THREEObject3D, this._THREEcamera);
-    }
+    },
 
+    projectClick: function (event) {
+      event.preventDefault();
+
+      var x =   ( event.clientX / this.props.width) * 2 - 1;
+      var y = - ( event.clientY / this.props.height) * 2 + 1;
+
+      var mousecoords = new THREE.Vector3(x,y,0.5);
+      var projector = this._THREEprojector;
+      var raycaster = this._THREEraycaster;
+      var camera = this._THREEcamera;
+
+      projector.unprojectVector(mousecoords, camera);
+      raycaster.ray.set( camera.position, mousecoords.sub( camera.position ).normalize() );
+
+      var intersections = raycaster.intersectObjects( this._THREEObject3D.children, true );
+      var firstintersection = ( intersections.length ) > 0 ? intersections[ 0 ] : null;
+
+			if (firstintersection !== null) {
+        var pickobject = firstintersection.object;
+        if (typeof pickobject.userData !== 'undefined' &&
+            typeof pickobject.userData.props.onPick === 'function') {
+          pickobject.userData.props.onPick(event, firstintersection);
+        }
+      }
+    }
   }
 );
 

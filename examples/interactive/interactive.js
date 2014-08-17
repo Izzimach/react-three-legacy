@@ -1,18 +1,22 @@
 //
-// Basic ReactPIXI example using pixi events to add/remove sprites.
-// Note that in order for a sprite to be clickable the sprite has
-// to be interactive (sprite.interactive = true)
-//
-// For react-pixi this means you should have 'interactive:true' in your props
-//
+// Basic ReactTHREE example using events to add/remove sprites.
 
 // tell jshint that we use lodash
 /* global _ : false */
 /* global React : false */
-/* global ReactPIXI : false */
+/* global ReactTHREE : false */
 /* jshint strict: false */
 
 var g_assetpath = function(filename) { return '../assets/' + filename; };
+
+
+//
+// This 'application' tracks a bunch of cubes.
+// You can do two things:
+// 1. add a new randomly-placed cube to the application state
+// 2. remove a specific cube, specified by the cube id
+//
+
 
 // the mounted instance will go here, so that callbacks can modify/set it
 var g_reactinstance;
@@ -21,88 +25,142 @@ var g_reactinstance;
 // a list of all the current sprites
 var g_applicationstate = {};
 
-var g_nextspriteid = 1;
+var g_nextcubeid = 1;
 
 // if the application state is modified call this to update the GUI
 
-function updateProps() {
+function updateApp() {
   g_reactinstance.setProps(g_applicationstate);
 }
 
 //
-// Deleting an interactive sprite while inside a pixi event handler can modify the 'interactiveItems'
-// arry while pixi is iterating over it, which is a no-no.
-// So instead we queue up the change using setTimeout
-//
-function enqueueSetProps() {
-  window.setTimeout(updateProps);
-}
-
-//
-// callback which adds a randomly placed sprite to the application state
+// callback which adds a randomly placed cube to the application state
 //
 
-function addRandomSprite() {
+function addRandomCube() {
   // give each sprite a unique ID
-  var refnumber = g_nextspriteid++;
-  var spriteid = 'sprite' + refnumber.toString();
+  var refnumber = g_nextcubeid++;
+  var cubeid = 'cube' + refnumber.toString();
 
-  var newsprite = {
-    x: Math.random() * g_applicationstate.width,
-    y: Math.random() * g_applicationstate.height,
-    image: g_assetpath('lollipopGreen.png'),
-    key: spriteid,
-    interactive:true,
-    click: function() { removeSpriteById(spriteid); }
+  var newcube = {
+    position: new THREE.Vector3(
+      (Math.random() - 0.5) * g_applicationstate.xsize,
+      (Math.random() - 0.5) * g_applicationstate.ysize,
+      (Math.random() - 0.5) * g_applicationstate.zsize
+    ),
+    materialname: g_assetpath('lollipopGreen.png'),
+    key: cubeid,
+    name: cubeid
   };
 
-  g_applicationstate.sprites.push(newsprite);
+  g_applicationstate.cubes.push(newcube);
 
   // update and re-render
-  updateProps();
+  updateApp();
 }
 
 //
-// callback to remove the dynamic sprite that was clicked on
+// callback to remove the dynamic cube that was clicked on
 //
 
-function removeSpriteById(spriteid) {
-  _.remove(g_applicationstate.sprites, function(sprite) { return sprite.key === spriteid; });
+function removeCubeById(cubeid) {
+  var isthecube = function(cube) { return cube.key === cubeid; };
+  _.remove(g_applicationstate.cubes, isthecube);
 
-  enqueueSetProps();
+  updateApp();
 }
 
+
+
+
 //
-// Component to hold a clickable sprite 'button'. click on this 'button' to add a sprite
+// React Components follow
 //
 
-var SpriteAppButtons = React.createClass({
-  displayName:'SpriteAppButtons',
+
+//
+// Component to represent a clickable cube with a given texture
+// the box geometry is shared!
+// materials are generated and cached here. Normally you would want to
+// come up with a more general purpose asset manager...
+//
+
+var boxgeometry = new THREE.BoxGeometry( 200,200,200);
+
+var boxmaterialcache = [];
+function lookupmaterial(materialname) {
+  var material = _.find(boxmaterialcache, function(x) { return x.name === materialname;});
+  if (typeof material !== "undefined") { return material; }
+
+  // not found. create a new material for the given texture
+  var texturemap = THREE.ImageUtils.loadTexture( g_assetpath(materialname) );
+  var newmaterial = new THREE.MeshBasicMaterial( { map: texturemap } );
+  newmaterial.name = materialname;
+
+  boxmaterialcache.push(newmaterial);
+  return newmaterial;
+}
+
+var ClickableCube = React.createClass({
+  displayName: 'ClickableCube',
+  propTypes: {
+    position: React.PropTypes.instanceOf(THREE.Vector3),
+    materialname: React.PropTypes.string.isRequired,
+    shared: React.PropTypes.bool,
+  },
   render: function() {
-    return ReactPIXI.DisplayObjectContainer(
+    var boxmaterial = lookupmaterial(this.props.materialname);
+    return ReactTHREE.Mesh({name:this.props.name, position:this.props.position, geometry:boxgeometry, material:boxmaterial, shared:true, onPick:this.props.onPick});
+  }
+});
+
+//
+// A cube that, when clicked, removes itself from the application state
+//
+
+var ClickToRemoveCube = React.createClass({
+  displayName: 'ClickToRemoveCube',
+  removeThisCube: function(event, intersection) {
+    var cubeid = intersection.object.name;
+    removeCubeById(cubeid);
+  },
+  render: function() {
+    var props = this.props;
+    return ClickableCube({name:props.name, position:props.position, materialname:'lollipopGreen.png', onPick:this.removeThisCube});
+  }
+});
+
+
+//
+// Component that represents an add button. click on this 'button' (really a cube) to add a cube to the scene
+//
+
+var CubeAppButtons = React.createClass({
+  displayName:'CubeAppButtons',
+  propTypes: {
+  },
+  handlePick: function(/*event, intersection*/) {
+    addRandomCube();
+  },
+  render: function() {
+    return ReactTHREE.Object3D(
       {},
-      ReactPIXI.Sprite({x:100,y:150,key:'cherry', image: g_assetpath('cherry.png'),interactive:true,click: addRandomSprite}),
-      ReactPIXI.Text({x:10,y:10, key:'label1', text:'Click the cherry to add a lollipop sprite', style:{font:'25px Times'}}),
-      ReactPIXI.Text({x:10,y:80, key:'label2', text:'Click on lollipop sprites to remove them', style:{font:'25px Times'}})
+      ClickableCube({position: new THREE.Vector3(0,0,0), materialname:'cherry.png', name:'addbutton', onPick:this.handlePick})
     );
   }
 });
 
 //
-// Component to display all the dynamic sprites
+// Component to display all the dynamically added cubes. All we do is
+// generate a ClickableCube component for each entry in the 'cubes' property.
 //
 
-var DynamicSprites = React.createClass({
-  displayName:'DynamicSprites',
+var RemovableCubes = React.createClass({
+  displayName:'RemoveableCubes',
   render: function() {
     var args = [{}];
-    this.props.sprites.forEach(function(spriteprops) {
-      args.push(ReactPIXI.Sprite(spriteprops));
-    });
-    return ReactPIXI.DisplayObjectContainer.apply(
-      null,
-      args
-    );
+    _.forEach(this.props.cubes, function(cube) { args.push(ClickToRemoveCube(cube));});
+    return ReactTHREE.Object3D.apply(null,args);
   }
 });
 
@@ -113,43 +171,38 @@ var DynamicSprites = React.createClass({
 // - sprites: a list of objects describing all the current sprites containing x,y and image fields
 //
 
-var SpriteApp = React.createClass({
-  displayName: 'BunchOfSprites',
+var CubeApp = React.createClass({
+  displayName: 'CubeApp',
+  propTypes: {
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+  },
   render: function() {
-    return ReactPIXI.Stage(
+    return ReactTHREE.Scene(
       // stage props
-      {width: this.props.width, height: this.props.height, backgroundcolor: 0xa08080, interactive:true},
+      {width: this.props.width, height: this.props.height},
       // children components are the buttons and the dynamic sprites
       [
-        DynamicSprites({key:'sprites', sprites:this.props.sprites}),
-        SpriteAppButtons({key:'gui'})
+        RemovableCubes({key:'cubes', cubes:this.props.cubes}),
+        CubeAppButtons({key:'gui'})
       ]
     );
   }
 });
 
+
+
 /* jshint unused:false */
 function interactiveexamplestart() {
 
-  var renderelement = document.getElementById("pixi-box");
+  var renderelement = document.getElementById("three-box");
 
   var w = window.innerWidth-6;
   var h = window.innerHeight-6;
 
-  g_applicationstate = {width:w, height:h, sprites:[]};
+  g_applicationstate = {width:w, height:h, cubes:[], xsize:500, ysize:500, zsize:500 };
 
-  function PutReact()
-  {
-    g_reactinstance = React.renderComponent(SpriteApp(g_applicationstate), renderelement);
-  }
-
-  var assetloader = new PIXI.AssetLoader([
-    g_assetpath('cherry.png'),
-    g_assetpath('lollipopGreen.png'),
-    g_assetpath('lollipopRed.png')
-  ]);
-
-  assetloader.on('onComplete', PutReact);
-  assetloader.load();
+  g_reactinstance = React.renderComponent(CubeApp(g_applicationstate), renderelement);
 }
+
 
