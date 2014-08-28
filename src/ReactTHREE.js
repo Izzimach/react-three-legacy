@@ -66,34 +66,37 @@ function defineTHREEComponent(name /* plus mixins */) {
   return factory;
 }
 
-var zeroVec3 = new THREE.Vector3(0,0,0);
-var zeroQuat = new THREE.Quaternion();
-
 var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
 
   applyTHREEObject3DProps: function(oldProps, props) {
     var THREEObject3D = this._THREEObject3D;
 
-    var position = props.position || zeroVec3;
-    var rotation = props.rotation || zeroQuat;
+    if (typeof props.position !== 'undefined') {
+      THREEObject3D.position.copy(props.position);
+    }
 
-    THREEObject3D.position.set(position.x, position.y, position.z);
-    THREEObject3D.rotation.set(rotation.x, rotation.y, rotation.z, rotation.w);
+    if (typeof props.quaternion !== 'undefined') {
+      THREEObject3D.quaternion.copy(props.quaternion);
+    }
 
     if (typeof props.visible !== 'undefined') {
       THREEObject3D.visible = props.visible;
     }
 
-    var scaletype = typeof props.scale;
-    if (scaletype === "number") {
-      THREEObject3D.scale.set(scaletype, scaletype, scaletype);
-    } else if (scaletype === "object") {
+    if (typeof props.scale === "number") {
+      THREEObject3D.scale.set(props.scale, props.scale, props.scale);
+    } else if (props.scale instanceof THREE.Vector3) {
       // copy over scale values
-      var scale = props.scale;
-      THREEObject3D.scale.set(scale.x, scale.y, scale.z);
+      THREEObject3D.scale.copy(props.scale);
     } else {
       THREEObject3D.scale.set(1,1,1);
     }
+
+
+    if (typeof props.lookat !== 'undefined') {
+      this._THREEObject3D.lookAt(props.lookat);
+    }
+
 
     if (typeof props.name !== 'undefined') {
       THREEObject3D.name = props.name;
@@ -299,10 +302,13 @@ var THREEScene = defineTHREEComponent(
 
       this._THREEObject3D = new THREE.Scene();
 
-			var camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
-      camera.aspect = props.width / props.height;
-      camera.updateProjectionMatrix();
-		  camera.position.z = 600;
+			var camera = props.camera;
+      if (typeof camera === 'undefined') {
+        camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
+        camera.aspect = props.width / props.height;
+        camera.updateProjectionMatrix();
+        camera.position.z = 600;
+      }
 
       this._THREErenderer = new THREE.WebGLRenderer({canvas:renderelement});
       this._THREErenderer.setSize(+props.width, +props.height);
@@ -360,6 +366,10 @@ var THREEScene = defineTHREEComponent(
 
       if (this.props.width != props.width || this.props.width != props.height) {
         this._THREErenderer.setSize(+props.width, +props.height);
+      }
+
+      if (typeof this.props.camera !== 'undefined' && this.props.camera !== null) {
+        this._THREEcamera = this.props.camera;
       }
 
       this.setApprovedDOMProperties(props);
@@ -431,25 +441,13 @@ var THREEMesh = defineTHREEComponent(
       if ((typeof newProps.geometry !== 'undefined') &&
           (newProps.geometry !== oldProps.geometry))
       {
-        // make a local copy unless it's shared
-        if (newProps.shared === true) {
-          THREEObject3D.geometry = newProps.geometry;
-        }
-        else {
-          THREEObject3D.geometry = newProps.geometry.clone();
-        }
-
+        THREEObject3D.geometry = newProps.geometry;
       }
 
       if ((typeof newProps.material !== 'undefined') &&
           (newProps.material !== oldProps.material))
       {
-        if (newProps.shared === true) {
-          THREEObject3D.material = newProps.material;
-        }
-        else {
-          THREEObject3D.material = newProps.material.clone(THREEObject3D.material);
-        }
+        THREEObject3D.material = newProps.material;
       }
 
     }
@@ -696,12 +694,48 @@ var THREESprite = defineTHREEComponent(
   }
 );
 
+var THREEPerspectiveCamera = defineTHREEComponent(
+  'PerspectiveCamera',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.PerspectiveCamera();
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                           ['fov','aspect','near','far']);
+
+      this._THREEObject3D.updateProjectionMatrix();
+    }
+  });
+
+var THREEOrthographicCamera = defineTHREEComponent(
+  'OrthographicCamera',
+  ReactComponentMixin,
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.OrthographicCamera();
+    },
+
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                           ['left','right','up','bottom','near','far']);
+
+      this._THREEObject3D.updateProjectionMatrix();
+    }
+  });
+
 //
 // module data
 //
 
 module.exports =  {
   Scene : THREEScene,
+  PerspectiveCamera : THREEPerspectiveCamera,
+  OrthographicCamera : THREEOrthographicCamera,
   Object3D : THREEObject3D,
   Line : THREELine,
   PointCloud : THREEPointCloud,
