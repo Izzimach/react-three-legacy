@@ -37,6 +37,10 @@ function updateApp() {
 // callback which adds a randomly placed cube to the application state
 //
 
+function randomradian() {
+  return Math.random() * Math.PI;
+}
+
 function addRandomCube() {
   // give each sprite a unique ID
   var refnumber = g_nextcubeid++;
@@ -48,6 +52,7 @@ function addRandomCube() {
       (Math.random() - 0.5) * g_applicationstate.ysize,
       (Math.random() - 0.5) * g_applicationstate.zsize
     ),
+    quaternion: new THREE.Quaternion().setFromEuler(new THREE.Euler(randomradian(), randomradian(), randomradian(),'XYZ')),
     materialname: g_assetpath('lollipopGreen.png'),
     key: cubeid,
     name: cubeid
@@ -105,12 +110,16 @@ var ClickableCube = React.createClass({
   displayName: 'ClickableCube',
   propTypes: {
     position: React.PropTypes.instanceOf(THREE.Vector3),
+    quaternion: React.PropTypes.instanceOf(THREE.Quaternion),
     materialname: React.PropTypes.string.isRequired,
     shared: React.PropTypes.bool,
   },
   render: function() {
     var boxmaterial = lookupmaterial(this.props.materialname);
-    return ReactTHREE.Mesh({name:this.props.name, position:this.props.position, geometry:boxgeometry, material:boxmaterial, shared:true, onPick:this.props.onPick});
+    var cubeprops = _.clone(this.props);
+    cubeprops.geometry = boxgeometry;
+    cubeprops.material = boxmaterial;
+    return ReactTHREE.Mesh(cubeprops);
   }
 });
 
@@ -125,8 +134,10 @@ var ClickToRemoveCube = React.createClass({
     removeCubeById(cubeid);
   },
   render: function() {
-    var props = this.props;
-    return ClickableCube({name:props.name, position:props.position, materialname:'lollipopGreen.png', onPick:this.removeThisCube});
+    var cubeprops = _.clone(this.props);
+    cubeprops.materialname = 'lollipopGreen.png';
+    cubeprops.onPick = this.removeThisCube;
+    return ClickableCube(cubeprops);
   }
 });
 
@@ -177,6 +188,11 @@ var CubeApp = React.createClass({
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
   },
+  getInitialState: function() {
+    var initalcamera = new THREE.PerspectiveCamera(70, this.props.width / this.props.height, 0.1, 1000);
+    return {camera: new THREE.PerspectiveCamera()};
+  },
+
   render: function() {
     return ReactTHREE.Scene(
       // stage props
