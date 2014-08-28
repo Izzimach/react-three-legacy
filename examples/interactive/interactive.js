@@ -168,8 +168,12 @@ var CubeAppButtons = React.createClass({
 
 var RemovableCubes = React.createClass({
   displayName:'RemoveableCubes',
+  propsTypes: {
+    cubes: React.PropTypes.arrayOf(React.PropTypes.object)
+  },
   render: function() {
-    var args = [{}];
+    var containerprops = {}; // for the Object3D containing the cubes
+    var args = [containerprops];
     _.forEach(this.props.cubes, function(cube) { args.push(ClickToRemoveCube(cube));});
     return ReactTHREE.Object3D.apply(null,args);
   }
@@ -185,18 +189,60 @@ var RemovableCubes = React.createClass({
 var CubeApp = React.createClass({
   displayName: 'CubeApp',
   propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
+    borderpx: React.PropTypes.number.isRequired,
   },
   getInitialState: function() {
-    var initalcamera = new THREE.PerspectiveCamera(70, this.props.width / this.props.height, 0.1, 1000);
-    return {camera: new THREE.PerspectiveCamera()};
-  },
+    // base initial size on window size minus border size
+    var width = window.innerWidth - this.props.borderpx;
+    var height = window.innerHeight - this.props.borderpx;
 
+    var initialcamera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+    initialcamera.position.z = 600;
+    initialcamera.userData = null; // will set this up in componentDidMount
+
+    return {camera: initialcamera, width:width, height:height};
+  },
+  componentDidMount: function() {
+    var zeroVec = new THREE.Vector3(0,0,0);
+    var componentinstance = this;
+    var spinquaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), 0.01);
+    var animationcallback = function(/*t*/) {
+      var camera = componentinstance.state.camera;
+      camera.position.applyQuaternion(spinquaternion);
+      camera.lookAt(zeroVec);
+      componentinstance.setState({camera:camera});      // 'update' the camera
+      camera.userData = requestAnimationFrame(animationcallback);
+    };
+    // add an interval timer function to rotation the camera
+    // the rAQ timer ID is dumped into the camera. Not the best place to put it probably.
+    this.state.camera.userData = requestAnimationFrame(animationcallback);
+
+    // handle resize events - should prob. be a mixin
+    var resizecallback = function() {
+      var newwidth = window.innerWidth - componentinstance.props.borderpx;
+      var newheight = window.innerHeight - componentinstance.props.borderpx;
+
+      // since we're responsible for the camera we need to update it here
+      var camera = componentinstance.state.camera;
+      camera.aspect = (newwidth / newheight);
+      camera.updateProjectionMatrix();
+
+      componentinstance.setState({width:newwidth, height:newheight, camera:camera});
+    };
+    window.addEventListener('resize',resizecallback, false);
+    this.setState({resizecallback:resizecallback});
+  },
+  componentWillUnmount: function() {
+    if (this.state.camera.userData !== null) {
+      cancelAnimationFrame(this.state.camera.userData);
+    }
+    this.state.camera.userData = null;
+    window.removeEventListener('resize',this.state.resizecallback);
+  },
   render: function() {
     return ReactTHREE.Scene(
       // stage props
-      {width: this.props.width, height: this.props.height},
+      {width: this.state.width, height: this.state.height, camera:this.state.camera},
       // children components are the buttons and the dynamic sprites
       [
         RemovableCubes({key:'cubes', cubes:this.props.cubes}),
@@ -213,10 +259,7 @@ function interactiveexamplestart() {
 
   var renderelement = document.getElementById("three-box");
 
-  var w = window.innerWidth-6;
-  var h = window.innerHeight-6;
-
-  g_applicationstate = {width:w, height:h, cubes:[], xsize:500, ysize:500, zsize:500 };
+  g_applicationstate = {borderpx:6, cubes:[], xsize:500, ysize:500, zsize:500 };
 
   g_reactinstance = React.renderComponent(CubeApp(g_applicationstate), renderelement);
 }
