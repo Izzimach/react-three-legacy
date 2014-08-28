@@ -115,6 +115,7 @@ gulp.task('bundle', ['browserify'], function() {
 
 gulp.task('watch', ['bundle'], function() {
   gulp.watch(SOURCEGLOB, ['browserify']);
+  gulp.watch(EXAMPLESGLOB, ['lint']);
 });
 
 gulp.task('livereload', ['lint','bundle'], function() {
@@ -129,6 +130,7 @@ gulp.task('livereload', ['lint','bundle'], function() {
   var livereloadserver = livereload();
 
   gulp.watch([SOURCEGLOB], ['bundle']);
+  gulp.watch([EXAMPLESGLOB], ['lint']);
   gulp.watch(['build/**/*.js', 'examples/**/*.js','examples/**/*.html'], function(file) {
     livereloadserver.changed(file.path);
   });
