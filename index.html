@@ -1,3 +1,6 @@
+---
+title: React-three
+---
 <!doctype html>
 <html>
   <head>
@@ -40,7 +43,8 @@ the basic primitives found in three.js such as Mesh, Scene, Object3D.</p>
 
 <p>To create a 3D scene you can create and compose React-three components just as you would compose DOM elements in vanilla React. An example:</p>
 
-<pre><code>var Cupcake = React.createClass({
+{% highlight javascript %}
+var Cupcake = React.createClass({
   displayName: 'Cupcake',
   render: function() {
     return ReactTHREE.Object3D(
@@ -50,7 +54,7 @@ the basic primitives found in three.js such as Mesh, Scene, Object3D.</p>
     );
   }
 });
-</code></pre>
+{% endhighlight %}
       </section>
       <footer>
         <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
