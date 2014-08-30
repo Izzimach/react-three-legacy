@@ -32,7 +32,23 @@ a script tag:
 Then ```React``` will appear in the global namespace and the new React-THREE components are available as ```ReactTHREE```. Note that
 you'll still have to load three.js with a separate script tag.
 
+## Examples
 
+Examples are set up in the examples/ directory. You can run
+
+```
+gulp livereload
+```
+
+Then open various examples in your browser:
+
+```
+http://localhost:8080/cupcake/cupcake.html
+http://localhost:8080/interactive/interactive.html
+```
+
+There should probably be something in place to generate an index.html
+containing all of the examples. Oh well.
 
 ## Testing
 
