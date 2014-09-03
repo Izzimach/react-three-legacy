@@ -172,7 +172,9 @@ var RemovableCubes = React.createClass({
     cubes: React.PropTypes.arrayOf(React.PropTypes.object)
   },
   render: function() {
-    var containerprops = {}; // for the Object3D containing the cubes
+    // props for the Object3D containing the cubes. You could change these
+    // props to translate/rotate/scale the whole group of cubes at once
+    var containerprops = {};
     var args = [containerprops];
     _.forEach(this.props.cubes, function(cube) { args.push(ClickToRemoveCube(cube));});
     return ReactTHREE.Object3D.apply(null,args);
