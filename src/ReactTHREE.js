@@ -129,7 +129,7 @@ var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
     // to create a new object type, mixin your own version of this method
   },
 
-  mountComponent: function(transaction) {
+  mountComponent: function(rootID, transaction, mountDepth) {
     ReactComponentMixin.mountComponent.apply(this, arguments);
     this._THREEObject3D = this.createTHREEObject(arguments);
     this._THREEObject3D.userData = this;
@@ -248,14 +248,9 @@ var THREEScene = defineTHREEComponent(
 
     _tagOpen: '<canvas',
     _tagClose: '</canvas>',
-
+    /*jshint unused: vars */
     mountComponent: function(rootID, transaction, mountDepth) {
-      ReactComponentMixin.mountComponent.call(
-        this,
-        rootID,
-        transaction,
-        mountDepth
-      );
+      ReactComponentMixin.mountComponent.apply(this, arguments);
       transaction.getReactMountReady().enqueue(this.componentDidMount, this);
 
       // this registers listeners so users can handle onClick etc.
@@ -265,6 +260,7 @@ var THREEScene = defineTHREEComponent(
         this._tagClose
       );
     },
+    /*jshint unused: true */
 
     setApprovedDOMProperties: function(nextProps) {
       var prevProps = this.props;
@@ -663,7 +659,8 @@ var THREESkinnedMesh = defineTHREEComponent(
   THREEObject3DMixin,
   {
     // skinned mesh is special since it needs the geometry and material data upon construction
-    mountComponent: function(transaction) {
+    /* jshint unused: vars */
+    mountComponent: function(rootID, transaction, mountDepth) {
       ReactComponentMixin.mountComponent.apply(this, arguments);
       this._THREEObject3D = new THREE.SkinnedMesh(this.props.geometry, this.props.material);
       this.applyTHREEObject3DProps({}, this.props);
@@ -672,6 +669,7 @@ var THREESkinnedMesh = defineTHREEComponent(
       this.mountAndAddChildren(this.props.children, transaction);
       return this._THREEObject3D;
     },
+    /* jshint unused: true */
 
     applySpecificTHREEProps: function(/*oldProps, newProps*/) {
     }
