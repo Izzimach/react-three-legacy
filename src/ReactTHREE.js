@@ -130,6 +130,7 @@ var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
   },
 
   mountComponent: function(rootID, transaction, mountDepth) {
+    /* jshint unused: vars */
     ReactComponentMixin.mountComponent.apply(this, arguments);
     this._THREEObject3D = this.createTHREEObject(arguments);
     this._THREEObject3D.userData = this;
@@ -227,6 +228,10 @@ var THREESceneMixin = merge(THREEObject3DMixin, {
   mountComponentIntoNode : ReactComponent.Mixin.mountComponentIntoNode
 });
 
+
+// used as a callback for 'onselectstart' event to indicate that the browser shouldn't let you
+// select the canvas the way you would select a block of text
+var dontselectcanvas = function() { return false; }
 
 //
 // The 'Scene' component includes both the three.js scene and
@@ -345,6 +350,8 @@ var THREEScene = defineTHREEComponent(
       }
       putListener(this._rootNodeID, 'onClick', function(event) { that.projectClick(event);});
 
+      renderelement.onselectstart = dontselectcanvas;
+
       this.props = props;
     },
 
@@ -391,9 +398,11 @@ var THREEScene = defineTHREEComponent(
 
     projectClick: function (event) {
       event.preventDefault();
+      var rect = this.getDOMNode().getBoundingClientRect();
 
-      var x =   ( event.clientX / this.props.width) * 2 - 1;
-      var y = - ( event.clientY / this.props.height) * 2 + 1;
+
+      var x =   ( (event.clientX - rect.left) / this.props.width) * 2 - 1;
+      var y = - ( (event.clientY - rect.top) / this.props.height) * 2 + 1;
 
       var mousecoords = new THREE.Vector3(x,y,0.5);
       var projector = this._THREEprojector;
