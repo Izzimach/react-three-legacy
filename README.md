@@ -3,6 +3,8 @@ react-three
 
 Create/control a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
+The interactive demo is (hopefully) accessible at on [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html)
+
 
 ![Sample Cupcake component](docs/react-three-interactiveexample.png)
 
