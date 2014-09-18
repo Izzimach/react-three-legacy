@@ -16,9 +16,9 @@ The following graphics files in examples/assets are CC0 (public domain), created
 The following files are Copyright 2013-2014 Facebook, Inc. and included under the Apache License v2.0:
  - vendor/phantomjs-shims.phantomjs
 
-The following files are Copyright 2013-2014 Mathew Groves and included under the MIT License:
- - vendor/pixi.js
- - vendor/pixi.dev.js
+The following files are Copyright 2010-2014 three.js authors and included under the MIT License:
+ - vendor/three.js
+ - vendor/three.min.js
 
 The following file is Copyright 2012-2013 The Dojo Foundation and included under the MIT License:
  - vendor/lodash.min.js
