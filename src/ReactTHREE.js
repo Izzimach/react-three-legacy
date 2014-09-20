@@ -231,7 +231,7 @@ var THREESceneMixin = merge(THREEObject3DMixin, {
 
 // used as a callback for 'onselectstart' event to indicate that the browser shouldn't let you
 // select the canvas the way you would select a block of text
-var dontselectcanvas = function() { return false; }
+var dontselectcanvas = function() { return false; };
 
 //
 // The 'Scene' component includes both the three.js scene and
