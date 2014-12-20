@@ -250,8 +250,7 @@ var THREEScene = defineTHREEComponent(
   ReactComponentMixin,
   THREESceneMixin, {
 
-    _tagOpen: '<canvas',
-    _tagClose: '</canvas>',
+    _tag: 'canvas',
     /*jshint unused: vars */
     mountComponent: function(rootID, transaction, mountDepth) {
       ReactComponentMixin.mountComponent.apply(this, arguments);
@@ -297,7 +296,7 @@ var THREEScene = defineTHREEComponent(
     },
 
     componentDidMount: function() {
-      var props = this._descriptor.props;
+      var props = this._currentElement.props;
       var renderelement = this.getDOMNode();
 
       this._THREEObject3D = new THREE.Scene();
