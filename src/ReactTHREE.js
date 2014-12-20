@@ -29,7 +29,7 @@ var ReactComponentMixin = ReactComponent.Mixin;
 var ReactUpdates = require('react/lib/ReactUpdates');
 var ReactMultiChild = require('react/lib/ReactMultiChild');
 var ReactBrowserComponentMixin = require('react/lib/ReactBrowserComponentMixin');
-var ReactDescriptor = require('react/lib/ReactDescriptor');
+var ReactElement = require('react/lib/ReactElement');
 
 var ReactDOMComponent = require('react/lib/ReactDOMComponent');
 var ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
@@ -39,8 +39,7 @@ var ReactBrowserEventEmitter = require('react/lib/ReactBrowserEventEmitter');
 var putListener = ReactBrowserEventEmitter.putListener;
 var listenTo = ReactBrowserEventEmitter.listenTo;
 
-var mixInto = require('react/lib/mixInto');
-var merge = require('react/lib/merge');
+var assign = require('react/lib/Object.assign');
 
 
 //
@@ -52,7 +51,7 @@ function defineTHREEComponent(name /* plus mixins */) {
   var ReactTHREEComponent = function() {};
   ReactTHREEComponent.prototype.type = ReactTHREEComponent;
   for (var i = 1; i < arguments.length; i++) {
-    mixInto(ReactTHREEComponent, arguments[i]);
+    assign(ReactTHREEComponent.prototype, arguments[i]);
   }
 
   var Constructor = function(props, owner) {
@@ -62,11 +61,11 @@ function defineTHREEComponent(name /* plus mixins */) {
   Constructor.prototype.constructor = Constructor;
   Constructor.displayName = name;
 
-  var factory = ReactDescriptor.createFactory(Constructor);
+  var factory = ReactElement.createFactory(Constructor);
   return factory;
 }
 
-var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
+var THREEObject3DMixin = assign({}, ReactMultiChild.Mixin, {
 
   applyTHREEObject3DProps: function(oldProps, props) {
     var THREEObject3D = this._THREEObject3D;
@@ -224,7 +223,7 @@ var THREEObject3DMixin = merge(ReactMultiChild.Mixin, {
 //
 // Seems a bit hackish. We could split the THREEScene into a Scene and a separate canvas component.
 //
-var THREESceneMixin = merge(THREEObject3DMixin, {
+var THREESceneMixin = assign({}, THREEObject3DMixin, {
   mountComponentIntoNode : ReactComponent.Mixin.mountComponentIntoNode
 });
 
