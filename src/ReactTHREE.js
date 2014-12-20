@@ -68,8 +68,10 @@ function defineTHREEComponent(name /* plus mixins */) {
 var THREEObject3DMixin = assign({}, ReactMultiChild.Mixin, {
 
   applyTHREEObject3DProps: function(oldProps, props) {
-    var THREEObject3D = this._THREEObject3D;
+    this.applyTHREEObject3DPropsToObject(this._THREEObject3D, oldProps, props);
+  },
 
+  applyTHREEObject3DPropsToObject: function(THREEObject3D, oldProps, props) {
     if (typeof props.position !== 'undefined') {
       THREEObject3D.position.copy(props.position);
     }
@@ -301,12 +303,13 @@ var THREEScene = defineTHREEComponent(
 
       this._THREEObject3D = new THREE.Scene();
 
-			var camera = props.camera;
-      if (typeof camera === 'undefined') {
-        camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
-        camera.aspect = props.width / props.height;
-        camera.updateProjectionMatrix();
-        camera.position.z = 600;
+      var camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
+      camera.aspect = props.width / props.height;
+      camera.updateProjectionMatrix();
+      camera.position.z = 600;
+
+      if (props.camera) {
+        this.applyTHREEObject3DPropsToObject(camera, {}, props.camera);
       }
 
       this._THREErenderer = new THREE.WebGLRenderer({canvas:renderelement});
@@ -369,9 +372,7 @@ var THREEScene = defineTHREEComponent(
         this._THREErenderer.setSize(+props.width, +props.height);
       }
 
-      if (typeof this.props.camera !== 'undefined' && this.props.camera !== null) {
-        this._THREEcamera = this.props.camera;
-      }
+      this.applyTHREEObject3DPropsToObject(this._THREEcamera, this.props.camera || {}, props.camera || {});
 
       this.setApprovedDOMProperties(props);
       this.applyTHREEObject3DProps(this.props, props);
