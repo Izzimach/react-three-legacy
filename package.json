@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "main": "build/react-three.js",
   "dependencies": {
-    "react": "0.11.1"
+    "react": "^0.12.2"
   },
   "devDependencies": {
     "http": "0.0.0",
