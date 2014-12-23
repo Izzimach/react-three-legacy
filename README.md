@@ -3,13 +3,27 @@ react-three
 
 Create/control a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
-The interactive demo is (hopefully) accessible at on [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html)
+You can view an interactive demo (hopefully) at [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html). This demo is also available as a standalone project at [r3test](https://github.com/Izzimach/r3test/)
 
+## Install and Use
 
-![Sample Cupcake component](docs/react-three-interactiveexample.png)
+If you are building a project with a `package.json` file you can
+```
+npm install react --save
+npm install react-three --save
+```
 
+and then access the extensions via a `require` expression:
 
-## Installation
+```
+var React = require('react');
+var ReactTHREE = require('react-three');
+```
+
+Note that this does not include three.js so you'll still need to find
+and include one of the three.js files yourself, either by building your own copy or via something like bower.
+
+## Building Standalone Files
 
 You will need node and npm. You should probably install gulp globally as well.
 
@@ -33,6 +47,9 @@ a script tag:
 
 Then ```React``` will appear in the global namespace and the new React-THREE components are available as ```ReactTHREE```. Note that
 you'll still have to load three.js with a separate script tag.
+
+
+![Sample Cupcake component](docs/react-three-interactiveexample.png)
 
 ## Examples
 
