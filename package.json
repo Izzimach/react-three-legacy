@@ -22,6 +22,7 @@
     "react": "^0.12.2"
   },
   "devDependencies": {
+    "react": "^0.12.2",
     "http": "0.0.0",
     "node-static": "~0.7.3",
     "react-tools": "~0.10.0",
