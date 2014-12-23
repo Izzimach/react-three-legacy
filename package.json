@@ -1,6 +1,6 @@
 {
   "name": "react-three",
-  "version": "0.1.1-EXPERIMENTAL",
+  "version": "0.1.2-EXPERIMENTAL",
   "description": "Construct three.js scenes using React",
   "keywords": [
     "react",
@@ -18,7 +18,7 @@
   },
   "license": "Apache-2.0",
   "main": "src/ReactTHREE.js",
-  "dependencies": {
+  "peerDependencies": {
     "react": "^0.12.2"
   },
   "devDependencies": {
