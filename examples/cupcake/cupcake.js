@@ -22,9 +22,13 @@ var creammaterial = new THREE.MeshBasicMaterial( { map: creamtexture } );
 
 var Cupcake = React.createClass({
   displayName: 'Cupcake',
+  propTypes: {
+    position: React.PropTypes.instanceOf(THREE.Vector3),
+    quaternion: React.PropTypes.instanceOf(THREE.Quaternion).isRequired
+  },
   render: function() {
     return ReactTHREE.Object3D(
-      {rotation:this.props.rotation, position:new THREE.Vector3(0,0,0)},
+      {quaternion:this.props.quaternion, position:this.props.position || new THREE.Vector3(0,0,0)},
       ReactTHREE.Mesh({position:new THREE.Vector3(0,-100,0), geometry:boxgeometry, material:cupcakematerial}),
       ReactTHREE.Mesh({position:new THREE.Vector3(0, 100,0), geometry:boxgeometry, material:creammaterial})
     );
@@ -42,7 +46,7 @@ var ExampleScene = React.createClass({
   displayName: 'ExampleScene',
   render: function() {
     return ReactTHREE.Scene(
-      {width:this.props.width, height:this.props.height},
+      {width:this.props.width, height:this.props.height, camera:{position:new THREE.Vector3(0,0,400), lookat:new THREE.Vector3(0,0,0)}},
       Cupcake(this.props.cupcakedata)
     );
   }
@@ -55,7 +59,7 @@ function cupcakestart() {
   var w = window.innerWidth-6;
   var h = window.innerHeight-6;
 
-  var sceneprops = {width:w, height:h, cupcakedata:{rotation:new THREE.Vector3(0,0,0)}};
+  var sceneprops = {width:w, height:h, cupcakedata:{position:new THREE.Vector3(0,0,0), quaternion:new THREE.Quaternion()}};
   var cupcakeprops = sceneprops.cupcakedata;
   var rotationangle = 0;
 
@@ -63,8 +67,8 @@ function cupcakestart() {
 
   function spincupcake(t) {
     rotationangle = t * 0.001;
-    cupcakeprops.rotation.y = rotationangle;
-    cupcakeprops.rotation.x = rotationangle * 0.3;
+    cupcakeprops.quaternion.setFromEuler(new THREE.Euler(rotationangle,rotationangle*3,0));
+    cupcakeprops.position.x = 300  * Math.sin(rotationangle);
     reactinstance.setProps(sceneprops);
 
     requestAnimationFrame(spincupcake);
@@ -72,4 +76,3 @@ function cupcakestart() {
 
   spincupcake();
 }
-
