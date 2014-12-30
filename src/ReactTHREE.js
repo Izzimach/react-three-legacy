@@ -303,13 +303,16 @@ var THREEScene = defineTHREEComponent(
 
       this._THREEObject3D = new THREE.Scene();
 
-      var camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
-      camera.aspect = props.width / props.height;
-      camera.updateProjectionMatrix();
-      camera.position.z = 600;
+      var camera = props.camera;
+      if (camera === null || !(camera instanceof THREE.Camera)) {
+        camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
+        camera.aspect = props.width / props.height;
+        camera.updateProjectionMatrix();
+        camera.position.z = 600;
 
-      if (props.camera) {
-        this.applyTHREEObject3DPropsToObject(camera, {}, props.camera);
+        if (props.camera) {
+          this.applyTHREEObject3DPropsToObject(camera, {}, props.camera);
+        }
       }
 
       this._THREErenderer = new THREE.WebGLRenderer({canvas:renderelement});
