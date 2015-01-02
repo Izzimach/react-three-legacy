@@ -30,6 +30,7 @@ var ReactUpdates = require('react/lib/ReactUpdates');
 var ReactMultiChild = require('react/lib/ReactMultiChild');
 var ReactBrowserComponentMixin = require('react/lib/ReactBrowserComponentMixin');
 var ReactElement = require('react/lib/ReactElement');
+var ReactLegacyElement = require('react/lib/ReactLegacyElement');
 
 var ReactDOMComponent = require('react/lib/ReactDOMComponent');
 var ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
@@ -46,23 +47,23 @@ var assign = require('react/lib/Object.assign');
 // Generates a React component by combining several mixin components
 //
 
-function defineTHREEComponent(name /* plus mixins */) {
+function createTHREEComponent(name /* plus mixins */) {
 
-  var ReactTHREEComponent = function() {};
-  ReactTHREEComponent.prototype.type = ReactTHREEComponent;
+  var ReactTHREEComponent = function(props) {
+    /* jshint unused: vars */
+    this.node = null;
+    this._mountImage = null;
+    this._renderedChildren = null;
+    this.displayObject = null;
+  };
+  ReactTHREEComponent.displayName = name;
   for (var i = 1; i < arguments.length; i++) {
     assign(ReactTHREEComponent.prototype, arguments[i]);
   }
 
-  var Constructor = function(props, owner) {
-    this.construct(props,owner);
-  };
-  Constructor.prototype = new ReactTHREEComponent();
-  Constructor.prototype.constructor = Constructor;
-  Constructor.displayName = name;
-
-  var factory = ReactElement.createFactory(Constructor);
-  return factory;
+  return ReactLegacyElement.wrapFactory(
+    ReactElement.createFactory(ReactTHREEComponent)
+  );
 }
 
 var THREEObject3DMixin = assign({}, ReactMultiChild.Mixin, {
@@ -245,7 +246,7 @@ var dontselectcanvas = function() { return false; };
 // --GJH
 //
 
-var THREEScene = defineTHREEComponent(
+var THREEScene = createTHREEComponent(
   'THREEScene',
   ReactBrowserComponentMixin,
   ReactDOMComponent.Mixin,
@@ -429,12 +430,12 @@ var THREEScene = defineTHREEComponent(
 );
 
 
-var THREEObject3D = defineTHREEComponent(
+var THREEObject3D = createTHREEComponent(
   'Object3D',
   ReactComponentMixin,
   THREEObject3DMixin);
 
-var THREEMesh = defineTHREEComponent(
+var THREEMesh = createTHREEComponent(
   'Mesh',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -472,7 +473,7 @@ var LightObjectMixin = {
   }
 };
 
-var THREEAmbientLight = defineTHREEComponent(
+var THREEAmbientLight = createTHREEComponent(
   'AmbientLight',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -487,7 +488,7 @@ var THREEAmbientLight = defineTHREEComponent(
   }
 );
 
-var THREEPointLight = defineTHREEComponent(
+var THREEPointLight = createTHREEComponent(
   'PointLight',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -504,7 +505,7 @@ var THREEPointLight = defineTHREEComponent(
   }
 );
 
-var THREEAreaLight = defineTHREEComponent(
+var THREEAreaLight = createTHREEComponent(
   'AreaLight',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -543,7 +544,7 @@ var CommonShadowmapProps = [
   'shadowMatrix'
 ];
 
-var THREEDirectionalLight = defineTHREEComponent(
+var THREEDirectionalLight = createTHREEComponent(
   'DirectionalLight',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -581,7 +582,7 @@ var THREEDirectionalLight = defineTHREEComponent(
 
 
 
-var THREEHemisphereLight = defineTHREEComponent(
+var THREEHemisphereLight = createTHREEComponent(
   'HemisphereLight',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -606,7 +607,7 @@ var THREEHemisphereLight = defineTHREEComponent(
 );
 
 
-var THREESpotLight = defineTHREEComponent(
+var THREESpotLight = createTHREEComponent(
   'SpotLight',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -632,7 +633,7 @@ var THREESpotLight = defineTHREEComponent(
   }
 );
 
-var THREELine = defineTHREEComponent(
+var THREELine = createTHREEComponent(
   'Line',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -648,7 +649,7 @@ var THREELine = defineTHREEComponent(
   }
 );
 
-var THREEPointCloud = defineTHREEComponent(
+var THREEPointCloud = createTHREEComponent(
   'PointCloud',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -664,7 +665,7 @@ var THREEPointCloud = defineTHREEComponent(
   }
 );
 
-var THREESkinnedMesh = defineTHREEComponent(
+var THREESkinnedMesh = createTHREEComponent(
   'SkinnedMesh',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -687,7 +688,7 @@ var THREESkinnedMesh = defineTHREEComponent(
   }
 );
 
-var THREESprite = defineTHREEComponent(
+var THREESprite = createTHREEComponent(
   'Sprite',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -703,7 +704,7 @@ var THREESprite = defineTHREEComponent(
   }
 );
 
-var THREEPerspectiveCamera = defineTHREEComponent(
+var THREEPerspectiveCamera = createTHREEComponent(
   'PerspectiveCamera',
   ReactComponentMixin,
   THREEObject3DMixin,
@@ -720,7 +721,7 @@ var THREEPerspectiveCamera = defineTHREEComponent(
     }
   });
 
-var THREEOrthographicCamera = defineTHREEComponent(
+var THREEOrthographicCamera = createTHREEComponent(
   'OrthographicCamera',
   ReactComponentMixin,
   THREEObject3DMixin,
