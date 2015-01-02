@@ -8,6 +8,8 @@
 
 var assetpath = function(filename) { return '../assets/' + filename; };
 
+var MeshFactory = React.createFactory(ReactTHREE.Mesh);
+
 //
 // Cupcake component is two cube meshes textured with cupcake textures
 //
@@ -27,10 +29,11 @@ var Cupcake = React.createClass({
     quaternion: React.PropTypes.instanceOf(THREE.Quaternion).isRequired
   },
   render: function() {
-    return ReactTHREE.Object3D(
+    return React.createElement(
+      ReactTHREE.Object3D,
       {quaternion:this.props.quaternion, position:this.props.position || new THREE.Vector3(0,0,0)},
-      ReactTHREE.Mesh({position:new THREE.Vector3(0,-100,0), geometry:boxgeometry, material:cupcakematerial}),
-      ReactTHREE.Mesh({position:new THREE.Vector3(0, 100,0), geometry:boxgeometry, material:creammaterial})
+      MeshFactory({position:new THREE.Vector3(0,-100,0), geometry:boxgeometry, material:cupcakematerial}),
+      MeshFactory({position:new THREE.Vector3(0, 100,0), geometry:boxgeometry, material:creammaterial})
     );
   }
 });
@@ -45,9 +48,10 @@ var Cupcake = React.createClass({
 var ExampleScene = React.createClass({
   displayName: 'ExampleScene',
   render: function() {
-    return ReactTHREE.Scene(
+    return React.createElement(
+      ReactTHREE.Scene,
       {width:this.props.width, height:this.props.height, camera:{position:new THREE.Vector3(0,0,400), lookat:new THREE.Vector3(0,0,0)}},
-      Cupcake(this.props.cupcakedata)
+      React.createElement(Cupcake, this.props.cupcakedata)
     );
   }
 });
@@ -63,7 +67,7 @@ function cupcakestart() {
   var cupcakeprops = sceneprops.cupcakedata;
   var rotationangle = 0;
 
-  var reactinstance = React.renderComponent(ExampleScene(sceneprops), renderelement);
+  var reactinstance = React.render(React.createElement(ExampleScene,sceneprops), renderelement);
 
   function spincupcake(t) {
     rotationangle = t * 0.001;
