@@ -66,7 +66,9 @@ var karmaconfiguration = {
     files: ['vendor/three.js',
             BUILDPATHDEV,
             'vendor/phantomjs-shims.js', // need a shim to work with the ancient version of Webkit used in PhantomJS
-            'test/basics/*.js'
+            'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
+            'test/basics/*.js',
+            'test/components/*.js'
            ],
     frameworks:['jasmine'],
     singleRun:true
