@@ -73,4 +73,8 @@ containing all of the examples. Oh well.
 
 ## Testing
 
-No testing yet!
+You can run tests using gulp:
+
+```
+gulp test
+```
