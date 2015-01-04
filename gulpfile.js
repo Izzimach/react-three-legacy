@@ -4,6 +4,7 @@
 
 var exec = require('child_process').exec;
 var path = require('path');
+var rimraf = require('rimraf');
 
 //
 // gulp-specific tools
@@ -15,6 +16,7 @@ var vsource = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
 var jshint = require('gulp-jshint');
 var livereload = require('gulp-livereload');
+var template = require('gulp-template');
 var gutil = require('gulp-util');
 var header = require('gulp-header');
 var uglify = require('gulp-uglify');
@@ -113,6 +115,60 @@ gulp.task('bundle', ['browserify'], function() {
     .pipe(gulp.dest(BUILDDIR));
 });
 
+gulp.task('dist-clean', function(done) {
+  rimraf('dist', done);
+});
+
+// dist puts build results into dist/ for release via bower
+gulp.task('dist', ['dist-clean','bundle'], function() {
+  return gulp.src(['build/**'], {base:'build'})
+    .pipe(gulp.dest('dist'));
+});
+
+//
+// For easy use with ClojureScript (om-react-three) we need to
+// arrange the files properly so that they may be properly
+// packaged with leiningen. File are first arranged in dist-clojars
+// and then packaged/deployed to clojars.org (currently by hand)
+//
+
+gulp.task('dist-clojars-clean', function(done) {
+  rimraf('dist-clojars',done);
+});
+
+// Generate a leiningen project file for clojars. The source
+// file itself is just a template so that we can fill in the
+// version field. The version used is whatever is specified in package.json
+gulp.task('dist-clojars-project', ['dist-clojars-clean'], function() {
+  return gulp.src(['src/project_template.clj'], {base:'src'})
+    .pipe(template({version:pkg.version}))
+    .pipe(concat("project.clj"))
+    .pipe(gulp.dest('dist-clojars/'));
+  });
+
+// put the react-three javascript files into resources/react_three so that
+// cljsbuild can refer to them via {:source-paths ["react_three"]}
+gulp.task('dist-clojars-src', ['dist', 'dist-clojars-clean'], function() {
+  return gulp.src(['dist/**'], {base:'dist'})
+    .pipe(gulp.dest('dist-clojars/resources/react_three'));
+});
+
+// Dump other files (like three.js itself) into the resources/react_three dir
+// so that ring or another web-server can serve it. Such a file can be accessed
+// at a '/react_three/<xxx>' URL.
+gulp.task('dist-clojars-resources', ['dist-clojars-clean'], function() {
+  return gulp.src(['vendor/three.js','vendor/three.min.js'], {base:'vendor'})
+    .pipe(gulp.dest('dist-clojars/resources/react_three'));
+});
+
+gulp.task('dist-clojars', ['dist-clojars-src','dist-clojars-project','dist-clojars-resources'], function() {
+  // user must run lein deploy in the subdir
+  gutil.log('ready to deploy');
+  gutil.log('chdir into the "dist-clojars" directory and run "lein deploy clojars"');
+});
+
+
+
 gulp.task('watch', ['bundle'], function() {
   gulp.watch(SOURCEGLOB, ['browserify']);
   gulp.watch(EXAMPLESGLOB, ['lint']);
@@ -144,4 +200,3 @@ gulp.task('test', ['bundle'], function() {
 });
 
 gulp.task('default', ['lint','bundle']);
-

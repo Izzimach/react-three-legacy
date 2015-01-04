@@ -18,6 +18,8 @@ coverage
 .grunt
 
 build
+dist
+dist-clojars
 
 # Dependency directory
 # Deployed apps should consider commenting this line out:
