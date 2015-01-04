@@ -26,9 +26,9 @@ var BasicTestFixture = ReactTHREE.createClass({
 
     if (typeof this.props.subcomponentfactory === 'undefined' ||
         this.props.subcomponentfactory === null) {
-      return React.createElement(ReactTHREE.Scene, stageprops);
+      return React.createElement(ReactTHREE.Scene, sceneprops);
     } else {
-      return React.createElement(ReactTHREE.Scene, stageprops, this.props.subcomponentfactory(this.props.subcomponentprops));
+      return React.createElement(ReactTHREE.Scene, sceneprops, this.props.subcomponentfactory(this.props.subcomponentprops));
     }
   }
 });
