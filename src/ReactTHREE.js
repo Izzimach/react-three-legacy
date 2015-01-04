@@ -21,7 +21,7 @@
 
 "use strict";
 
-//var React = require('react/react.js');
+var React = require('react');
 
 var ReactMount = require('react/lib/ReactMount');
 var ReactComponent = require('react/lib/ReactComponent');
@@ -254,6 +254,7 @@ var THREEScene = createTHREEComponent(
   THREESceneMixin, {
 
     _tag: 'canvas',
+    _tagClose: '</canvas>',
     /*jshint unused: vars */
     mountComponent: function(rootID, transaction, mountDepth) {
       ReactComponentMixin.mountComponent.apply(this, arguments);
@@ -262,7 +263,8 @@ var THREEScene = createTHREEComponent(
       // this registers listeners so users can handle onClick etc.
       return (
         this._createOpenTagMarkupAndPutListeners(transaction) +
-        this._createContentMarkup(transaction) +
+        // content is basically children, which should not be generating HTML
+        //this._createContentMarkup(transaction) +
         this._tagClose
       );
     },
@@ -757,6 +759,7 @@ module.exports =  {
   AreaLight: THREEAreaLight,
   DirectionalLight: THREEDirectionalLight,
   HemisphereLight: THREEHemisphereLight,
-  SpotLight: THREESpotLight
+  SpotLight: THREESpotLight,
+  createClass : React.createClass // should monkey-patch this eventually
 
 };
