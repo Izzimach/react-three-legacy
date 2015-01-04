@@ -1,6 +1,8 @@
 react-three
 ===========
 
+[![Build Status](https://travis-ci.org/Izzimach/react-three.svg?branch=master)](https://travis-ci.org/Izzimach/react-three)
+
 Create/control a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
 You can view an interactive demo (hopefully) at [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html). This demo is also available as a standalone project at [r3test](https://github.com/Izzimach/r3test/)
