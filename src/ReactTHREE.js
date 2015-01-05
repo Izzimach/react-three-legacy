@@ -42,6 +42,8 @@ var listenTo = ReactBrowserEventEmitter.listenTo;
 
 var assign = require('react/lib/Object.assign');
 
+var Detector = require('../vendor/Detector.js');
+
 
 //
 // Generates a React component by combining several mixin components
@@ -318,7 +320,9 @@ var THREEScene = createTHREEComponent(
         }
       }
 
-      this._THREErenderer = new THREE.WebGLRenderer({canvas:renderelement});
+      this._THREErenderer = Detector.webgl ?
+        new THREE.WebGLRenderer({canvas:renderelement}) :
+        new THREE.CanvasRenderer({canvas:renderelement});
       this._THREErenderer.setSize(+props.width, +props.height);
       this._THREEcamera = camera;
       this._THREEprojector = new THREE.Projector();
