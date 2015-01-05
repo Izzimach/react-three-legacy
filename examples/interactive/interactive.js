@@ -106,7 +106,7 @@ function lookupmaterial(materialname) {
   return newmaterial;
 }
 
-var ClickableCube = React.createClass({
+var ClickableCube = ReactTHREE.createClass({
   displayName: 'ClickableCube',
   propTypes: {
     position: React.PropTypes.instanceOf(THREE.Vector3),
@@ -127,7 +127,7 @@ var ClickableCube = React.createClass({
 // A cube that, when clicked, removes itself from the application state
 //
 
-var ClickToRemoveCube = React.createClass({
+var ClickToRemoveCube = ReactTHREE.createClass({
   displayName: 'ClickToRemoveCube',
   removeThisCube: function(event, intersection) {
     var cubeid = intersection.object.name;
@@ -146,7 +146,7 @@ var ClickToRemoveCube = React.createClass({
 // Component that represents an add button. click on this 'button' (really a cube) to add a cube to the scene
 //
 
-var CubeAppButtons = React.createClass({
+var CubeAppButtons = ReactTHREE.createClass({
   displayName:'CubeAppButtons',
   propTypes: {
   },
@@ -167,7 +167,7 @@ var CubeAppButtons = React.createClass({
 // generate a ClickableCube component for each entry in the 'cubes' property.
 //
 
-var RemovableCubes = React.createClass({
+var RemovableCubes = ReactTHREE.createClass({
   displayName:'RemoveableCubes',
   propTypes: {
     cubes: React.PropTypes.arrayOf(React.PropTypes.object)
@@ -181,6 +181,36 @@ var RemovableCubes = React.createClass({
     return React.createElement(ReactTHREE.Object3D,
       containerprops,
       children);
+  }
+});
+
+//
+// A camera that orbits the origin. Specify orbit distance and angle (azimuth)
+//
+
+var OrbitCamera = ReactTHREE.createClass({
+  displayName:'OrbitCamera',
+  propTypes: {
+    distance: React.PropTypes.number.isRequired,
+    azimuth: React.PropTypes.number.isRequired,
+    aspectratio: React.PropTypes.number
+  },
+  render: function() {
+    // could use sin/cos here but a quat allows for more generic rotation
+    var orbitquaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), this.props.azimuth);
+    var cameraposition = new THREE.Vector3(this.props.distance,0,0); // camera position at azimuth 0
+    cameraposition.applyQuaternion(orbitquaternion);
+
+    return React.createElement(ReactTHREE.PerspectiveCamera,
+      {
+        name:'maincamera',
+        fov:75,
+        aspect:this.props.aspectratio,
+        position: cameraposition,
+        lookat: new THREE.Vector3(0,0,0),
+        near:1,
+        far:5000
+      });
   }
 });
 
@@ -201,56 +231,43 @@ var CubeApp = React.createClass({
     var width = window.innerWidth - this.props.borderpx;
     var height = window.innerHeight - this.props.borderpx;
 
-    var initialcamera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
-    initialcamera.position.z = 600;
-    initialcamera.userData = null; // will set this up in componentDidMount
-
-    return {camera: initialcamera, width:width, height:height};
+    return {width:width, height:height, cameraazimuth:0};
   },
   componentDidMount: function() {
-    var zeroVec = new THREE.Vector3(0,0,0);
     var componentinstance = this;
-    var spinquaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), 0.01);
     var animationcallback = function(/*t*/) {
-      var camera = componentinstance.state.camera;
-      camera.position.applyQuaternion(spinquaternion);
-      camera.lookAt(zeroVec);
-      componentinstance.setState({camera:camera});      // 'update' the camera
-      camera.userData = requestAnimationFrame(animationcallback);
+      var newazimuth = componentinstance.state.cameraazimuth + 0.01;
+
+      var newstate = {
+        cameraazimuth:newazimuth,
+        spincameracallback:requestAnimationFrame(animationcallback)
+      };
+      componentinstance.setState(newstate);
     };
-    // add an interval timer function to rotation the camera
-    // the rAQ timer ID is dumped into the camera. Not the best place to put it probably.
-    this.state.camera.userData = requestAnimationFrame(animationcallback);
+    // add an interval timer function to rotate the camera
+    componentinstance.setState({spincameracallback:requestAnimationFrame(animationcallback)});
 
     // handle resize events - should prob. be a mixin
     var resizecallback = function() {
       var newwidth = window.innerWidth - componentinstance.props.borderpx;
       var newheight = window.innerHeight - componentinstance.props.borderpx;
-
-      // since we're responsible for the camera we need to update it here
-      var camera = componentinstance.state.camera;
-      camera.aspect = (newwidth / newheight);
-      camera.updateProjectionMatrix();
-
-      componentinstance.setState({width:newwidth, height:newheight, camera:camera});
+      componentinstance.setState({width:newwidth, height:newheight});
     };
     window.addEventListener('resize',resizecallback, false);
-    this.setState({resizecallback:resizecallback});
+    componentinstance.setState({resizecallback:resizecallback});
   },
   componentWillUnmount: function() {
-    if (this.state.camera.userData !== null) {
-      cancelAnimationFrame(this.state.camera.userData);
+    if (this.state.spincameracallback !== null) {
+      cancelAnimationFrame(this.state.spincameracallback);
     }
-    this.state.camera.userData = null;
     window.removeEventListener('resize',this.state.resizecallback);
   },
   render: function() {
     return React.createElement(
       ReactTHREE.Scene,
-      // stage props
-      {width: this.state.width, height: this.state.height, camera:this.state.camera},
-      // children components are the buttons and the dynamic sprites
+      {width: this.state.width, height: this.state.height, camera:'maincamera'},
       [
+        React.createElement(OrbitCamera, {key:'camera', distance:600, azimuth:this.state.cameraazimuth, aspectratio:this.state.width / this.state.height}),
         React.createElement(RemovableCubes, {key:'cubes', cubes:this.props.cubes}),
         React.createElement(CubeAppButtons, {key:'gui'})
       ]

@@ -41,6 +41,7 @@ var putListener = ReactBrowserEventEmitter.putListener;
 var listenTo = ReactBrowserEventEmitter.listenTo;
 
 var assign = require('react/lib/Object.assign');
+var warning = require('react/lib/warning');
 
 var Detector = require('../vendor/Detector.js');
 
@@ -308,23 +309,10 @@ var THREEScene = createTHREEComponent(
 
       this._THREEObject3D = new THREE.Scene();
 
-      var camera = props.camera;
-      if (camera === null || !(camera instanceof THREE.Camera)) {
-        camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
-        camera.aspect = props.width / props.height;
-        camera.updateProjectionMatrix();
-        camera.position.z = 600;
-
-        if (props.camera) {
-          this.applyTHREEObject3DPropsToObject(camera, {}, props.camera);
-        }
-      }
-
       this._THREErenderer = Detector.webgl ?
         new THREE.WebGLRenderer({canvas:renderelement}) :
         new THREE.CanvasRenderer({canvas:renderelement});
       this._THREErenderer.setSize(+props.width, +props.height);
-      this._THREEcamera = camera;
       this._THREEprojector = new THREE.Projector();
       this._THREEraycaster = new THREE.Raycaster();
       this.setApprovedDOMProperties(props);
@@ -338,6 +326,40 @@ var THREEScene = createTHREEComponent(
         transaction
       );
       ReactUpdates.ReactReconcileTransaction.release(transaction);
+
+      // can't look for refs until children get mounted
+      var camera = props.camera;
+      if (typeof camera === 'string') {
+        camera = this._THREEObject3D.getObjectByName(camera, true);
+      }
+      else if (camera === null || (typeof camera === 'undefined')) {
+        // look for a 'maincamera' object; if none, then make a default camera
+        camera = this._THREEObject3D.getObjectByName('maincamera', true);
+        if (camera === null) {
+          camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
+          camera.aspect = props.width / props.height;
+          camera.updateProjectionMatrix();
+          camera.position.z = 600;
+        }
+      }
+      // backward compability -- for now
+      else if (typeof camera === 'object') {
+        warning(false,"As of 0.2.0 the 'camera' prop in a react-three scene " +
+          "should be a string specifying the name of a camera component.");
+
+        // pass the object through if it's a Camera object. If not, make a
+        // default camera object and copy over props
+        if (!(camera instanceof THREE.Camera)) {
+          camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
+          camera.aspect = props.width / props.height;
+          camera.updateProjectionMatrix();
+          camera.position.z = 600;
+          this.applyTHREEObject3DPropsToObject(camera, {}, props.camera);
+        }
+      }
+
+      this._THREEcamera = camera;
+
       this.renderScene();
 
       var that = this;
@@ -382,12 +404,18 @@ var THREEScene = createTHREEComponent(
         this._THREErenderer.setSize(+props.width, +props.height);
       }
 
-      this.applyTHREEObject3DPropsToObject(this._THREEcamera, this.props.camera || {}, props.camera || {});
-
       this.setApprovedDOMProperties(props);
       this.applyTHREEObject3DProps(this.props, props);
 
       this.updateChildren(props.children, transaction);
+
+      if (typeof props.camera === 'string') {
+        this._THREEcamera = this._THREEObject3D.getObjectByName(props.camera);
+      } else {
+        this.applyTHREEObject3DPropsToObject(this._THREEcamera, this.props.camera || {}, props.camera || {});
+      }
+
+
       this.props = props;
       this.renderScene();
     },
