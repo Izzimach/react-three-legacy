@@ -335,7 +335,7 @@ var THREEScene = createTHREEComponent(
       else if (camera === null || (typeof camera === 'undefined')) {
         // look for a 'maincamera' object; if none, then make a default camera
         camera = this._THREEObject3D.getObjectByName('maincamera', true);
-        if (camera === null) {
+        if (typeof camera === 'undefined') {
           camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
           camera.aspect = props.width / props.height;
           camera.updateProjectionMatrix();
