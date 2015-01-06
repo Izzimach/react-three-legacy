@@ -333,9 +333,11 @@ var THREEScene = createTHREEComponent(
         camera = this._THREEObject3D.getObjectByName(camera, true);
       }
       else if (camera === null || (typeof camera === 'undefined')) {
+        warning(false, "No camera prop specified for react-three scene, using 'maincamera'");
         // look for a 'maincamera' object; if none, then make a default camera
         camera = this._THREEObject3D.getObjectByName('maincamera', true);
         if (typeof camera === 'undefined') {
+          warning(false, "No camera named 'maincamera' found, creating a default camera");
           camera = new THREE.PerspectiveCamera( 75, props.width / props.height, 1, 5000 );
           camera.aspect = props.width / props.height;
           camera.updateProjectionMatrix();
