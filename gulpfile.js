@@ -21,6 +21,7 @@ var gutil = require('gulp-util');
 var header = require('gulp-header');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var jsxtransform = require('gulp-react');
 
 //
 // testing/packaging
@@ -172,14 +173,23 @@ gulp.task('dist-clojars', ['dist-clojars-src','dist-clojars-project','dist-cloja
   gutil.log('chdir into the "dist-clojars" directory and run "lein deploy clojars"');
 });
 
-
+//
+// the JSX example needs to be run through the jsx transform
+//
+gulp.task('jsxtransform', function() {
+  return gulp.src('examples/jsxtransform/*.jsx', {base:'examples/jsxtransform'})
+    .pipe(jsxtransform())
+    .pipe(gulp.dest('examples/jsxtransform'))
+    .pipe(livereload());
+});
 
 gulp.task('watch', ['bundle'], function() {
   gulp.watch(SOURCEGLOB, ['browserify']);
   gulp.watch(EXAMPLESGLOB, ['lint']);
+  gulp.watch(['examples/jsxtransform/*.jsx'], ['jsxtransform']);
 });
 
-gulp.task('livereload', ['lint','bundle'], function() {
+gulp.task('livereload', ['lint','bundle','jsxtransform'], function() {
   var nodestatic = require('node-static');
   var fileserver = new nodestatic.Server('.');
   require('http').createServer(function(request, response) {
@@ -191,6 +201,7 @@ gulp.task('livereload', ['lint','bundle'], function() {
   livereload.listen();
 
   gulp.watch([SOURCEGLOB], ['bundle']);
+  gulp.watch(['examples/jsxtransform/*.jsx'], ['jsxtransform']);
   gulp.watch([EXAMPLESGLOB], ['lint']);
 });
 
