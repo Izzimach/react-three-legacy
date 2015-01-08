@@ -76,16 +76,23 @@ var THREEObject3DMixin = assign({}, ReactMultiChild.Mixin, {
   },
 
   applyTHREEObject3DPropsToObject: function(THREEObject3D, oldProps, props) {
+    // these props have defaults
     if (typeof props.position !== 'undefined') {
       THREEObject3D.position.copy(props.position);
+    } else {
+      THREEObject3D.position.set(0,0,0);
     }
 
     if (typeof props.quaternion !== 'undefined') {
       THREEObject3D.quaternion.copy(props.quaternion);
+    } else {
+      THREEObject3D.quaternion.set(0,0,0,1); // no rotation
     }
 
     if (typeof props.visible !== 'undefined') {
       THREEObject3D.visible = props.visible;
+    } else {
+      THREEObject3D.visible = true;
     }
 
     if (typeof props.scale === "number") {
@@ -360,6 +367,10 @@ var THREEScene = createTHREEComponent(
         }
       }
 
+      if (typeof props.background !== 'undefined') {
+        this._THREErenderer.setClearColor(props.background);
+      }
+
       this._THREEcamera = camera;
 
       this.renderScene();
@@ -405,6 +416,11 @@ var THREEScene = createTHREEComponent(
       if (this.props.width != props.width || this.props.width != props.height) {
         this._THREErenderer.setSize(+props.width, +props.height);
       }
+
+      if (props.background !== 'undefined') {
+        this._THREErenderer.setClearColor(props.background);
+      }
+
 
       this.setApprovedDOMProperties(props);
       this.applyTHREEObject3DProps(this.props, props);
