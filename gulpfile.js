@@ -64,12 +64,16 @@ var banner = ['/**',
 var browserlist = ['Firefox'];
 var karmaconfiguration = {
     browsers: browserlist,
-    files: ['vendor/three.js',
+    files: ['vendor/lodash.min.js',
+            'vendor/three.js',
             BUILDPATHDEV,
             'vendor/phantomjs-shims.js', // need a shim to work with the ancient version of Webkit used in PhantomJS
+            'node_modules/resemblejs/resemble.js',
             'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
             'test/basics/*.js',
-            'test/components/*.js'
+            'test/components/*.js',
+            'test/pixels/pixelTests.js',
+            {pattern:'test/pixels/*.png',included:false, served:true} // for render tests
            ],
     frameworks:['jasmine'],
     singleRun:true
@@ -86,6 +90,7 @@ gulp.task('help', function() {
   console.log('"watch" - watch ' + pkg.name + ' source files and rebuild');
   console.log('"test" - run tests in test directory');
   console.log('"livereload" - compile and launch web server/reload server');
+  console.log('"pixelrefs" - generate pixel reference images (needs phantomjs)');
 });
 
 gulp.task('lint', function() {
@@ -209,6 +214,25 @@ gulp.task('test', ['bundle'], function() {
   karma.server.start(karmaconfiguration, function (exitCode) {
     gutil.log('Karma has exited with code ' + exitCode);
     process.exit(exitCode);
+  });
+});
+
+//
+// generate the bitmap references used in testing
+//
+
+gulp.task('pixelrefs', ['bundle'], function(done) {
+  var command = 'phantomjs';
+  var child = exec(command + ' test/pixels/generatetestrender.js',
+  function(error, stdout, stderr) {
+    gutil.log('result of reference image generation:\n' + stdout);
+    if (stderr.length > 0) {
+      gutil.log('stderr: ' + stderr);
+    }
+    if (error !== null) {
+      gutil.log('exec error: ' + error);
+    }
+    done();
   });
 });
 
