@@ -6,4 +6,6 @@ gulpfile.js
 index.html
 bower.json
 bower_components/
+.jshintrc
+.travis.yml
 
