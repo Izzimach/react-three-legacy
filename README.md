@@ -5,9 +5,11 @@ react-three
 
 Create/control a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
+To use React for drawing 2D using WebGL, try [react-pixi](https://github.com/Izzimach/react-pixi).
+
 You can view an interactive demo (hopefully) at [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html). This demo is also available as a standalone project at [r3test](https://github.com/Izzimach/r3test/)
 
-## Install and Use
+## Install and Use with npm
 
 If you are building a project with a `package.json` file you can
 ```
@@ -27,14 +29,16 @@ and include one of the three.js files yourself, either by building your own copy
 
 ## Building Standalone Files
 
-You will need node and npm. You should probably install gulp globally as well.
+Checkout the git repository. You will need node and npm. You should probably install gulp globally as well.
 
 ```
+git clone https://github.com/Izzimach/react-three.git
+cd react-three
 npm install -g gulp
 npm install
 ```
 
-Simply running
+At this point, simply running
 
 ```
 gulp
