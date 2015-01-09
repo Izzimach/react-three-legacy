@@ -61,15 +61,7 @@ Examples are set up in the examples/ directory. You can run
 gulp livereload
 ```
 
-Then open various examples in your browser:
-
-```
-http://localhost:8080/cupcake/cupcake.html
-http://localhost:8080/interactive/interactive.html
-```
-
-There should probably be something in place to generate an index.html
-containing all of the examples. Oh well.
+Then open the example index in your browser at `http://localhost:8080/`
 
 ## Testing
 
@@ -78,3 +70,10 @@ You can run tests using gulp:
 ```
 gulp test
 ```
+
+To generate the pixel reference images you need to install phantomjs and run
+
+```
+gulp pixelrefs
+```
+
