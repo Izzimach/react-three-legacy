@@ -317,7 +317,10 @@ var THREEScene = createTHREEComponent(
       this._THREEObject3D = new THREE.Scene();
 
       this._THREErenderer = Detector.webgl ?
-        new THREE.WebGLRenderer({canvas:renderelement}) :
+        new THREE.WebGLRenderer({
+          canvas:renderelement,
+          antialias: props.antialias === undefined ? true : props.antialias
+        }) :
         new THREE.CanvasRenderer({canvas:renderelement});
       this._THREErenderer.setSize(+props.width, +props.height);
       this._THREEprojector = new THREE.Projector();
