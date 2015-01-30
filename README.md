@@ -42,16 +42,14 @@ At this point, simply running
 gulp
 ```
 
-Will package up the react-three components along with React and put the result in build/react-three.js. If you include this into your webpage via
-a script tag:
+Will package up the react-three components along with React and put the result in 
+build/react-three.js. If you include this into your webpage via a script tag:
 
 ```
 <script src="react-three.js"></script>
 ```
 
-Then ```React``` will appear in the global namespace and the new React-THREE components are available as ```ReactTHREE```. Note that
-you'll still have to load three.js with a separate call to require().
-
+Then the relevant parts will be accessed in the global namespace as `React`, `ReactTHREE`, and `THREE`.
 
 ![Sample Cupcake component](docs/react-three-interactiveexample.png)
 
