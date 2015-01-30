@@ -22,6 +22,7 @@ and then access the extensions via a `require` expression:
 ```
 var React = require('react');
 var ReactTHREE = require('react-three');
+var THREE = require('three');
 ```
 
 ## Building Standalone Files
