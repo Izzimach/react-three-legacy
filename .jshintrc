@@ -5,7 +5,6 @@
 	"browser":true,
 	"globals" : {
 	  "module" : false,
-	  "require" : false,
-	  "THREE" : false
+	  "require" : false
 	}
 }

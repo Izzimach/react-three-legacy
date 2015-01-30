@@ -3,6 +3,7 @@
 /* jshint strict: false */
 /* global React : false */
 /* global ReactTHREE : false */
+/* global THREE : false */
 
 var sphereGeometry = new THREE.SphereGeometry(100, 32, 32);
 

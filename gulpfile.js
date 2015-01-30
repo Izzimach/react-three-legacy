@@ -65,10 +65,10 @@ var browserlist = ['Firefox'];
 var karmaconfiguration = {
     browsers: browserlist,
     files: ['vendor/lodash.min.js',
-            'vendor/three.js',
             BUILDPATHDEV,
             'vendor/phantomjs-shims.js', // need a shim to work with the ancient version of Webkit used in PhantomJS
             'node_modules/resemblejs/resemble.js',
+            'node_modules/three/three.js',
             'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
             'test/basics/*.js',
             'test/components/*.js',
@@ -103,6 +103,7 @@ gulp.task('lint', function() {
 gulp.task('browserify',['lint'], function() {
   var bundler = browserify();
   bundler.require('react');
+  bundler.require('three');
   bundler.require('./src/ReactTHREE.js',{expose:MODULENAME});
 
   return bundler.bundle().on('error', errorHandler)
