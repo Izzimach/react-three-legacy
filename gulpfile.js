@@ -61,7 +61,7 @@ var banner = ['/**',
              ' */',
              ''].join('\n');
 
-var browserlist = ['Chrome'];
+var browserlist = ['Firefox'];
 var karmaconfiguration = {
     browsers: browserlist,
     files: ['vendor/lodash.min.js',
