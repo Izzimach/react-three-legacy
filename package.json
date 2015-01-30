@@ -19,7 +19,8 @@
   "license": "Apache-2.0",
   "main": "src/ReactTHREE.js",
   "peerDependencies": {
-    "react": "^0.12.2"
+    "react": "^0.12.2",
+    "three": "^0.68.0"
   },
   "devDependencies": {
     "browserify": "~7.0.0",
@@ -45,6 +46,7 @@
     "react-tools": "^0.12.2",
     "resemblejs": "^1.2.0",
     "rimraf": "~2.2.8",
+    "three": "^0.68.0",
     "vinyl-source-stream": "~1.0.0"
   },
   "scripts": {

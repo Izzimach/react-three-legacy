@@ -5,6 +5,7 @@
 /* global _ : false */
 /* global React : false */
 /* global ReactTHREE : false */
+/* global THREE : false */
 /* jshint strict: false */
 
 var g_assetpath = function(filename) { return '../assets/' + filename; };

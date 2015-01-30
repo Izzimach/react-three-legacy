@@ -24,9 +24,6 @@ var React = require('react');
 var ReactTHREE = require('react-three');
 ```
 
-Note that this does not include three.js so you'll still need to find
-and include one of the three.js files yourself, either by building your own copy or via something like bower.
-
 ## Building Standalone Files
 
 Checkout the git repository. You will need node and npm. You should probably install gulp globally as well.
@@ -52,7 +49,7 @@ a script tag:
 ```
 
 Then ```React``` will appear in the global namespace and the new React-THREE components are available as ```ReactTHREE```. Note that
-you'll still have to load three.js with a separate script tag.
+you'll still have to load three.js with a separate call to require().
 
 
 ![Sample Cupcake component](docs/react-three-interactiveexample.png)

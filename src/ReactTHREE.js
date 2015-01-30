@@ -22,6 +22,7 @@
 "use strict";
 
 var React = require('react');
+var THREE = require('three');
 
 var ReactMount = require('react/lib/ReactMount');
 var ReactComponent = require('react/lib/ReactComponent');
