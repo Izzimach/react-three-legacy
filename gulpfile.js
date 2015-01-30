@@ -68,7 +68,6 @@ var karmaconfiguration = {
             BUILDPATHDEV,
             'vendor/phantomjs-shims.js', // need a shim to work with the ancient version of Webkit used in PhantomJS
             'node_modules/resemblejs/resemble.js',
-            'node_modules/three/three.js',
             'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
             'test/basics/*.js',
             'test/components/*.js',
@@ -93,7 +92,7 @@ gulp.task('help', function() {
   console.log('"pixelrefs" - generate pixel reference images (needs phantomjs)');
 });
 
-gulp.task('lint', function() {
+gulp.task('lint', ['jsxtransform'], function() {
   return gulp.src([SOURCEGLOB,EXAMPLESGLOB])
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
