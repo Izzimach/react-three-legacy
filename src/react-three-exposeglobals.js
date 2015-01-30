@@ -4,4 +4,5 @@
 
 window.React = require('react');
 window.ReactTHREE = require('react-three');
+window.THREE = require('three');
 
