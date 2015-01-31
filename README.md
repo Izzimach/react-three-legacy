@@ -9,6 +9,42 @@ To use React for drawing 2D using WebGL, try [react-pixi](https://github.com/Izz
 
 You can view an interactive demo (hopefully) at [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html). This demo is also available as a standalone project at [r3test](https://github.com/Izzimach/r3test/)
 
+## Usage
+
+An example render functions from the examples:
+
+```javascript
+render: function() {
+  var MainCameraElement = React.createElement(
+    ReactTHREE.PerspectiveCamera,
+    {name:'maincamera', fov:'75', aspect:this.props.width/this.props.height,
+     near:1, far:5000,
+     position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)});
+
+  return React.createElement(
+      ReactTHREE.Scene,
+      {width:this.props.width, height:this.props.height, camera:'maincamera'},
+      MainCameraElement,
+      React.createElement(Cupcake, this.props.cupcakedata)
+  );
+}
+```
+
+or if you want to use JSX,
+
+```javascript
+render: function() {
+  var aspectratio = this.props.width / this.props.height;
+  var cameraprops = {fov:75, aspect:aspectratio, near:1, far:5000,
+    position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)};
+
+  return  <Scene width={this.props.width} height={this.props.height} camera="maincamera">
+            <PerspectiveCamera name="maincamera" {...cameraprops} />
+            <Cupcake {...this.props.cupcakedata} />
+          </Scene>;
+}
+```
+
 ## Install and Use with npm
 
 If you are building a project with a `package.json` file you can
@@ -42,7 +78,7 @@ At this point, simply running
 gulp
 ```
 
-Will package up the react-three components along with React and put the result in 
+Will package up the react-three components along with React and put the result in
 build/react-three.js. If you include this into your webpage via a script tag:
 
 ```
@@ -76,4 +112,3 @@ To generate the pixel reference images you need to install phantomjs and run
 ```
 gulp pixelrefs
 ```
-
