@@ -45,6 +45,10 @@ var warning = require('react/lib/warning');
 
 var Detector = require('../vendor/Detector.js');
 
+var shouldUpdateReactComponent = require('react/lib/shouldUpdateReactComponent');
+var instantiateReactComponent = require ('react/lib/instantiateReactComponent');
+var invariant = require('react/lib/invariant');
+
 
 //
 // Generates a React component by combining several mixin components
@@ -791,7 +795,137 @@ var THREEOrthographicCamera = createTHREEComponent(
 
       this._THREEObject3D.updateProjectionMatrix();
     }
+  }
+);
+
+//
+// Composite components don't have a displayObject. So we have to do some work to find
+// the proper Object3D sometimes.
+//
+
+function findObject3DAncestor(componentinstance) {
+  // walk up via _owner until we find something with a displayObject hasOwnProperty
+  var componentwalker = componentinstance._currentElement._owner;
+  while (typeof componentwalker !== 'undefined') {
+    // no owner? then fail
+    if (typeof componentwalker._renderedComponent._THREEObject3D !== 'undefined') {
+      return componentwalker._renderedComponent._THREEObject3D;
+    }
+    componentwalker = componentwalker._currentElement._owner;
+  }
+
+  // we walked all the way up and found no Object3D
+  return undefined;
+}
+
+function findObject3DChild(componentinstance) {
+  // walk downwards via _renderedComponent to find something with a displayObject
+  var componentwalker = componentinstance;
+  while (typeof componentwalker !== 'undefined') {
+    // no displayObject? then fail
+    if (typeof componentwalker._THREEObject3D !== 'undefined') {
+      return componentwalker._THREEObject3D;
+    }
+    componentwalker = componentwalker._renderedComponent;
+  }
+
+  // we walked all the way down and found no Object3D
+  return undefined;
+
+}
+
+//
+// time to monkey-patch React!
+//
+// a subtle bug happens when ReactCompositeComponent updates something in-place by
+// modifying HTML markup; since THREE objects don't exist as markup the whole thing bombs.
+// we try to fix this by monkey-patching ReactCompositeComponent
+//
+var originalCreateClass = React.createClass;
+
+function createTHREEClass(spec) {
+
+  var patchedspec = assign({}, spec, {
+    updateComponent : function(transaction, prevParentDescriptor) {
+      // Find the first actual rendered (non-Composite) component.
+      // If that component is a THREE node we use the special code here.
+      // If not, we call back to the original updateComponent which should
+      // handle all non-THREE nodes.
+
+      var prevObject3D = findObject3DChild(this._renderedComponent);
+      if (!prevObject3D) {
+        // not a THREE node, use the original version of updateComponent
+        this.prototype.updateComponent(transaction, prevParentDescriptor);
+        return;
+      }
+
+      // This is a THREE node, do a special THREE version of updateComponent
+      ReactComponent.Mixin.updateComponent.call(
+        this,
+        transaction,
+        prevParentDescriptor
+      );
+
+      var prevComponentInstance = this._renderedComponent;
+      var prevElement = prevComponentInstance._currentElement;
+      var nextElement = this._renderValidatedComponent();
+      if (shouldUpdateReactComponent(prevElement, nextElement)) {
+        prevComponentInstance.receiveComponent(nextElement, transaction);
+      } else {
+        // We can't just update the current component.
+        // So we nuke the current instantiated component and put a new component in
+        // the same place based on the new props.
+        var rootID = this._rootNodeID;
+
+        var object3DParent = prevObject3D.parent;
+
+        if ("production" !== process.env.NODE_ENV) { // jshint ignore:line
+          // this should produce the parent as well
+          var object3DAncestor = findObject3DAncestor(this);
+          invariant(object3DAncestor === object3DParent,
+            'Object3D found by following _owner fields should match Object3D parent');
+        }
+
+        // unparent the current DisplayObject from its parent
+        var object3DIndex = object3DParent.children.indexOf(prevObject3D);
+        prevComponentInstance.unmountComponent();
+        //object3DParent.remove(prevObject3D);
+        this._THREEObject3D = null;
+
+        // create the new object and stuff it into the place vacated by the old object
+        this._renderedComponent = instantiateReactComponent(nextElement, this._currentElement.type);
+        var nextObject3D = this._renderedComponent.mountComponent(
+          rootID,
+          transaction,
+          this._mountDepth + 1
+        );
+        this._THREEObject3D = nextObject3D;
+
+        // fixup _mountImage as well
+        this._mountImage = this._THREEObject3D;
+
+        // overwrite the old child
+        object3DParent.children[object3DIndex] = nextObject3D;
+      }
+    }
   });
+
+  /* jshint validthis: true */
+  var newclass = originalCreateClass(patchedspec);
+  return newclass;
+
+}
+
+// gaaah
+React.createClass = createTHREEClass;
+
+function dontUseReactTHREECreateClass(spec)
+{
+  warning(false, "ReactTHREE.createClass is no longer needed, use React.createClass instead");
+  return createTHREEClass(spec);
+}
+
+
 
 //
 // module data
@@ -813,6 +947,6 @@ module.exports =  {
   DirectionalLight: THREEDirectionalLight,
   HemisphereLight: THREEHemisphereLight,
   SpotLight: THREESpotLight,
-  createClass : React.createClass // should monkey-patch this eventually
+  createClass : dontUseReactTHREECreateClass
 
 };

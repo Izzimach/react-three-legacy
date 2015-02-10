@@ -11,7 +11,7 @@ describe("THREE Object3D Component", function() {
   // has some specific number of objects as children.
   // you specify the number of children as props.childCount
   //
-  var VariableChildrenComponent = ReactTHREE.createClass({
+  var VariableChildrenComponent = React.createClass({
     displayName: 'variableChildrenComponent',
     render: function () {
       var o3dargs = [{key:'argh'}];
@@ -149,7 +149,7 @@ describe("THREE Object3D Component", function() {
     // will update in-place and then updateComponent in ReactCompositeComponentMixin will try to nuke and replace the child
     // component since the keys don't match.
     //
-    var injectedKeyComponent = ReactTHREE.createClass({
+    var injectedKeyComponent = React.createClass({
       displayName: 'injectedKeyComponent',
       render: function () {
         var propswithkey = _.clone(this.props);
@@ -159,8 +159,6 @@ describe("THREE Object3D Component", function() {
     });
     var injectedKeyFactory = React.createFactory(injectedKeyComponent);
 
-    // note we use React.createClass, not ReactTHREE.createClass, since the Scene
-    // is actually a <canvas> DOM element!
     var injectedKeyScene = React.createClass({
       displayName: 'injectedKeyScene',
       render: function () {

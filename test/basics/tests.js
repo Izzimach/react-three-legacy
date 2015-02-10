@@ -10,6 +10,7 @@ describe("React and ReactTHREE modules", function() {
   it("exist and are loaded", function() {
     expect(React).toBeDefined();
     expect(ReactTHREE).toBeDefined();
+    expect(THREE).toBeDefined();
   });
 
   it("has all the components you expect", function() {
