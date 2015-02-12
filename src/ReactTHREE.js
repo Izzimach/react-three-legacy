@@ -50,7 +50,6 @@ var shouldUpdateReactComponent = require('react/lib/shouldUpdateReactComponent')
 var instantiateReactComponent = require ('react/lib/instantiateReactComponent');
 var invariant = require('react/lib/invariant');
 
-
 //
 // Generates a React component by combining several mixin components
 //
@@ -856,7 +855,7 @@ function createTHREEClass(spec) {
       var prevObject3D = findObject3DChild(this._renderedComponent);
       if (!prevObject3D) {
         // not a THREE node, use the original version of updateComponent
-        this.prototype.updateComponent(transaction, prevParentDescriptor);
+        this._renderedComponent.updateComponent(transaction, prevParentDescriptor);
         return;
       }
 

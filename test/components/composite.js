@@ -151,6 +151,6 @@ describe("ReactTHREE composite components", function() {
     expect(mountpoint.childNodes.length).toBe(1);
     expect(mountpoint.childNodes[0].nodeName).toBe('DIV');
     expect(mountpoint.childNodes[0].childNodes.length).toBe(1);
-    expect(mountpoint.childNodes[0].childNodes[0].Name).toBe('DIV');
+    expect(mountpoint.childNodes[0].childNodes[0].nodeName).toBe('DIV');
   });
 });
