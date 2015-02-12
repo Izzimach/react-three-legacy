@@ -19,7 +19,7 @@
 // adding sub-objects to the BasicTestFixture component. This way we
 // avoid creating and destroying WebGL contexts, although you can
 // still it do 'by hand' by unmounting the component
-var BasicTestFixture = ReactTHREE.createClass({
+var BasicTestFixture = React.createClass({
   displayName: 'BasicTestFixture',
   render: function() {
     var sceneprops = {width:this.props.width, height:this.props.height, ref:'scene'};

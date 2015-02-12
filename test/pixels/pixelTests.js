@@ -24,7 +24,7 @@ function drawTestRenders(mountpoint, testimage) {
   };
   var imagesize = 400;
 
-  var MeshTestComponent = ReactTHREE.createClass({
+  var MeshTestComponent = React.createClass({
     displayName:'SpriteTextComponent',
     render: function () {
       var cameraprops = _.clone(defaultcameraprops);
