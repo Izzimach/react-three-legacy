@@ -194,7 +194,7 @@ var OrbitCamera = ReactTHREE.createClass({
   propTypes: {
     distance: React.PropTypes.number.isRequired,
     azimuth: React.PropTypes.number.isRequired,
-    aspectratio: React.PropTypes.number
+    aspectratio: React.PropTypes.number.isRequired
   },
   render: function() {
     // could use sin/cos here but a quat allows for more generic rotation
