@@ -113,4 +113,44 @@ describe("ReactTHREE composite components", function() {
     reactinstance.setProps({text:'ack'});
     expect(scene.children.length).toBe(1); // might be 0 or 2 if buggy
   });
+
+  it("still works on non-THREE nodes", function () {
+    // we need to fall back on the default DOM behavior for nodes that are
+    // not THREE elements. So we'll do the same tests as above but with DOM nodes
+
+    var injectedKeyFactory = React.createFactory(React.createClass({
+      displayName: 'injectedKeyComponent',
+      render : function() {
+        var propswithkey = _.clone(this.props);
+        propswithkey.key = this.props.injectedkey;
+        return React.createElement('div', propswithkey);
+      }
+    }));
+    var injectedKeyStageFactory = React.createFactory(React.createClass({
+      displayName: 'injectedKeyStage',
+      render: function () {
+        return React.createElement('div', {ref:'rootnode'},
+                                   injectedKeyFactory({key:'argh', injectedkey:this.props.injectedkey}));
+      }
+    }));
+
+    var baseprops = {key:'argh'};
+    var addinjectedkey = function(originalprops, injectedkey) {
+      var newprops = _.clone(originalprops);
+      newprops.injectedkey = injectedkey;
+      return newprops;
+    };
+    var props1 = addinjectedkey(baseprops, 'one');
+    var props2 = addinjectedkey(baseprops, 'two');
+
+    var reactinstance = React.render(injectedKeyStageFactory(props1),mountpoint);
+
+    // this should destroy and replace the child instance instead of updating it
+    reactinstance.setProps(props2);
+
+    expect(mountpoint.childNodes.length).toBe(1);
+    expect(mountpoint.childNodes[0].nodeName).toBe('DIV');
+    expect(mountpoint.childNodes[0].childNodes.length).toBe(1);
+    expect(mountpoint.childNodes[0].childNodes[0].Name).toBe('DIV');
+  });
 });
