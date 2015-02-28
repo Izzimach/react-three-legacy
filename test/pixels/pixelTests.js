@@ -75,7 +75,7 @@ function drawTestRenders(mountpoint, testimage) {
 function pixelTests(fixture, testimagepath, resultscallback) {
   // preload the image so that we don't get a blank render
   console.log("Loading test image...");
-  THREE.ImageUtils.loadTexture(testimagepath + 'testimage.png', new THREE.UVMapping(), function (testtexture) {
+  THREE.ImageUtils.loadTexture(testimagepath + 'testimage.png', THREE.UVMapping, function (testtexture) {
     var results = drawTestRenders(fixture, testtexture);
     resultscallback(results);
   }, function() { console.log("error loading test image");});

@@ -327,7 +327,6 @@ var THREEScene = createTHREEComponent(
         }) :
         new THREE.CanvasRenderer({canvas:renderelement});
       this._THREErenderer.setSize(+props.width, +props.height);
-      this._THREEprojector = new THREE.Projector();
       this._THREEraycaster = new THREE.Raycaster();
       this.setApprovedDOMProperties(props);
       this.applyTHREEObject3DProps({},this.props);
@@ -467,11 +466,10 @@ var THREEScene = createTHREEComponent(
       var y = - ( (event.clientY - rect.top) / this.props.height) * 2 + 1;
 
       var mousecoords = new THREE.Vector3(x,y,0.5);
-      var projector = this._THREEprojector;
       var raycaster = this._THREEraycaster;
       var camera = this._THREEcamera;
 
-      projector.unprojectVector(mousecoords, camera);
+      mousecoords.unproject(camera);
       raycaster.ray.set( camera.position, mousecoords.sub( camera.position ).normalize() );
 
       var intersections = raycaster.intersectObjects( this._THREEObject3D.children, true );
