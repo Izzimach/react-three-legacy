@@ -70,10 +70,13 @@ var test_basic_files =[
     BUILDPATHDEV,
     'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
     'test/basics/*.js',
+    'test/components/scene.js',
+    'test/components/composite.js',
+    'test/components/object3d.js'
 ];
 var test_render_files = [
             'node_modules/resemblejs/resemble.js',
-            'test/components/*.js',
+            'test/components/mesh.js',
             'test/pixels/pixelTests.js',
             {pattern:'test/pixels/*.png',included:false, served:true} // for render tests
 ];
