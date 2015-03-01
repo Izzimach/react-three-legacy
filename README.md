@@ -101,13 +101,18 @@ Then open the example index in your browser at `http://localhost:8080/`
 
 ## Testing
 
+Certain tests require WebGL and cannot be run on the CI test server. Because of
+this, it is recommended that you run the tests locally before submitting a pull request.
+
 You can run tests using gulp:
 
 ```
 gulp test
 ```
 
-To generate the pixel reference images you need to install phantomjs and run
+Certain tests compare results to know correct reference images.
+If for some reason you need to generate (or regenerate) the pixel reference images
+you need to install phantomjs and run
 
 ```
 gulp pixelrefs
