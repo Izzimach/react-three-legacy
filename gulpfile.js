@@ -2,6 +2,7 @@
 // system-level requires
 //
 
+var _ = require('lodash');
 var exec = require('child_process').exec;
 var path = require('path');
 var rimraf = require('rimraf');
@@ -62,21 +63,28 @@ var banner = ['/**',
              ''].join('\n');
 
 var browserlist = ['Firefox'];
-var karmaconfiguration = {
-    browsers: browserlist,
-    files: ['vendor/lodash.min.js',
-            BUILDPATHDEV,
-            'vendor/phantomjs-shims.js', // need a shim to work with the ancient version of Webkit used in PhantomJS
+
+// the travis test build doesn't render anything since travis doesn't support webGL
+var test_basic_files =[
+    'vendor/lodash.min.js',
+    BUILDPATHDEV,
+    'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
+    'test/basics/*.js',
+];
+var test_render_files = [
             'node_modules/resemblejs/resemble.js',
-            'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
-            'test/basics/*.js',
             'test/components/*.js',
             'test/pixels/pixelTests.js',
             {pattern:'test/pixels/*.png',included:false, served:true} // for render tests
-           ],
+];
+var basickarmaconfiguration = {
+    browsers: browserlist,
     frameworks:['jasmine'],
+    files: test_basic_files,
     singleRun:true
 };
+var karmaconfiguration = _.clone(basickarmaconfiguration);
+karmaconfiguration.files = test_basic_files.concat(test_render_files);
 
 function errorHandler(err) {
   gutil.log(err);
@@ -212,6 +220,13 @@ gulp.task('livereload', ['lint','bundle','jsxtransform'], function() {
 
 gulp.task('test', ['bundle'], function() {
   karma.server.start(karmaconfiguration, function (exitCode) {
+    gutil.log('Karma has exited with code ' + exitCode);
+    process.exit(exitCode);
+  });
+});
+
+gulp.task('test-norender', ['bundle'], function() {
+  karma.server.start(basickarmaconfiguration, function (exitCode) {
     gutil.log('Karma has exited with code ' + exitCode);
     process.exit(exitCode);
   });

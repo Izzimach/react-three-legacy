@@ -44,8 +44,6 @@ var listenTo = ReactBrowserEventEmitter.listenTo;
 var assign = require('react/lib/Object.assign');
 var warning = require('react/lib/warning');
 
-var Detector = require('../vendor/Detector.js');
-
 var shouldUpdateReactComponent = require('react/lib/shouldUpdateReactComponent');
 var instantiateReactComponent = require ('react/lib/instantiateReactComponent');
 var invariant = require('react/lib/invariant');
@@ -320,12 +318,10 @@ var THREEScene = createTHREEComponent(
 
       this._THREEObject3D = new THREE.Scene();
 
-      this._THREErenderer = Detector.webgl ?
-        new THREE.WebGLRenderer({
+      this._THREErenderer = new THREE.WebGLRenderer({
           canvas:renderelement,
           antialias: props.antialias === undefined ? true : props.antialias
-        }) :
-        new THREE.CanvasRenderer({canvas:renderelement});
+      });
       this._THREErenderer.setSize(+props.width, +props.height);
       this._THREEraycaster = new THREE.Raycaster();
       this.setApprovedDOMProperties(props);
