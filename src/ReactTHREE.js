@@ -370,7 +370,11 @@ var THREEScene = createTHREEComponent(
       }
 
       if (typeof props.background !== 'undefined') {
-        this._THREErenderer.setClearColor(props.background);
+	// background color should be a number, check it
+	warning(typeof props.background === 'number', "The background property of "+
+		"the scene component must be a number, not " + typeof props.background);
+	this._THREErenderer.setClearColor(props.background);
+
       }
 
       this._THREEcamera = camera;
