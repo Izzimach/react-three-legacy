@@ -107,7 +107,7 @@ function lookupmaterial(materialname) {
   return newmaterial;
 }
 
-var ClickableCube = ReactTHREE.createClass({
+var ClickableCube = React.createClass({
   displayName: 'ClickableCube',
   propTypes: {
     position: React.PropTypes.instanceOf(THREE.Vector3),
@@ -128,7 +128,7 @@ var ClickableCube = ReactTHREE.createClass({
 // A cube that, when clicked, removes itself from the application state
 //
 
-var ClickToRemoveCube = ReactTHREE.createClass({
+var ClickToRemoveCube = React.createClass({
   displayName: 'ClickToRemoveCube',
   removeThisCube: function(event, intersection) {
     var cubeid = intersection.object.name;
@@ -147,7 +147,7 @@ var ClickToRemoveCube = ReactTHREE.createClass({
 // Component that represents an add button. click on this 'button' (really a cube) to add a cube to the scene
 //
 
-var CubeAppButtons = ReactTHREE.createClass({
+var CubeAppButtons = React.createClass({
   displayName:'CubeAppButtons',
   propTypes: {
   },
@@ -168,7 +168,7 @@ var CubeAppButtons = ReactTHREE.createClass({
 // generate a ClickableCube component for each entry in the 'cubes' property.
 //
 
-var RemovableCubes = ReactTHREE.createClass({
+var RemovableCubes = React.createClass({
   displayName:'RemoveableCubes',
   propTypes: {
     cubes: React.PropTypes.arrayOf(React.PropTypes.object)
@@ -189,7 +189,7 @@ var RemovableCubes = ReactTHREE.createClass({
 // A camera that orbits the origin. Specify orbit distance and angle (azimuth)
 //
 
-var OrbitCamera = ReactTHREE.createClass({
+var OrbitCamera = React.createClass({
   displayName:'OrbitCamera',
   propTypes: {
     distance: React.PropTypes.number.isRequired,
@@ -266,7 +266,7 @@ var CubeApp = React.createClass({
   render: function() {
     return React.createElement(
       ReactTHREE.Scene,
-      {width: this.state.width, height: this.state.height, camera:'maincamera'},
+      {width: this.state.width, height: this.state.height, background:0x202020, camera:'maincamera'},
       [
         React.createElement(OrbitCamera, {key:'camera', distance:600, azimuth:this.state.cameraazimuth, aspectratio:this.state.width / this.state.height}),
         React.createElement(RemovableCubes, {key:'cubes', cubes:this.props.cubes}),
