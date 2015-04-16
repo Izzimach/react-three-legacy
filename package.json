@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "main": "src/ReactTHREE.js",
   "peerDependencies": {
-    "react": "^0.12.2",
+    "react": "^0.13.1",
     "three": "^0.70.0"
   },
   "devDependencies": {
@@ -29,7 +29,7 @@
     "gulp-header": "~1.2.0",
     "gulp-jshint": "~1.9.0",
     "gulp-livereload": "~3.0.2",
-    "gulp-react": "~2.0.0",
+    "gulp-react": "~3.0.0",
     "gulp-rename": "~1.2.0",
     "gulp-streamify": "0.0.5",
     "gulp-template": "~1.1.1",
@@ -43,8 +43,8 @@
     "karma-jasmine": "~0.3.2",
     "lodash": "^3.3.1",
     "node-static": "~0.7.3",
-    "react": "^0.12.2",
-    "react-tools": "^0.12.2",
+    "react": "^0.13.1",
+    "react-tools": "^0.13.1",
     "resemblejs": "^1.2.0",
     "rimraf": "~2.2.8",
     "three": "^0.70.0",

@@ -66,22 +66,22 @@ var browserlist = ['Firefox'];
 
 // the travis test build doesn't render anything since travis doesn't support webGL
 var test_basic_files =[
-    'vendor/lodash.min.js',
-    BUILDPATHDEV,
-    'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
-    'test/basics/*.js'
+  'vendor/lodash.min.js',
+  BUILDPATHDEV,
+  'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
+  'test/basics/*.js'
 ];
 var test_render_files = [
-    'node_modules/resemblejs/resemble.js',
-    'test/components/*.js',
-    'test/pixels/pixelTests.js',
-    {pattern:'test/pixels/*.png',included:false, served:true} // for render tests
+  'node_modules/resemblejs/resemble.js',
+  'test/components/*.js',
+  'test/pixels/pixelTests.js',
+  {pattern:'test/pixels/*.png',included:false, served:true} // for render tests
 ];
 var basickarmaconfiguration = {
-    browsers: browserlist,
-    frameworks:['jasmine'],
-    files: test_basic_files,
-    singleRun:true
+  browsers: browserlist,
+  frameworks:['jasmine'],
+  files: test_basic_files,
+  singleRun:true
 };
 var karmaconfiguration = _.clone(basickarmaconfiguration);
 karmaconfiguration.files = test_basic_files.concat(test_render_files);
