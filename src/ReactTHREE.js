@@ -224,13 +224,13 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
     return this._THREEObject3D;
   },
 
-  receiveComponent: function(nextElement, transaction) {
+  receiveComponent: function(nextElement, transaction, context) {
     var oldProps = this._currentElement.props;
     var props = nextElement.props;
     this.applyTHREEObject3DProps(oldProps, props);
     this.applySpecificTHREEProps(oldProps, props);
 
-    this.updateChildren(props.children, transaction);
+    this.updateChildren(props.children, transaction, context);
     this._currentElement = nextElement;
   },
 
