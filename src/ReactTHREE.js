@@ -153,11 +153,6 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
     return new THREE.Object3D();
   },
 
-  updateComponent: function() {
-    var a = null;
-    return a.x;
-  },
-  
   applyTHREEObject3DProps: function(oldProps, props) {
     this.applyTHREEObject3DPropsToObject(this._THREEObject3D, oldProps, props);
   },
