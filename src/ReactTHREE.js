@@ -21,35 +21,24 @@
 
 "use strict";
 
-// monkey patch to workaround some assumptions that we're working with the DOM
 var React = require('react');
 var THREE = require('three');
 
-//var ReactClass = require('react/lib/ReactClass');
 var ReactMount = require('react/lib/ReactMount');
-//var ReactReconciler = require('react/lib/ReactReconciler');
-//var ReactCompositeComponent = require('react/lib/ReactCompositeComponent');
-//var ReactCompositeComponentMixin = ReactCompositeComponent.Mixin;
 var ReactUpdates = require('react/lib/ReactUpdates');
 var ReactMultiChild = require('react/lib/ReactMultiChild');
-//var ReactBrowserComponentMixin = require('react/lib/ReactBrowserComponentMixin');
-//var ReactElement = require('react/lib/ReactElement');
 
-//var ReactDOM = require('react/lib/ReactDOM');
-//var ReactDOMComponent = require('react/lib/ReactDOMComponent');
 var ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
 
-//var DOMPropertyOperations = require('react/lib/DOMPropertyOperations');
 var ReactBrowserEventEmitter = require('react/lib/ReactBrowserEventEmitter');
-
 var putListener = ReactBrowserEventEmitter.putListener;
 var listenTo = ReactBrowserEventEmitter.listenTo;
+
 var assign = require('react/lib/Object.assign');
 var emptyObject = require('react/lib/emptyObject');
 var warning = require('react/lib/warning');
-//var shouldUpdateReactComponent = require('react/lib/shouldUpdateReactComponent');
-//var invariant = require('react/lib/invariant');
 
+// monkey patch to workaround some assumptions that we're working with the DOM
 var monkeypatch = require('./ReactTHREEMonkeyPatch');
 monkeypatch();
 
