@@ -416,11 +416,6 @@ var THREEScene = React.createClass({
     return React.createElement("canvas");
   },
 
-  updateComponent: function() {
-    var a = null;
-    a.x = 3;
-  },
-
   projectClick: function (event) {
     event.preventDefault();
     var rect = this.getDOMNode().getBoundingClientRect();
