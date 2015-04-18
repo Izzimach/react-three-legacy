@@ -652,7 +652,7 @@ var THREELine = createTHREEComponent(
 
     applySpecificTHREEProps: function(oldProps, newProps) {
       this.transferTHREEObject3DPropsByName(oldProps,newProps,
-                                           ['geometry','material','type']);
+                                           ['geometry','material','mode']);
     }
   }
 );
