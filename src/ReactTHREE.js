@@ -22,7 +22,7 @@
 "use strict";
 
 var React = require('react');
-var THREE = require('three');
+var THREE = window.THREE || require('three');
 
 var ReactMount = require('react/lib/ReactMount');
 var ReactUpdates = require('react/lib/ReactUpdates');
