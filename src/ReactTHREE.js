@@ -436,7 +436,7 @@ var THREEScene = React.createClass({
 
     if (firstintersection !== null) {
       var pickobject = firstintersection.object;
-      if (typeof pickobject.userData !== 'undefined') {
+      if (typeof pickobject.userData !== 'undefined' && pickobject.userData._currentElement) {
 	var onpickfunction = pickobject.userData._currentElement.props.onPick;
 	if (typeof onpickfunction === 'function') {
 	  onpickfunction(event, firstintersection);
@@ -679,11 +679,11 @@ var THREESkinnedMesh = createTHREEComponent(
     // skinned mesh is special since it needs the geometry and material data upon construction
     /* jshint unused: vars */
     mountComponent: function(rootID, transaction, context) {
-      this._THREEObject3D = new THREE.SkinnedMesh(this.props.geometry, this.props.material);
-      this.applyTHREEObject3DProps({}, this.props);
-      this.applySpecificTHREEProps({}, this.props);
+      this._THREEObject3D = new THREE.SkinnedMesh(this._currentElement.props.geometry, this._currentElement.props.material);
+      this.applyTHREEObject3DProps({}, this._currentElement.props);
+      this.applySpecificTHREEProps({}, this._currentElement.props);
 
-      this.mountAndAddChildren(this.props.children, transaction, context);
+      this.mountAndAddChildren(this._currentElement.props.children, transaction, context);
       return this._THREEObject3D;
     },
     /* jshint unused: true */
