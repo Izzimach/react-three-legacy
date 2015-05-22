@@ -329,10 +329,11 @@ var THREEScene = React.createClass({
       }
     }
 
-    if (typeof props.background !== 'undefined') {
+    var backgroundtype = typeof props.background;
+    if (backgroundtype !== 'undefined') {
       // background color should be a number, check it
-      warning(typeof props.background === 'number', "The background property of "+
-	      "the scene component must be a number, not " + typeof props.background);
+      warning(backgroundtype === 'number', "The background property of "+
+	      "the scene component must be a number, not " + backgroundtype);
       this._THREErenderer.setClearColor(props.background);
 
     }
@@ -375,7 +376,11 @@ var THREEScene = React.createClass({
       this._THREErenderer.setSize(+props.width, +props.height);
     }
 
-    if (props.background !== 'undefined') {
+    var backgroundtype = typeof props.background;
+    if (backgroundtype !== 'undefined') {
+      // background color should be a number, check it
+      warning(backgroundtype === 'number', "The background property of "+
+	      "the scene component must be a number, not " + backgroundtype);
       this._THREErenderer.setClearColor(props.background);
     }
 
@@ -477,13 +482,30 @@ var THREEMesh = createTHREEComponent(
   }
 );
 
+//
+// function to set a light color. The sourcevalue
+// can be either a number (usually in hex: 0xff0000)
+// or a THREE.Color
+var g_SetNewLightColor = function(targetColor, sourceValue) {
+  // is the prop a hex number or a THREE.Color?
+  if (typeof sourceValue === 'number') {
+    targetColor.setHex(sourceValue);
+  } else if (typeof sourceValue === 'object' &&
+	     sourceValue !== null &&
+	     sourceValue instanceof THREE.Color) {
+    targetColor.copy(sourceValue);
+  } else {
+    warning(false, "Light color must be a number or an instance of THREE.Color");
+  }
+};
+
 var LightObjectMixin = {
   applySpecificTHREEProps: function (oldProps, newProps) {
     var THREEObject3D = this._THREEObject3D;
     if ((typeof newProps.color !== 'undefined') &&
         (newProps.color !== oldProps.color))
     {
-      THREEObject3D.color = newProps.color;
+      g_SetNewLightColor(THREEObject3D.color, newProps.color);
     }
   }
 };
@@ -606,7 +628,7 @@ var THREEHemisphereLight = createTHREEComponent(
 
       // sky color gets mapped to 'color'
       if (typeof newProps.skyColor !== 'undefined') {
-        this._THREEObject3D.color = newProps.skyColor;
+        g_SetNewLightColor(this._THREEObject3D.color, newProps.skyColor);
       }
 
       this.transferTHREEObject3DPropsByName(oldProps, newProps,
