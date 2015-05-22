@@ -61,13 +61,14 @@ var ReactTHREE_updateRenderedComponent = function(transaction, context) {
   // This is a THREE node, do a special THREE version of updateComponent
   var prevRenderedElement = prevComponentInstance._currentElement;
   var nextRenderedElement = this._renderValidatedComponent();
+  var childContext = this._getValidatedChildContext();
   
   if (shouldUpdateReactComponent(prevRenderedElement, nextRenderedElement)) {
     ReactReconciler.receiveComponent(
       prevComponentInstance,
       nextRenderedElement,
       transaction,
-      this._processChildContext(context)
+      this._mergeChildContext(context,childContext)
     );
   } else {
     // We can't just update the current component.
@@ -90,7 +91,7 @@ var ReactTHREE_updateRenderedComponent = function(transaction, context) {
       this._renderedComponent,
       thisID,
       transaction,
-      context
+      this._mergeChildContext(context, childContext)
     );
     this._renderedComponent._THREEObject3D = nextObject3D;
     

@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "main": "src/ReactTHREE.js",
   "peerDependencies": {
-    "react": "^0.13.1",
+    "react": "0.13.3",
     "three": "^0.70.0"
   },
   "devDependencies": {
@@ -43,7 +43,7 @@
     "karma-jasmine": "~0.3.2",
     "lodash": "^3.3.1",
     "node-static": "~0.7.3",
-    "react": "^0.13.1",
+    "react": "0.13.3",
     "react-tools": "^0.13.1",
     "resemblejs": "^1.2.0",
     "rimraf": "~2.2.8",
