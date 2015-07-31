@@ -186,6 +186,9 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
       THREEObject3D.scale.set(1,1,1);
     }
 
+    if (typeof props.up !== 'undefined') {
+      this._THREEObject3D.up.copy(props.up);
+    }
 
     if (typeof props.lookat !== 'undefined') {
       this._THREEObject3D.lookAt(props.lookat);
