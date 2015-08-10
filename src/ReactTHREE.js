@@ -343,6 +343,8 @@ var THREEScene = React.createClass({
 
     this._THREEcamera = camera;
 
+    this.mountOrbitControls(props);
+
     this.renderScene();
 
     var that = this;
@@ -404,6 +406,8 @@ var THREEScene = React.createClass({
       THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEcamera, oldProps.camera || {}, props.camera || {});
     }
 
+    this.mountOrbitControls(props);
+
     this.renderScene();
   },
 
@@ -412,6 +416,14 @@ var THREEScene = React.createClass({
     ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
     if (typeof this._rAFID !== 'undefined') {
       window.cancelAnimationFrame(this._rAFID);
+    }
+  },
+
+  mountOrbitControls: function(props) {
+    if (props.orbitControls) {
+        if (!this.orbitControls) {
+          this.orbitControls = new props.orbitControls(this._THREEcamera);
+        }
     }
   },
 
