@@ -18,6 +18,7 @@ var SpherePanoramaScene = React.createClass({
             width: this.props.width,
             height: this.props.height,
             camera: 'maincamera',
+            listenToClick: true
         };
 
         var cameraAngle = this.props.cameraAngle || 0;

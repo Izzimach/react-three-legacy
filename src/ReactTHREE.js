@@ -359,16 +359,18 @@ var THREEScene = React.createClass({
       that.renderScene();
     }
 
-    // fiddle with some internals here - probably a bit brittle
-    var internalInstance = this._reactInternalInstance;
-    var container = ReactMount.findReactContainerForID(internalInstance._rootNodeID);
-    if (container) {
-      var doc = container.nodeType === ELEMENT_NODE_TYPE ?
-          container.ownerDocument :
-      container;
-      listenTo('onClick', doc);
+    if (props.listenToClick) {
+      // fiddle with some internals here - probably a bit brittle
+      var internalInstance = this._reactInternalInstance;
+      var container = ReactMount.findReactContainerForID(internalInstance._rootNodeID);
+      if (container) {
+        var doc = container.nodeType === ELEMENT_NODE_TYPE ?
+            container.ownerDocument :
+        container;
+        listenTo('onClick', doc);
+      }
+      putListener(internalInstance._rootNodeID, 'onClick', function(event) { that.projectClick(event);});
     }
-    putListener(internalInstance._rootNodeID, 'onClick', function(event) { that.projectClick(event);});
 
     renderelement.onselectstart = function() { return false; };
   },
