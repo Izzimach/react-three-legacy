@@ -259,6 +259,16 @@ var THREEScene = React.createClass({
   displayName: 'THREEScene',
   mixins: [THREEContainerMixin],
 
+  propTypes: {
+    enableRapidRender: React.PropTypes.bool
+  },
+
+  getDefaultProps: function() {
+    return {
+      enableRapidRender: true
+    };
+  },
+
   setApprovedDOMProperties: function(nextProps) {
     var prevProps = this.props;
 
@@ -346,7 +356,16 @@ var THREEScene = React.createClass({
     this.renderScene();
 
     var that = this;
-    that._rAFID = window.requestAnimationFrame( rapidrender );
+
+    // The canvas gets re-rendered every frame even if no props/state changed.
+    // This is because some three.js items like skinned meshes need redrawing
+    // every frame even if nothing changed in React props/state.
+    //
+    // See https://github.com/Izzimach/react-three/issues/28
+
+    if (this.props.enableRapidRender) {
+      that._rAFID = window.requestAnimationFrame( rapidrender );
+    }
 
     function rapidrender(timestamp) {
 
