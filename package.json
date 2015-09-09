@@ -55,7 +55,17 @@
     "webpack-dev-server": "^1.10.1"
   },
   "scripts": {
-    "test": "gulp test-norender"
+    "test": "gulp test-norender",
+    "build": "webpack",
+    "dev": "webpack-dev-server",
+    "lint": "eslint src examples"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env": {
+      "browser": true,
+      "node": true
+    }
   },
   "engines": {
     "node": ">=0.10.0"
