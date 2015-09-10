@@ -11,10 +11,18 @@ module.exports = {
   },
   
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: ['babel'],
-      include: path.join(__dirname, 'src')
-    }]
+    loaders: [
+      {
+	test: /\.js$/,
+	loader: 'babel',
+	include: path.join(__dirname, 'src'),
+	query: {
+	  // When generating a standalone library, this makes sure to
+	  // use babel-runtime to wrap our code and
+	  // avoid global polyfills.
+	  optional: ['runtime']
+	}
+      }
+    ]
   }
 }
