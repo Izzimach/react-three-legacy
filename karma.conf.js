@@ -1,4 +1,4 @@
-test_basic_files = [
+var test_basic_files = [
   'vendor/lodash.min.js',
   'build/react-three.js',
   'test/createTestFixtureMountPoint.js', // why did I make this filename so long/
