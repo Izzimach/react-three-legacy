@@ -59,8 +59,12 @@
     "build": "webpack",
     "dev": "webpack-dev-server --progress --colors",
     "lint": "eslint src examples",
-    "test": "gulp test-norender",
-    "pixelrefs": ""
+    "test": "karma start",
+    "rendertest": "karma start karma.conf-withrender.js",
+    "pixelrefs": "",
+    
+    "pretest": "npm build",
+    "prerendertest": "npm build"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
