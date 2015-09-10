@@ -9,11 +9,13 @@ To use React for drawing 2D using WebGL, try [react-pixi](https://github.com/Izz
 
 You can view an interactive demo (hopefully) at [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html). This demo is also available as a standalone project at [r3test](https://github.com/Izzimach/r3test/)
 
-## Usage
+Usage
+=====
 
 An example render functions from the examples:
 
-```javascript
+
+```
 render: function() {
   var MainCameraElement = React.createElement(
     ReactTHREE.PerspectiveCamera,
@@ -32,7 +34,7 @@ render: function() {
 
 or if you want to use JSX,
 
-```javascript
+```
 render: function() {
   var aspectratio = this.props.width / this.props.height;
   var cameraprops = {fov:75, aspect:aspectratio, near:1, far:5000,
@@ -45,9 +47,11 @@ render: function() {
 }
 ```
 
-## Install and Use with npm
+Install and Use with npm
+========================
 
 If you are building a project with a `package.json` file you can
+
 ```
 npm install react --save
 npm install react-three --save
@@ -61,21 +65,21 @@ var ReactTHREE = require('react-three');
 var THREE = require('three');
 ```
 
-## Building Standalone Files
+Building Standalone Files
+=========================
 
-Checkout the git repository. You will need node and npm. You should probably install gulp globally as well.
+Checkout the git repository. You will need node and npm.
 
 ```
 git clone https://github.com/Izzimach/react-three.git
 cd react-three
-npm install -g gulp
 npm install
 ```
 
-At this point, simply running
+At this point, you can build and package the files:
 
 ```
-gulp
+npm run build
 ```
 
 Will package up the react-three components along with React and put the result in
@@ -89,25 +93,29 @@ Then the relevant parts will be accessed in the global namespace as `React`, `Re
 
 ![Sample Cupcake component](docs/react-three-interactiveexample.png)
 
-## Examples
+Examples
+========
 
 Examples are set up in the examples/ directory. You can run
 
 ```
-gulp livereload
+npm run dev
 ```
 
 Then open the example index in your browser at `http://localhost:8080/`
 
-## Testing
+
+
+Testing
+=======
 
 Certain tests require WebGL and cannot be run on the CI test server. Because of
 this, it is recommended that you run the tests locally before submitting a pull request.
 
-You can run tests using gulp:
+You can run tests via npm:
 
 ```
-gulp test
+npm run test
 ```
 
 Certain tests compare results to know correct reference images.
@@ -115,5 +123,6 @@ If for some reason you need to generate (or regenerate) the pixel reference imag
 you need to install phantomjs and run
 
 ```
-gulp pixelrefs
+npm run pixelrefs
 ```
+
