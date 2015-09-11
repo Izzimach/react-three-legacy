@@ -1,12 +1,10 @@
 //
 // Basic ReactTHREE example using events to add/remove sprites.
 
-// tell jshint that we use lodash
-/* global _ : false */
-/* global React : false */
-/* global ReactTHREE : false */
-/* global THREE : false */
-/* jshint strict: false */
+/* global _*/
+/* global React */
+/* global ReactTHREE */
+/* global THREE */
 
 var g_assetpath = function(filename) { return '../assets/' + filename; };
 
@@ -113,7 +111,7 @@ var ClickableCube = React.createClass({
     position: React.PropTypes.instanceOf(THREE.Vector3),
     quaternion: React.PropTypes.instanceOf(THREE.Quaternion),
     materialname: React.PropTypes.string.isRequired,
-    shared: React.PropTypes.bool,
+    shared: React.PropTypes.bool
   },
   render: function() {
     var boxmaterial = lookupmaterial(this.props.materialname);
@@ -225,7 +223,7 @@ var OrbitCamera = React.createClass({
 var CubeApp = React.createClass({
   displayName: 'CubeApp',
   propTypes: {
-    borderpx: React.PropTypes.number.isRequired,
+    borderpx: React.PropTypes.number.isRequired
   },
   getInitialState: function() {
     // base initial size on window size minus border size
@@ -278,9 +276,8 @@ var CubeApp = React.createClass({
 
 
 
-/* jshint unused:false */
-function interactiveexamplestart() {
-
+function interactiveexamplestart() { // eslint-disable-line no-unused-vars
+  
   var renderelement = document.getElementById("three-box");
 
   g_applicationstate = {borderpx:6, cubes:[], xsize:500, ysize:500, zsize:500 };

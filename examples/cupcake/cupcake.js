@@ -2,10 +2,9 @@
 // Basic React-THREE example using a custom 'Cupcake' Component which consists of two cubes
 //
 
-/* jshint strict: false */
-/* global React : false */
-/* global ReactTHREE : false */
-/* global THREE : false */
+/* global React */
+/* global ReactTHREE */
+/* global THREE */
 
 var assetpath = function(filename) { return '../assets/' + filename; };
 
@@ -62,8 +61,7 @@ var ExampleScene = React.createClass({
   }
 });
 
-/* jshint unused:false */
-function cupcakestart() {
+var cupcakestart = function() { // eslint-disable-line no-unused-vars
   var renderelement = document.getElementById("three-box");
 
   var w = window.innerWidth-6;

@@ -2,10 +2,9 @@
 // The cupcake example done using JSX instead of javascript.
 //
 
-/* jshint strict: false */
-/* global React : false */
-/* global ReactTHREE : false */
-/* global THREE : false */
+/* global React */
+/* global ReactTHREE */
+/* global THREE */
 
 var assetpath = function(filename) { return '../assets/' + filename; };
 var boxgeometry = new THREE.BoxGeometry( 200,200,200);
@@ -64,8 +63,8 @@ var ExampleScene = React.createClass({
   }
 });
 
-/* jshint unused:false */
-function jsxtransformstart() {
+
+function jsxtransformstart() { // eslint-disable-line no-unused-vars
   var renderelement = document.getElementById("three-box");
 
   var w = window.innerWidth-6;
