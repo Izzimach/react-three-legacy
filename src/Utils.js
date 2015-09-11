@@ -1,8 +1,9 @@
+import THREE from 'three';
 import assign from 'react/lib/Object.assign';
 import warning from 'react/lib/warning';
 
 export function createTHREEComponent(name, ...mixins) {
-  let ReactTHREEComponent = function(props) {
+  let ReactTHREEComponent = function(/*props*/) {
     this.node = null;
     this._mountImage = null;
     this._renderedChildren = null;
@@ -15,7 +16,7 @@ export function createTHREEComponent(name, ...mixins) {
   }
 
   return ReactTHREEComponent;
-};
+}
 
 
 export function setNewLightColor(targetColor, sourceValue) {
@@ -33,4 +34,4 @@ export function setNewLightColor(targetColor, sourceValue) {
   } else {
     warning(false, "Light color must be a number or an instance of THREE.Color");
   }
-};
+}
