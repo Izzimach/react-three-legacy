@@ -18,7 +18,7 @@
     "url": "https://github.com/Izzimach/react-three"
   },
   "license": "Apache-2.0",
-  "files": ["es5"],
+  "files": ["es5", "src"],
   "main": "es5/react-three-commonjs.js",
   "es6": "src/ReactTHREE.js",
   "peerDependencies": {
@@ -48,13 +48,14 @@
     "build": "webpack",
     "dev": "webpack-dev-server --progress --colors",
     "examples": "webpack --config webpack-examples.config.js",
-    "prepublish": "webpack --config webpack-commonjs.config.js",
+    "build-commonjs": "webpack --config webpack-commonjs.config.js",
     "lint": "eslint src examples",
     "test": "karma start",
     "rendertest": "karma start karma.conf-withrender.js",
     "pixelrefs": "",
     "pretest": "npm run build",
-    "prerendertest": "npm run build"
+    "prerendertest": "npm run build",
+    "prepublish": "npm run build-commonjs"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",

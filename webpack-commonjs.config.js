@@ -9,12 +9,15 @@ var defaultconfig = require('./webpack.config.js');
 var commonjsconfig = _.cloneDeep(defaultconfig);
 _.assign(commonjsconfig, {
   entry: path.join(__dirname, "src", "ReactTHREE.js"),
-  externals: {
-    "three": "THREE"
-  }
+  externals: [
+    "three",
+    "react",
+    /^react\/lib\/.+/  // any require that refers to internal react modules
+  ]
 });
 _.assign(commonjsconfig.output, {
-  libraryTarget: "commonjs",
+  path: path.join(__dirname, "es5"),
+  libraryTarget: "commonjs2",
   library: "react-three",
   filename: "react-three-commonjs.js"
 });
