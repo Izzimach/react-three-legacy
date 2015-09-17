@@ -20,6 +20,7 @@ examples/jsxtransform/jsxtransform.js
 build
 dist
 dist-clojars
+es5
 
 # Dependency directory
 # Deployed apps should consider commenting this line out:
