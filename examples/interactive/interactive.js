@@ -264,7 +264,7 @@ var CubeApp = React.createClass({
   render: function() {
     return React.createElement(
       ReactTHREE.Scene,
-      {width: this.state.width, height: this.state.height, listenToClick: true,background:0x202020, camera:'maincamera'},
+      {width: this.state.width, height: this.state.height, listenToClick: true, background:0x202020, camera:'maincamera'},
       [
         React.createElement(OrbitCamera, {key:'camera', distance:600, azimuth:this.state.cameraazimuth, aspectratio:this.state.width / this.state.height}),
         React.createElement(RemovableCubes, {key:'cubes', cubes:this.props.cubes}),
