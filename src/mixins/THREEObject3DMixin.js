@@ -57,11 +57,11 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
         }
 
         if (typeof props.up !== 'undefined') {
-            this._THREEObject3D.up.copy(props.up);
+            THREEObject3D.up.copy(props.up);
         }
 
         if (typeof props.lookat !== 'undefined') {
-            this._THREEObject3D.lookAt(props.lookat);
+            THREEObject3D.lookAt(props.lookat);
         }
 
 
