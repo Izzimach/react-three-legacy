@@ -5,6 +5,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, "build"),
+    publicPath: "/build/",
     filename: "react-three.js",
     libraryTarget: "var",
     library:"ReactTHREE"
