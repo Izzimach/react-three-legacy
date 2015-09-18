@@ -52,7 +52,7 @@
     "lint": "eslint src examples",
     "test": "karma start",
     "rendertest": "karma start karma.conf-withrender.js",
-    "pixelrefs": "",
+    "pixelrefs": "slimerjs test/pixels/generatetestrender.js",
     "pretest": "npm run build",
     "prerendertest": "npm run build",
     "prepublish": "npm run build-commonjs"

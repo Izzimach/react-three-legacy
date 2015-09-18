@@ -54,6 +54,7 @@ If you are building a project with a `package.json` file you can
 
 ```
 npm install react --save
+npm install three --save
 npm install react-three --save
 ```
 
@@ -68,6 +69,11 @@ var THREE = require('three');
 Building Standalone Files
 =========================
 
+You can build two version of the library:
+* The default with global libraries (`React`,`THREE`, and `ReactTHREE`) exposed,
+  for easy inclusion using a `<script>` tag.
+* The `dist` version which is basically a commonjs module which you can `require` from.
+  
 Checkout the git repository. You will need node and npm.
 
 ```
@@ -76,13 +82,14 @@ cd react-three
 npm install
 ```
 
-At this point, you can build and package the files:
+At this point, you can build and package the files. If you want a file you can just
+include using a `<script>` tag make the default version:
 
 ```
 npm run build
 ```
 
-Will package up the react-three components along with React and put the result in
+This will package up the react-three components along with React and put the result in
 build/react-three.js. If you include this into your webpage via a script tag:
 
 ```
@@ -90,6 +97,15 @@ build/react-three.js. If you include this into your webpage via a script tag:
 ```
 
 Then the relevant parts will be accessed in the global namespace as `React`, `ReactTHREE`, and `THREE`.
+
+For the commonjs version you must invoke the `prepublish` build:
+
+```
+npm run prepublish
+```
+
+This produces the file es5/react-three-commonjs.js which can be used as a normal
+commonjs library like the one published to npmjs.
 
 ![Sample Cupcake component](docs/react-three-interactiveexample.png)
 
@@ -104,25 +120,27 @@ npm run dev
 
 Then open the example index in your browser at `http://localhost:8080/`
 
-
-
 Testing
 =======
 
-Certain tests require WebGL and cannot be run on the CI test server. Because of
+Some tests require WebGL and cannot be run on the CI test server. Because of
 this, it is recommended that you run the tests locally before submitting a pull request.
 
-You can run tests via npm:
+You can run two sets of tests via npm: `npm run test` runs some basic javascript
+tests while `npm run rendertest` will check actual rendered output
+on a WebGL canvas.
 
 ```
 npm run test
+npm run rendertest
 ```
 
-Certain tests compare results to know correct reference images.
-If for some reason you need to generate (or regenerate) the pixel reference images
-you need to install phantomjs and run
+The render tests compare their render output to known correct reference images.
+If for some reason you need to generate (or regenerate) the pixel reference images,
+you can! Install slimerjs and run the `pixelrefs` npm task
 
 ```
+npm install -g slimerjs
 npm run pixelrefs
 ```
 
