@@ -11,7 +11,7 @@ describe("ReactTHREE composite components", function() {
   afterEach(function() { removeTestFixtureMountPoint(mountpoint); });
 
 
-  it("correctly replaces PIXI objects instead of setting HTML markup when replacing components in-place", function() {
+  it("correctly replaces THREE objects instead of setting HTML markup when replacing components in-place", function() {
 
     //
     // This occurs when a composite element is updated in-place. To create this (admittedly uncommon)
