@@ -2,10 +2,6 @@
 // The cupcake example done using JSX instead of javascript.
 //
 
-/* global React */
-/* global ReactTHREE */
-/* global THREE */
-
 var assetpath = function(filename) { return '../assets/' + filename; };
 var boxgeometry = new THREE.BoxGeometry( 200,200,200);
 
@@ -74,16 +70,18 @@ function jsxtransformstart() { // eslint-disable-line no-unused-vars
   var cupcakeprops = sceneprops.cupcakedata;
   var rotationangle = 0;
 
-  var reactinstance = React.render(<ExampleScene {...sceneprops}/>, renderelement);
+  ReactDOM.render(<ExampleScene {...sceneprops}/>, renderelement);
 
   function spincupcake(t) {
     rotationangle = t * 0.001;
     cupcakeprops.quaternion.setFromEuler(new THREE.Euler(rotationangle,rotationangle*3,0));
     cupcakeprops.position.x = 300  * Math.sin(rotationangle);
-    reactinstance.setProps(sceneprops);
+    ReactDOM.render(<ExampleScene {...sceneprops}/>, renderelement);
 
     requestAnimationFrame(spincupcake);
   }
 
   spincupcake();
 }
+
+window.onload = jsxtransformstart;

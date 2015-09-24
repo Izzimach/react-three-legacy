@@ -54,6 +54,7 @@ If you are building a project with a `package.json` file you can
 
 ```
 npm install react --save
+npm install react-dom --save
 npm install three --save
 npm install react-three --save
 ```
@@ -72,7 +73,7 @@ Building Standalone Files
 You can build two version of the library:
 * The default with global libraries (`React`,`THREE`, and `ReactTHREE`) exposed,
   for easy inclusion using a `<script>` tag.
-* The `dist` version which is basically a commonjs module which you can `require` from.
+* The `dist` version which is basically a commonjs module that you can `require` from.
   
 Checkout the git repository. You will need node and npm.
 

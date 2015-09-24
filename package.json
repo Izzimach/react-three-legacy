@@ -52,7 +52,7 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server --progress --colors",
-    "examples": "webpack --config webpack-examples.config.js",
+    "examples": "webpack-dev-server --config webpack-examples.config.js",
     "build-commonjs": "webpack --config webpack-commonjs.config.js",
     "lint": "eslint src examples",
     "test": "karma start",

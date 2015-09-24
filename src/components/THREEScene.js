@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var ReactMount = require('react/lib/ReactMount');
 var ReactUpdates = require('react/lib/ReactUpdates');
 var warning = require('fbjs/lib/warning');
@@ -62,7 +63,7 @@ var THREEScene = React.createClass({
     },
 
     componentDidMount: function() {
-        var renderelement = this.getDOMNode();
+        var renderelement = ReactDOM.findDOMNode(this);
         var props = this.props;
 
 //    var instance = this._reactInternalInstance._renderedComponent;
@@ -221,7 +222,7 @@ var THREEScene = React.createClass({
 
     projectClick: function (event) {
         event.preventDefault();
-        var rect = this.getDOMNode().getBoundingClientRect();
+        var rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
 
         var x =   ( (event.clientX - rect.left) / this.props.width) * 2 - 1;

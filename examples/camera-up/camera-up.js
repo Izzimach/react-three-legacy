@@ -18,8 +18,8 @@ var g_assetpath = function(filename) { return '../assets/' + filename; };
 //
 
 
-// the mounted instance will go here, so that callbacks can modify/set it
-var g_reactinstance;
+// the DOM element where the canvas is mounted
+var g_renderelement;
 
 // This basically the 'application state':
 // a list of all the current sprites
@@ -30,7 +30,7 @@ var g_nextcubeid = 1;
 // if the application state is modified call this to update the GUI
 
 function updateApp() {
-  g_reactinstance.setProps(g_applicationstate);
+  ReactDOM.render(React.createElement(CubeApp,   g_applicationstate), g_renderelement);
 }
 
 //
@@ -283,9 +283,9 @@ var CubeApp = React.createClass({
 
 function interactiveexamplestart() {  // eslint-disable-line no-unused-vars
 
-  var renderelement = document.getElementById("three-box");
+  g_renderelement = document.getElementById("three-box");
 
   g_applicationstate = {borderpx:6, cubes:[], xsize:500, ysize:500, zsize:500 };
 
-  g_reactinstance = React.render(React.createElement(CubeApp,   g_applicationstate), renderelement);
+  updateApp();
 }
