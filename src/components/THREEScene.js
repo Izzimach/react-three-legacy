@@ -23,12 +23,14 @@ var THREEScene = React.createClass({
     mixins: [THREEContainerMixin],
 
     propTypes: {
-        enableRapidRender: React.PropTypes.bool
+        enableRapidRender: React.PropTypes.bool,
+        pixelRatio: React.PropTypes.number
     },
 
     getDefaultProps: function() {
         return {
-            enableRapidRender: true
+            enableRapidRender: true,
+            pixelRatio: 1
         };
     },
 
@@ -73,6 +75,7 @@ var THREEScene = React.createClass({
             canvas: renderelement,
             antialias: props.antialias === undefined ? true : props.antialias
         });
+        this._THREErenderer.setPixelRatio(props.pixelRatio);
         this._THREErenderer.setSize(+props.width, +props.height);
         this._THREEraycaster = new THREE.Raycaster();
         //this.setApprovedDOMProperties(props);
@@ -160,8 +163,13 @@ var THREEScene = React.createClass({
     componentDidUpdate: function(oldProps) {
         var props = this.props;
 
+        if (props.pixelRatio != oldProps.pixelRatio) {
+            this._THREErenderer.setPixelRatio(props.pixelRatio);
+        }
+
         if (props.width != oldProps.width ||
-            props.width != oldProps.height) {
+            props.width != oldProps.height ||
+            props.pixelRatio != oldProps.pixelRatio) {
             this._THREErenderer.setSize(+props.width, +props.height);
         }
 
