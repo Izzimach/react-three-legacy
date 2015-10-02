@@ -27,6 +27,7 @@ module.exports =  {
     Scene : require('./components/THREEScene'),
     PerspectiveCamera : require('./components/cameras/THREEPerspectiveCamera'),
     OrthographicCamera : require('./components/cameras/THREEOrthographicCamera'),
+    AxisHelper : require('./components/objects/THREEAxisHelper'),
     Line : require('./components/objects/THREELine'),
     PointCloud : require('./components/objects/THREEPointCloud'),
     Object3D : require('./components/objects/THREEObject3D'),
@@ -38,5 +39,6 @@ module.exports =  {
     AreaLight: require('./components/lights/THREEAreaLight'),
     DirectionalLight: require('./components/lights/THREEDirectionalLight'),
     HemisphereLight: require('./components/lights/THREEHemisphereLight'),
-    SpotLight: require('./components/lights/THREESpotLight')
+    SpotLight: require('./components/lights/THREESpotLight'),
+    Constants: require('./Constants')
 };

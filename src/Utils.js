@@ -1,5 +1,6 @@
 var assign = require('react/lib/Object.assign');
 var warning = require('react/lib/warning');
+var THREE = require('three');
 
 var Utils = {
 
