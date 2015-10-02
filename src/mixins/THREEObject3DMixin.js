@@ -68,6 +68,14 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
         if (typeof props.name !== 'undefined') {
             THREEObject3D.name = props.name;
         }
+
+        if (typeof props.castShadow !== 'undefined') {
+            THREEObject3D.castShadow = props.castShadow;
+        }
+
+        if (typeof props.receiveShadow !== 'undefined') {
+            THREEObject3D.receiveShadow = props.receiveShadow;
+        }
     },
 
     transferTHREEObject3DPropsByName: function(oldProps, newProps, propnames) {
