@@ -10,6 +10,8 @@ var ReactBrowserEventEmitter = require('react/lib/ReactBrowserEventEmitter');
 var putListener = ReactBrowserEventEmitter.putListener;
 var listenTo = ReactBrowserEventEmitter.listenTo;
 
+var warning = require('react/lib/warning');
+
 var ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
 
 //
