@@ -75,6 +75,10 @@ var THREEScene = React.createClass({
             canvas: renderelement,
             antialias: props.antialias === undefined ? true : props.antialias
         });
+        this._THREErenderer.shadowMapEnabled = props.shadowMapEnabled !== undefined ? props.shadowMapEnabled : false;
+        if (props.shadowMapType !== undefined) {
+            this._THREErenderer.shadowMapType = props.shadowMapType;
+        }
         this._THREErenderer.setPixelRatio(props.pixelRatio);
         this._THREErenderer.setSize(+props.width, +props.height);
         this._THREEraycaster = new THREE.Raycaster();
