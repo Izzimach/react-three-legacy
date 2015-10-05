@@ -147,6 +147,9 @@ var THREEScene = React.createClass({
             this._rAFID = window.requestAnimationFrame( rapidrender );
         }
 
+        // warn users of the old listenToClick prop
+        warning(typeof props.listenToClick !== 'undefined', "the `listenToClick` prop has been replaced with `pointerEvents`");
+
         if (props.pointerEvents) {
             // fiddle with some internals here - probably a bit brittle
             const internalInstance = this._reactInternalInstance;
