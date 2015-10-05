@@ -135,7 +135,7 @@ var ClickToRemoveCube = React.createClass({
   render: function() {
     var cubeprops = _.clone(this.props);
     cubeprops.materialname = 'lollipopGreen.png';
-    cubeprops.onPick = this.removeThisCube;
+    cubeprops.onMouseMove3D = this.removeThisCube;
     return React.createElement(ClickableCube, cubeprops);
   }
 });
@@ -156,7 +156,7 @@ var CubeAppButtons = React.createClass({
     return React.createElement(
       ReactTHREE.Object3D,
       {},
-      React.createElement(ClickableCube,{position: new THREE.Vector3(0,0,0), materialname:'cherry.png', name:'addbutton', onPick:this.handlePick})
+      React.createElement(ClickableCube,{position: new THREE.Vector3(0,0,0), materialname:'cherry.png', name:'addbutton', onClick3D:this.handlePick})
     );
   }
 });
@@ -264,7 +264,7 @@ var CubeApp = React.createClass({
   render: function() {
     return React.createElement(
       ReactTHREE.Scene,
-      {width: this.state.width, height: this.state.height, listenToClick: true, background:0x202020, camera:'maincamera'},
+      {width: this.state.width, height: this.state.height, pointerEvents: ['onClick', 'onMouseMove'], background:0x202020, camera:'maincamera'},
       [
         React.createElement(OrbitCamera, {key:'camera', distance:600, azimuth:this.state.cameraazimuth, aspectratio:this.state.width / this.state.height}),
         React.createElement(RemovableCubes, {key:'cubes', cubes:this.props.cubes}),
@@ -277,7 +277,7 @@ var CubeApp = React.createClass({
 
 
 function interactiveexamplestart() { // eslint-disable-line no-unused-vars
-  
+
   g_renderelement = document.getElementById("three-box");
 
   g_applicationstate = {borderpx:6, cubes:[], xsize:500, ysize:500, zsize:500 };
