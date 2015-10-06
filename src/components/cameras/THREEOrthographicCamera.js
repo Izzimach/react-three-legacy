@@ -12,7 +12,7 @@ var THREEOrthographicCamera = createTHREEComponent(
 
         applySpecificTHREEProps: function(oldProps, newProps) {
             this.transferTHREEObject3DPropsByName(oldProps, newProps,
-                ['left','right','up','bottom','near','far']);
+                ['left','right','top','bottom','near','far']);
 
             this._THREEObject3D.updateProjectionMatrix();
         }
