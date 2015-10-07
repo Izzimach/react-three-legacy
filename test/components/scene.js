@@ -34,7 +34,7 @@ describe("THREE Scene Component", function() {
     expect(mountpoint.childNodes[0].nodeName).not.toBe('CANVAS');
     expect(mountpoint.childNodes[0].childNodes.length).toBe(0);
 
-    React.unmountComponentAtNode(mountpoint);
+    ReactTHREE.unmountComponentAtNode(mountpoint);
 
     expect(mountpoint.childNodes.length).toBe(0);
   });

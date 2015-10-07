@@ -43,5 +43,6 @@ module.exports =  {
     HemisphereLight: require('./components/lights/THREEHemisphereLight'),
     SpotLight: require('./components/lights/THREESpotLight'),
     Constants: require('./Constants'),
-    render: ReactDOM.render
+    render: ReactDOM.render,
+    unmountComponentAtNode: ReactDOM.unmountComponentAtNode
 };

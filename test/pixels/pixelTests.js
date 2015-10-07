@@ -67,7 +67,7 @@ function drawTestRenders(mountpoint, testimage) {
     renderresults.push(renderURL);
   });
 
-  React.unmountComponentAtNode(mountpoint);
+  ReactTHREE.unmountComponentAtNode(mountpoint);
 
   return renderresults;
 }
