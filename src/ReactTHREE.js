@@ -19,6 +19,8 @@
 // Lots of code here is based on react-art: https://github.com/facebook/react-art
 //
 
+var ReactDOM = require('react-dom');
+
 // monkey patch to workaround some assumptions that we're working with the DOM
 var monkeypatch = require('./ReactTHREEMonkeyPatch');
 monkeypatch();
@@ -40,5 +42,6 @@ module.exports =  {
     DirectionalLight: require('./components/lights/THREEDirectionalLight'),
     HemisphereLight: require('./components/lights/THREEHemisphereLight'),
     SpotLight: require('./components/lights/THREESpotLight'),
-    Constants: require('./Constants')
+    Constants: require('./Constants'),
+    render: ReactDOM.render
 };

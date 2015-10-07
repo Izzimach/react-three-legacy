@@ -70,13 +70,13 @@ function jsxtransformstart() { // eslint-disable-line no-unused-vars
   var cupcakeprops = sceneprops.cupcakedata;
   var rotationangle = 0;
 
-  ReactDOM.render(<ExampleScene {...sceneprops}/>, renderelement);
+  ReactTHREE.render(<ExampleScene {...sceneprops}/>, renderelement);
 
   function spincupcake(t) {
     rotationangle = t * 0.001;
     cupcakeprops.quaternion.setFromEuler(new THREE.Euler(rotationangle,rotationangle*3,0));
     cupcakeprops.position.x = 300  * Math.sin(rotationangle);
-    ReactDOM.render(<ExampleScene {...sceneprops}/>, renderelement);
+    ReactTHREE.render(<ExampleScene {...sceneprops}/>, renderelement);
 
     requestAnimationFrame(spincupcake);
   }

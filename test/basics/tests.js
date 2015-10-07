@@ -14,7 +14,6 @@ describe("React and ReactTHREE modules", function() {
   });
 
   it("has all the components you expect", function() {
-    expect(React.DOM).toBeDefined();
     expect(ReactTHREE.Scene).toBeDefined();
     expect(ReactTHREE.PerspectiveCamera).toBeDefined();
     expect(ReactTHREE.OrthographicCamera).toBeDefined();
@@ -30,5 +29,6 @@ describe("React and ReactTHREE modules", function() {
     expect(ReactTHREE.DirectionalLight).toBeDefined();
     expect(ReactTHREE.HemisphereLight).toBeDefined();
     expect(ReactTHREE.SpotLight).toBeDefined();
+    expect(ReactTHREE.render).toBeDefined();
   });
 });

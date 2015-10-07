@@ -30,7 +30,7 @@ var g_nextcubeid = 1;
 // if the application state is modified call this to update the GUI
 
 function updateApp() {
-  ReactDOM.render(React.createElement(CubeApp,   g_applicationstate), g_renderelement);
+  ReactTHREE.render(React.createElement(CubeApp,   g_applicationstate), g_renderelement);
 }
 
 //

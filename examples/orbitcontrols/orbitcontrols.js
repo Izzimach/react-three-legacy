@@ -69,5 +69,5 @@ function orbitcontrolsstart() { // eslint-disable-line no-unused-vars
 
   var sceneprops = {width:w, height:h, cupcakedata:{position:new THREE.Vector3(0,0,0), quaternion:new THREE.Quaternion()}};
 
-  ReactDOM.render(React.createElement(ExampleScene,sceneprops), renderelement);
+  ReactTHREE.render(React.createElement(ExampleScene,sceneprops), renderelement);
 }

@@ -58,7 +58,7 @@ function drawTestRenders(mountpoint, testimage) {
 
   meshtestprops.forEach(function (curprops) {
     curprops.key = 'urgh'; // re-use the same sprite instance
-    var reactinstance = React.render(MeshTest({width:imagesize, height:imagesize, meshprops:curprops}), mountpoint);
+    var reactinstance = ReactTHREE.render(MeshTest({width:imagesize, height:imagesize, meshprops:curprops}), mountpoint);
 
     // Convert the rendered image to a data blob we can use. We do this by
     // getting a data URL from the scene canvas

@@ -58,10 +58,10 @@ describe("ReactTHREE composite components", function() {
     // don't switch to a different key then React will just update the current instance
     // of Object3D instead of trying to replace it.
     //
-    var reactinstance = React.render(injectedKeyStageFactory(props1),mountpoint);
+    var reactinstance = ReactTHREE.render(injectedKeyStageFactory(props1),mountpoint);
 
     // this should destroy and replace the child instance instead of updating it
-    reactinstance.setProps(props2);
+    reactinstance = ReactTHREE.render(injectedKeyStageFactory(props2),mountpoint);
 
     expect(mountpoint.childNodes.length).toBe(1);
     expect(mountpoint.childNodes[0].nodeName).toBe('CANVAS');
@@ -98,19 +98,19 @@ describe("ReactTHREE composite components", function() {
         }
     }));
 
-    var reactinstance = React.render(changedChildSceneFactory({thingindex:1,text:'newtext'}), mountpoint);
+    var reactinstance = ReactTHREE.render(changedChildSceneFactory({thingindex:1,text:'newtext'}), mountpoint);
 
     var scene = reactinstance.refs['scene']._THREEObject3D;
     expect(scene.children.length).toBe(1);
 
     // should switch from Object3D to Camera node... the old node shouldn't be
     // stashed somewhere (in _mountImage perhaps?)
-    reactinstance.setProps({thingindex:2});
+    reactinstance = ReactTHREE.render(changedChildSceneFactory({thingindex:2,text:'newtext'}), mountpoint);
     expect(scene.children.length).toBe(1);
 
     // If buggy, this will pull the old node (Object3D) and add it in, resulting
     // in two children
-    reactinstance.setProps({text:'ack'});
+    reactinstance = ReactTHREE.render(changedChildSceneFactory({thingindex:2,text:'ack'}), mountpoint);
     expect(scene.children.length).toBe(1); // might be 0 or 2 if buggy
   });
 
@@ -143,10 +143,10 @@ describe("ReactTHREE composite components", function() {
     var props1 = addinjectedkey(baseprops, 'one');
     var props2 = addinjectedkey(baseprops, 'two');
 
-    var reactinstance = React.render(injectedKeyStageFactory(props1),mountpoint);
+    var reactinstance = ReactTHREE.render(injectedKeyStageFactory(props1),mountpoint);
 
     // this should destroy and replace the child instance instead of updating it
-    reactinstance.setProps(props2);
+    ReactTHREE.render(injectedKeyStageFactory(props2),mountpoint);
 
     expect(mountpoint.childNodes.length).toBe(1);
     expect(mountpoint.childNodes[0].nodeName).toBe('DIV');

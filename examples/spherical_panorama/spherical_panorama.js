@@ -68,7 +68,7 @@ function spherepanoramaexamplestart() { // eslint-disable-line no-unused-vars
         cameraAngle: 0
     };
 
-    var reactInstance = React.render(
+    ReactTHREE.render(
         React.createElement(SpherePanoramaScene, appState),
         renderelement
     );
@@ -80,8 +80,13 @@ function spherepanoramaexamplestart() { // eslint-disable-line no-unused-vars
         var dt = time - start;
         var newAngle = (2 * dt / (PERIOD * 1000)) * Math.PI;
         appState.cameraAngle = newAngle;
-        reactInstance.setProps(appState);
-        requestAnimationFrame(animate);
+
+        ReactTHREE.render(
+            React.createElement(SpherePanoramaScene, appState),
+            renderelement
+        );
+
+      requestAnimationFrame(animate);
     }
 
     animate(start);
