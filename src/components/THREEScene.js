@@ -148,7 +148,7 @@ var THREEScene = React.createClass({
         }
 
         // warn users of the old listenToClick prop
-        warning(typeof props.listenToClick !== 'undefined', "the `listenToClick` prop has been replaced with `pointerEvents`");
+        warning(typeof props.listenToClick === 'undefined', "the `listenToClick` prop has been replaced with `pointerEvents`");
 
         if (props.pointerEvents) {
             // fiddle with some internals here - probably a bit brittle
