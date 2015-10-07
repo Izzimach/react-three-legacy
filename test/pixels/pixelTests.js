@@ -62,7 +62,7 @@ function drawTestRenders(mountpoint, testimage) {
 
     // Convert the rendered image to a data blob we can use. We do this by
     // getting a data URL from the scene canvas
-    var renderURL = reactinstance.refs['scene'].getDOMNode().toDataURL('image/png');
+    var renderURL = ReactDOM.findDOMNode(reactinstance.refs['scene']).toDataURL('image/png');
 
     renderresults.push(renderURL);
   });
