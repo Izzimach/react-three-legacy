@@ -12,7 +12,7 @@ You can view an interactive demo (hopefully) at [my github demo page](http://izz
 Usage
 =====
 
-An example render functions from the examples:
+An example render function from the examples:
 
 
 ```
@@ -50,6 +50,8 @@ render: function() {
 Install and Use with npm
 ========================
 
+The current version of react-three is 0.7.0 which uses React 0.14.
+
 If you are building a project with a `package.json` file you can
 
 ```
@@ -70,10 +72,10 @@ var THREE = require('three');
 Building Standalone Files
 =========================
 
-You can build two version of the library:
+You can build two versions of the library:
 * The default with global libraries (`React`,`THREE`, and `ReactTHREE`) exposed,
   for easy inclusion using a `<script>` tag.
-* The `dist` version which is basically a commonjs module that you can `require` from.
+* The `commonjs` version which is basically a commonjs module that you can `require` from.
   
 Checkout the git repository. You will need node and npm.
 
@@ -99,16 +101,46 @@ build/react-three.js. If you include this into your webpage via a script tag:
 
 Then the relevant parts will be accessed in the global namespace as `React`, `ReactTHREE`, and `THREE`.
 
-For the commonjs version you must invoke the `prepublish` build:
+For the commonjs version you must invoke the `build-commonjs` task:
 
 ```
-npm run prepublish
+npm run build-commonjs
 ```
 
 This produces the file es5/react-three-commonjs.js which can be used as a normal
 commonjs library like the one published to npmjs.
 
 ![Sample Cupcake component](docs/react-three-interactiveexample.png)
+
+Node Props
+==========
+
+In general, you specify props with names and content that are the same
+as equivalent three.js nodes. For example, the three.js Mesh object has
+a position, geometry, and material. You would render a Mesh component as:
+
+```
+React.createElement(ReactTHREE.Mesh, {position:p, geometry:g, material:m}
+```
+
+where `p`,`g`, and `m` are the same values you would have set in a three.js Mesh object:
+
+* `p` is position, a `THREE.Vector3`
+* `g` is geometry data such as `THREE.BoxGeometry`
+* `m` is a material like a `THREE.MeshBasicMaterial`
+
+Extra Props
+-----------
+
+The `THREEScene` component has a few extra props that aren't in the standard `Scene` object:
+
+* `camera`: specifies the name of the camera to use when rendering. The default is `maincamera`
+* `background`: is the background color specified as a number, usually hex (for example `0x202020`)
+* `enableRapidRender`: if set to `true` will re-render the scene every frame even if nothing was modified by React. This is for handling non-static THREE entities such as animated meshes and particle systems.
+* `pointerEvents`: an array of strings containing the names of events that will be processed and forwarded to objects in the scene. The code uses ray casting to find which object gets the event. For example `['onClick', 'onMouseMove']` will send mouse clicks and move events to whatever object is under the mouse. To handle events, add handler functions as props to your component with `3D` appended - so use the `onClick3D` prop to handle mouse clicks on your object. See the 'interactive' example for more details.
+* `orbitControls`: you can specify an orbit controller (typically `THREE.OrbitControls`) for the scene. Note that this consumes mouse input so will not work well with `pointerEvents`. The 'orbitcontrols' example shows how to use this prop.
+
+
 
 Examples
 ========
