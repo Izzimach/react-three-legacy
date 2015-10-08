@@ -1,9 +1,8 @@
 // A simple SphericalPanorama viewer
 
-/* jshint strict: false */
-/* global React : false */
-/* global ReactTHREE : false */
-/* global THREE : false */
+/* global React */
+/* global ReactTHREE */
+/* global THREE */
 
 var sphereGeometry = new THREE.SphereGeometry(100, 32, 32);
 
@@ -36,7 +35,7 @@ var SpherePanoramaScene = React.createClass({
                 near: 1,
                 far: 5000,
                 position: new THREE.Vector3(0, 0, 0),
-                lookat: cameraLookAt,
+                lookat: cameraLookAt
             }
         );
 
@@ -47,7 +46,7 @@ var SpherePanoramaScene = React.createClass({
                 material: imageMaterial,
                 position: new THREE.Vector3(0, 0, 0),
                 scale: new THREE.Vector3(1, 1, -1),
-                quaternion: new THREE.Quaternion(),
+                quaternion: new THREE.Quaternion()
             }
         );
 
@@ -61,16 +60,15 @@ var SpherePanoramaScene = React.createClass({
 });
 
 
-/* jshint unused:false */
-function spherepanoramaexamplestart() {
+function spherepanoramaexamplestart() { // eslint-disable-line no-unused-vars
     var renderelement = document.getElementById("three-box");
     var appState = {
         width: window.innerWidth,
         height: window.innerHeight,
-        cameraAngle: 0,
+        cameraAngle: 0
     };
 
-    var reactInstance = React.render(
+    ReactTHREE.render(
         React.createElement(SpherePanoramaScene, appState),
         renderelement
     );
@@ -82,8 +80,13 @@ function spherepanoramaexamplestart() {
         var dt = time - start;
         var newAngle = (2 * dt / (PERIOD * 1000)) * Math.PI;
         appState.cameraAngle = newAngle;
-        reactInstance.setProps(appState);
-        requestAnimationFrame(animate);
+
+        ReactTHREE.render(
+            React.createElement(SpherePanoramaScene, appState),
+            renderelement
+        );
+
+      requestAnimationFrame(animate);
     }
 
     animate(start);

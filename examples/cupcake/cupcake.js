@@ -2,10 +2,9 @@
 // Basic React-THREE example using a custom 'Cupcake' Component which consists of two cubes
 //
 
-/* jshint strict: false */
-/* global React : false */
-/* global ReactTHREE : false */
-/* global THREE : false */
+/* global React */
+/* global ReactTHREE */
+/* global THREE */
 
 var assetpath = function(filename) { return '../assets/' + filename; };
 
@@ -62,8 +61,7 @@ var ExampleScene = React.createClass({
   }
 });
 
-/* jshint unused:false */
-function cupcakestart() {
+var cupcakestart = function() { // eslint-disable-line no-unused-vars
   var renderelement = document.getElementById("three-box");
 
   var w = window.innerWidth-6;
@@ -73,13 +71,14 @@ function cupcakestart() {
   var cupcakeprops = sceneprops.cupcakedata;
   var rotationangle = 0;
 
-  var reactinstance = React.render(React.createElement(ExampleScene,sceneprops), renderelement);
+  ReactTHREE.render(React.createElement(ExampleScene,sceneprops), renderelement);
 
   function spincupcake(t) {
     rotationangle = t * 0.001;
     cupcakeprops.quaternion.setFromEuler(new THREE.Euler(rotationangle,rotationangle*3,0));
     cupcakeprops.position.x = 300  * Math.sin(rotationangle);
-    reactinstance.setProps(sceneprops);
+    
+    ReactTHREE.render(React.createElement(ExampleScene,sceneprops), renderelement);
 
     requestAnimationFrame(spincupcake);
   }

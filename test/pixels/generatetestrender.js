@@ -1,7 +1,7 @@
 //
 // code to generate test render images
-// run this in phantomjs from the root directory:
-// 'node_modules/.bin/phantomjs test/pixels/generatetestrender.js'
+// run this in slimerjs from the root directory:
+// 'slimerjs test/pixels/generatetestrender.js'
 //
 
 var webPage = require('webpage');
@@ -28,7 +28,7 @@ page.onCallback = function(refimages) {
     fs.write(filename,refimages[renderindex], 'wb');
     console.log('Wrote test render file ' + filename);
   }
-  phantom.exit();
+  slimer.exit();
 }
 
 page.open('test/pixels/generatetestrender.html', function() {

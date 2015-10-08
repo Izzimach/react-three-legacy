@@ -1,5 +1,5 @@
 var ReactMultiChild = require('react/lib/ReactMultiChild');
-var emptyObject = require('react/lib/emptyObject');
+var emptyObject = require('fbjs/lib/emptyObject');
 var assign = require('react/lib/Object.assign');
 
 //

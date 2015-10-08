@@ -1,7 +1,8 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var ReactMount = require('react/lib/ReactMount');
 var ReactUpdates = require('react/lib/ReactUpdates');
-var warning = require('react/lib/warning');
+var warning = require('fbjs/lib/warning');
 var THREE = require('three');
 var THREEContainerMixin = require('../mixins/THREEContainerMixin');
 var THREEObject3DMixin = require('../mixins/THREEObject3DMixin');
@@ -9,8 +10,6 @@ var THREEObject3DMixin = require('../mixins/THREEObject3DMixin');
 var ReactBrowserEventEmitter = require('react/lib/ReactBrowserEventEmitter');
 var putListener = ReactBrowserEventEmitter.putListener;
 var listenTo = ReactBrowserEventEmitter.listenTo;
-
-var warning = require('react/lib/warning');
 
 var ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
 
@@ -25,17 +24,18 @@ var THREEScene = React.createClass({
 
     propTypes: {
         enableRapidRender: React.PropTypes.bool,
-        pixelRatio: React.PropTypes.number
+        pixelRatio: React.PropTypes.number,
+        pointerEvents: React.PropTypes.arrayOf(React.PropTypes.string)
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
         return {
             enableRapidRender: true,
             pixelRatio: 1
         };
     },
 
-    setApprovedDOMProperties: function(nextProps) {
+    setApprovedDOMProperties(nextProps) {
         var prevProps = this.props;
 
         var prevPropsSubset = {
@@ -65,8 +65,8 @@ var THREEScene = React.createClass({
         this.props = prevProps;
     },
 
-    componentDidMount: function() {
-        var renderelement = this.getDOMNode();
+    componentDidMount() {
+        var renderelement = ReactDOM.findDOMNode(this);
         var props = this.props;
 
 //    var instance = this._reactInternalInstance._renderedComponent;
@@ -76,9 +76,9 @@ var THREEScene = React.createClass({
             canvas: renderelement,
             antialias: props.antialias === undefined ? true : props.antialias
         });
-        this._THREErenderer.shadowMapEnabled = props.shadowMapEnabled !== undefined ? props.shadowMapEnabled : false;
+        this._THREErenderer.shadowMap.enabled = props.shadowMapEnabled !== undefined ? props.shadowMapEnabled : false;
         if (props.shadowMapType !== undefined) {
-            this._THREErenderer.shadowMapType = props.shadowMapType;
+            this._THREErenderer.shadowMap.type = props.shadowMapType;
         }
         this._THREErenderer.setPixelRatio(props.pixelRatio);
         this._THREErenderer.setSize(+props.width, +props.height);
@@ -128,8 +128,6 @@ var THREEScene = React.createClass({
 
         this.renderScene();
 
-        var that = this;
-
         // The canvas gets re-rendered every frame even if no props/state changed.
         // This is because some three.js items like skinned meshes need redrawing
         // every frame even if nothing changed in React props/state.
@@ -137,35 +135,44 @@ var THREEScene = React.createClass({
         // See https://github.com/Izzimach/react-three/issues/28
 
         if (this.props.enableRapidRender) {
-            that._rAFID = window.requestAnimationFrame( rapidrender );
-        }
+            const rapidrender = (timestamp) => {
 
-        function rapidrender(timestamp) {
+                this._timestamp = timestamp;
+                this._rAFID = window.requestAnimationFrame( rapidrender );
 
-            that._timestamp = timestamp;
-            that._rAFID = window.requestAnimationFrame( rapidrender );
-
-            // render the stage
-            that.renderScene();
-        }
-
-        if (props.listenToClick) {
-            // fiddle with some internals here - probably a bit brittle
-            var internalInstance = this._reactInternalInstance;
-            var container = ReactMount.findReactContainerForID(internalInstance._rootNodeID);
-            if (container) {
-                var doc = container.nodeType === ELEMENT_NODE_TYPE ?
-                    container.ownerDocument :
-                    container;
-                listenTo('onClick', doc);
+                // render the stage
+                this.renderScene();
             }
-            putListener(internalInstance._rootNodeID, 'onClick', function(event) { that.projectClick(event);});
+
+            this._rAFID = window.requestAnimationFrame( rapidrender );
+        }
+
+        // warn users of the old listenToClick prop
+        warning(typeof props.listenToClick === 'undefined', "the `listenToClick` prop has been replaced with `pointerEvents`");
+
+        if (props.pointerEvents) {
+            // fiddle with some internals here - probably a bit brittle
+            const internalInstance = this._reactInternalInstance;
+            const container = ReactMount.findReactContainerForID(internalInstance._rootNodeID);
+
+            props.pointerEvents.forEach(eventName => {
+                if (container) {
+                    const doc = container.nodeType === ELEMENT_NODE_TYPE ?
+                        container.ownerDocument :
+                        container;
+                    listenTo(eventName, doc);
+                }
+                putListener(
+                  internalInstance._rootNodeID,
+                  eventName,
+                  event => this.projectPointerEvent(event, eventName) );
+            });
         }
 
         renderelement.onselectstart = function() { return false; };
     },
 
-    componentDidUpdate: function(oldProps) {
+    componentDidUpdate(oldProps) {
         var props = this.props;
 
         if (props.pixelRatio != oldProps.pixelRatio) {
@@ -208,7 +215,7 @@ var THREEScene = React.createClass({
         this.renderScene();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.unmountChildren();
         ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
         if (typeof this._rAFID !== 'undefined') {
@@ -216,7 +223,7 @@ var THREEScene = React.createClass({
         }
     },
 
-    mountOrbitControls: function(props) {
+    mountOrbitControls(props) {
         if (props.orbitControls) {
             if (!this.orbitControls) {
                 this.orbitControls = new props.orbitControls(this._THREEcamera);
@@ -224,18 +231,18 @@ var THREEScene = React.createClass({
         }
     },
 
-    renderScene: function() {
+    renderScene() {
         this._THREErenderer.render(this._THREEObject3D, this._THREEcamera);
     },
 
-    render: function() {
+    render() {
         // the three.js renderer will get applied to this canvas element
         return React.createElement("canvas");
     },
 
-    projectClick: function (event) {
+    projectPointerEvent (event, eventName) {
         event.preventDefault();
-        var rect = this.getDOMNode().getBoundingClientRect();
+        var rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
 
         var x =   ( (event.clientX - rect.left) / this.props.width) * 2 - 1;
@@ -254,7 +261,7 @@ var THREEScene = React.createClass({
         if (firstintersection !== null) {
             var pickobject = firstintersection.object;
             if (typeof pickobject.userData !== 'undefined' && pickobject.userData._currentElement) {
-                var onpickfunction = pickobject.userData._currentElement.props.onPick;
+                var onpickfunction = pickobject.userData._currentElement.props[eventName + '3D'];
                 if (typeof onpickfunction === 'function') {
                     onpickfunction(event, firstintersection);
                 }

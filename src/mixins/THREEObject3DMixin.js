@@ -1,6 +1,6 @@
-var THREE = require('three');
-var assign = require('react/lib/Object.assign');
-var THREEContainerMixin = require('./THREEContainerMixin');
+import THREE from 'three';
+import assign from 'react/lib/Object.assign';
+import THREEContainerMixin from './THREEContainerMixin';
 
 //
 // The container methods are use by both the THREEScene composite component
@@ -57,11 +57,11 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
         }
 
         if (typeof props.up !== 'undefined') {
-            this._THREEObject3D.up.copy(props.up);
+            THREEObject3D.up.copy(props.up);
         }
 
         if (typeof props.lookat !== 'undefined') {
-            this._THREEObject3D.lookAt(props.lookat);
+            THREEObject3D.lookAt(props.lookat);
         }
 
 
@@ -119,8 +119,8 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
         this.unmountChildren();
     },
 
+    /*eslint no-unused-vars: [2, { "args": "none" }]*/
     mountComponentIntoNode: function(rootID, container) {
-        /* jshint unused: vars */
         throw new Error(
             'You cannot render an THREE Object3D standalone. ' +
             'You need to wrap it in a THREEScene.'
@@ -128,4 +128,4 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
     }
 });
 
-module.exports = THREEObject3DMixin;
+export default THREEObject3DMixin;

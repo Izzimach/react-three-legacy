@@ -42,7 +42,7 @@ describe("THREE Object3D Component", function() {
   var maxtestchildren = 10;
 
   it("maintains proper references to the parent Object3D", function() {
-    var reactinstance = React.render(VariableChildrenTest(1),mountpoint);
+    var reactinstance = ReactTHREE.render(VariableChildrenTest(1),mountpoint);
 
     var scene = reactinstance.refs['scene']._THREEObject3D;
     var testpoint = scene.children[0];
@@ -53,7 +53,7 @@ describe("THREE Object3D Component", function() {
   it("can hold a variable number of children", function() {
 
     for (var numchildren = 0; numchildren < maxtestchildren; numchildren++) {
-      var reactinstance = React.render(
+      var reactinstance = ReactTHREE.render(
         VariableChildrenTest(numchildren),
         mountpoint);
 
@@ -79,14 +79,14 @@ describe("THREE Object3D Component", function() {
   });
 
   it ("can add Object3D node to an already-mounted tree", function() {
-    var reactinstance = React.render(
+    var reactinstance = ReactTHREE.render(
       VariableChildrenTest(0),
       mountpoint);
 
     for (var numchildren = 1; numchildren < maxtestchildren; numchildren++) {
 
       // this should add another Object3D as a child
-      reactinstance = React.render(
+      reactinstance = ReactTHREE.render(
         VariableChildrenTest(numchildren),
         mountpoint);
 
@@ -109,14 +109,14 @@ describe("THREE Object3D Component", function() {
   });
 
   it("can remove Object3D nodes from an already-mounted tree", function() {
-    var reactinstance = React.render(
+    var reactinstance = ReactTHREE.render(
       VariableChildrenTest(maxtestchildren),
       mountpoint);
 
     for (var numchildren = maxtestchildren-1; numchildren > 0; numchildren--) {
 
       // this should remove an already existing child
-      var reactinstance = React.render(
+      var reactinstance = ReactTHREE.render(
         VariableChildrenTest(numchildren),
         mountpoint);
 
@@ -188,10 +188,10 @@ describe("THREE Object3D Component", function() {
     //  then React will just update the current instance
     // of Object3D instead of replacing it.
     //
-    var reactinstance = React.render(injectedKeyStageFactory(props1),mountpoint);
+    var reactinstance = ReactTHREE.render(injectedKeyStageFactory(props1),mountpoint);
 
     // this should destroy and replace the child instance instead of updating it
-    reactinstance.setProps(props2);
+    ReactTHREE.render(injectedKeyStageFactory(props2),mountpont);
 
     expect(mountpoint.childNodes.length).toBe(1);
     expect(mountpoint.childNodes[0].nodeName).toBe('CANVAS');

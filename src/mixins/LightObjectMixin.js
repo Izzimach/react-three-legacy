@@ -1,4 +1,4 @@
-var setNewLightColor = require('../Utils').setNewLightColor;
+import {setNewLightColor} from '../Utils';
 
 var LightObjectMixin = {
     applySpecificTHREEProps: function (oldProps, newProps) {
@@ -11,4 +11,5 @@ var LightObjectMixin = {
     }
 };
 
-module.exports = LightObjectMixin;
+export default LightObjectMixin;
+

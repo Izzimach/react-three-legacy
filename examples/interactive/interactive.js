@@ -1,12 +1,10 @@
 //
 // Basic ReactTHREE example using events to add/remove sprites.
 
-// tell jshint that we use lodash
-/* global _ : false */
-/* global React : false */
-/* global ReactTHREE : false */
-/* global THREE : false */
-/* jshint strict: false */
+/* global _*/
+/* global React */
+/* global ReactTHREE */
+/* global THREE */
 
 var g_assetpath = function(filename) { return '../assets/' + filename; };
 
@@ -19,8 +17,8 @@ var g_assetpath = function(filename) { return '../assets/' + filename; };
 //
 
 
-// the mounted instance will go here, so that callbacks can modify/set it
-var g_reactinstance;
+// DOM node upon which to mount the WebGL canvas
+var g_renderelement;
 
 // This basically the 'application state':
 // a list of all the current sprites
@@ -31,7 +29,7 @@ var g_nextcubeid = 1;
 // if the application state is modified call this to update the GUI
 
 function updateApp() {
-  g_reactinstance.setProps(g_applicationstate);
+  ReactTHREE.render(React.createElement(CubeApp, g_applicationstate), g_renderelement);
 }
 
 //
@@ -113,7 +111,7 @@ var ClickableCube = React.createClass({
     position: React.PropTypes.instanceOf(THREE.Vector3),
     quaternion: React.PropTypes.instanceOf(THREE.Quaternion),
     materialname: React.PropTypes.string.isRequired,
-    shared: React.PropTypes.bool,
+    shared: React.PropTypes.bool
   },
   render: function() {
     var boxmaterial = lookupmaterial(this.props.materialname);
@@ -137,7 +135,7 @@ var ClickToRemoveCube = React.createClass({
   render: function() {
     var cubeprops = _.clone(this.props);
     cubeprops.materialname = 'lollipopGreen.png';
-    cubeprops.onPick = this.removeThisCube;
+    cubeprops.onMouseMove3D = this.removeThisCube;
     return React.createElement(ClickableCube, cubeprops);
   }
 });
@@ -158,7 +156,7 @@ var CubeAppButtons = React.createClass({
     return React.createElement(
       ReactTHREE.Object3D,
       {},
-      React.createElement(ClickableCube,{position: new THREE.Vector3(0,0,0), materialname:'cherry.png', name:'addbutton', onPick:this.handlePick})
+      React.createElement(ClickableCube,{position: new THREE.Vector3(0,0,0), materialname:'cherry.png', name:'addbutton', onClick3D:this.handlePick})
     );
   }
 });
@@ -225,7 +223,7 @@ var OrbitCamera = React.createClass({
 var CubeApp = React.createClass({
   displayName: 'CubeApp',
   propTypes: {
-    borderpx: React.PropTypes.number.isRequired,
+    borderpx: React.PropTypes.number.isRequired
   },
   getInitialState: function() {
     // base initial size on window size minus border size
@@ -266,7 +264,7 @@ var CubeApp = React.createClass({
   render: function() {
     return React.createElement(
       ReactTHREE.Scene,
-      {width: this.state.width, height: this.state.height, listenToClick: true,background:0x202020, camera:'maincamera'},
+      {width: this.state.width, height: this.state.height, pointerEvents: ['onClick', 'onMouseMove'], background:0x202020, camera:'maincamera'},
       [
         React.createElement(OrbitCamera, {key:'camera', distance:600, azimuth:this.state.cameraazimuth, aspectratio:this.state.width / this.state.height}),
         React.createElement(RemovableCubes, {key:'cubes', cubes:this.props.cubes}),
@@ -278,12 +276,11 @@ var CubeApp = React.createClass({
 
 
 
-/* jshint unused:false */
-function interactiveexamplestart() {
+function interactiveexamplestart() { // eslint-disable-line no-unused-vars
 
-  var renderelement = document.getElementById("three-box");
+  g_renderelement = document.getElementById("three-box");
 
   g_applicationstate = {borderpx:6, cubes:[], xsize:500, ysize:500, zsize:500 };
 
-  g_reactinstance = React.render(React.createElement(CubeApp,   g_applicationstate), renderelement);
+  updateApp();
 }

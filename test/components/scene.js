@@ -8,7 +8,7 @@ describe("THREE Scene Component", function() {
   afterEach(function() { removeTestFixtureMountPoint(mountpoint); });
 
   it("creates a canvas used by THREE", function() {
-    React.render(scenecomponent,mountpoint);
+    ReactTHREE.render(scenecomponent,mountpoint);
 
     expect(mountpoint.childNodes.length).toBe(1);
     expect(mountpoint.childNodes[0].nodeName).toBe('CANVAS');
@@ -16,7 +16,7 @@ describe("THREE Scene Component", function() {
   });
 
   it("creates a THREE Scene object", function() {
-    var reactinstance = React.render(scenecomponent,mountpoint);
+    var reactinstance = ReactTHREE.render(scenecomponent,mountpoint);
 
     // hm, probably need some equivalent of getDOMNode
     expect(reactinstance.refs['scene']._THREEObject3D).toBeDefined();
@@ -25,16 +25,16 @@ describe("THREE Scene Component", function() {
   });
 
   it("destroys the canvas when the stage is unmounted", function() {
-    reactinstance = React.render(scenecomponent,mountpoint);
+    reactinstance = ReactTHREE.render(scenecomponent,mountpoint);
 
     // this should unmount the stage and remove the canvas
-    var reactinstance = React.render(React.DOM.div(), mountpoint);
+    var reactinstance = ReactTHREE.render(React.DOM.div(), mountpoint);
 
     expect(mountpoint.childNodes.length).toBe(1);
     expect(mountpoint.childNodes[0].nodeName).not.toBe('CANVAS');
     expect(mountpoint.childNodes[0].childNodes.length).toBe(0);
 
-    React.unmountComponentAtNode(mountpoint);
+    ReactTHREE.unmountComponentAtNode(mountpoint);
 
     expect(mountpoint.childNodes.length).toBe(0);
   });
