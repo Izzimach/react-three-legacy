@@ -226,7 +226,7 @@ var THREEScene = React.createClass({
     mountOrbitControls(props) {
         if (props.orbitControls) {
             if (!this.orbitControls) {
-                this.orbitControls = new props.orbitControls(this._THREEcamera);
+                this.orbitControls = new props.orbitControls(this._THREEcamera, ReactDOM.findDOMNode(this));
             }
         }
     },
