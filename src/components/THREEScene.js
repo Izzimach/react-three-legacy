@@ -25,13 +25,15 @@ var THREEScene = React.createClass({
     propTypes: {
         enableRapidRender: React.PropTypes.bool,
         pixelRatio: React.PropTypes.number,
-        pointerEvents: React.PropTypes.arrayOf(React.PropTypes.string)
+        pointerEvents: React.PropTypes.arrayOf(React.PropTypes.string),
+        transparent: React.PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             enableRapidRender: true,
-            pixelRatio: 1
+            pixelRatio: 1,
+            transparent: false
         };
     },
 
@@ -73,6 +75,7 @@ var THREEScene = React.createClass({
 
         this._THREEObject3D = new THREE.Scene();
         this._THREErenderer = new THREE.WebGLRenderer({
+            alpha: this.props.transparent,
             canvas: renderelement,
             antialias: props.antialias === undefined ? true : props.antialias
         });
@@ -118,7 +121,7 @@ var THREEScene = React.createClass({
             // background color should be a number, check it
             warning(backgroundtype === 'number', "The background property of "+
                 "the scene component must be a number, not " + backgroundtype);
-            this._THREErenderer.setClearColor(props.background);
+            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 1 : 0);
 
         }
 
@@ -190,7 +193,7 @@ var THREEScene = React.createClass({
             // background color should be a number, check it
             warning(backgroundtype === 'number', "The background property of "+
                 "the scene component must be a number, not " + backgroundtype);
-            this._THREErenderer.setClearColor(props.background);
+            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 1 : 0);
         }
 
         THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, oldProps, props);
