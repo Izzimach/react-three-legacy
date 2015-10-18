@@ -45,10 +45,6 @@ var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
         this._updateChildren(nextChildren, transaction, context);
     },
 
-    updateChildrenAtRoot: function (nextChildren, transaction) {
-        this.updateChildren(nextChildren, transaction, emptyObject);
-    },
-
     // called by any container component after it gets mounted
     mountAndAddChildren: function(children, transaction, context) {
         var mountedImages = this.mountChildren(
@@ -66,10 +62,6 @@ var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
                 i++;
             }
         }
-    },
-
-    mountAndAddChildrenAtRoot: function(children, transaction) {
-        this.mountAndAddChildren(children, transaction, emptyObject);
     }
 });
 

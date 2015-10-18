@@ -68,10 +68,9 @@ var THREEScene = React.createClass({
     },
 
     componentDidMount() {
-        var renderelement = ReactDOM.findDOMNode(this);
-        var props = this.props;
-
-//    var instance = this._reactInternalInstance._renderedComponent;
+        let renderelement = ReactDOM.findDOMNode(this);
+        let props = this.props;
+        let context = this._reactInternalInstance._context;
 
         this._THREEObject3D = new THREE.Scene();
         this._THREErenderer = new THREE.WebGLRenderer({
@@ -87,14 +86,17 @@ var THREEScene = React.createClass({
         this._THREErenderer.setSize(+props.width, +props.height);
         this._THREEraycaster = new THREE.Raycaster();
         //this.setApprovedDOMProperties(props);
-        THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, {}, props);
+      THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, {}, props);
+
+      console.log(context);
 
         var transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
         transaction.perform(
-            this.mountAndAddChildrenAtRoot,
-            this,
-            props.children,
-            transaction
+          this.mountAndAddChildren,
+          this,
+          props.children,
+          transaction,
+	  context
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
 
@@ -175,7 +177,8 @@ var THREEScene = React.createClass({
     },
 
     componentDidUpdate(oldProps) {
-        var props = this.props;
+        let props = this.props;
+        let context = this._reactInternalInstance._context;
 
         if (props.pixelRatio != oldProps.pixelRatio) {
             this._THREErenderer.setPixelRatio(props.pixelRatio);
@@ -197,12 +200,13 @@ var THREEScene = React.createClass({
 
         THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, oldProps, props);
 
-        var transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
+        let transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
         transaction.perform(
-            this.updateChildrenAtRoot,
-            this,
-            this.props.children,
-            transaction
+          this.updateChildren,
+          this,
+          this.props.children,
+          transaction,
+	  context
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
 
