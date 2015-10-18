@@ -88,8 +88,6 @@ var THREEScene = React.createClass({
         //this.setApprovedDOMProperties(props);
       THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, {}, props);
 
-      console.log(context);
-
         var transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
         transaction.perform(
           this.mountAndAddChildren,
