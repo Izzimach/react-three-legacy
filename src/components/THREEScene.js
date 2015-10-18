@@ -122,7 +122,6 @@ var THREEScene = React.createClass({
             warning(backgroundtype === 'number', "The background property of "+
                 "the scene component must be a number, not " + backgroundtype);
             this._THREErenderer.setClearColor(props.background, this.props.transparent ? 1 : 0);
-
         }
 
         this._THREEcamera = camera;
