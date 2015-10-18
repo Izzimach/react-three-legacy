@@ -66,7 +66,7 @@ var THREEScene = React.createClass({
     },
 
     componentDidMount() {
-        var renderelement = ReactDOM.findDOMNode(this);
+        var renderelement = this.props.canvas || ReactDOM.findDOMNode(this);
         var props = this.props;
 
 //    var instance = this._reactInternalInstance._renderedComponent;
@@ -236,17 +236,20 @@ var THREEScene = React.createClass({
     },
 
     render() {
+        if (this.props.canvas) return null;
+
         // the three.js renderer will get applied to this canvas element
         return React.createElement("canvas");
     },
 
     projectPointerEvent (event, eventName) {
         event.preventDefault();
-        var rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+        var canvas = this.props.canvas || ReactDOM.findDOMNode(this);
+        var rect = canvas.getBoundingClientRect();
 
-
-        var x =   ( (event.clientX - rect.left) / this.props.width) * 2 - 1;
-        var y = - ( (event.clientY - rect.top) / this.props.height) * 2 + 1;
+        const {clientX, clientY} = event.touches ? event.touches[0] : event;
+        var x =   ( (clientX - rect.left) / this.props.width) * 2 - 1;
+        var y = - ( (clientY - rect.top) / this.props.height) * 2 + 1;
 
         var mousecoords = new THREE.Vector3(x,y,0.5);
         var raycaster = this._THREEraycaster;
