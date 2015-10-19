@@ -21,7 +21,7 @@
   "files": ["es5", "src"],
   "main": "es5/react-three-commonjs.js",
   "es6": "src/ReactTHREE.js",
-  "jsnext:main: "src/ReactTHREE.js",
+  "jsnext:main": "src/ReactTHREE.js",
   "dependencies" : {
     "fbjs": "^0.2.1"
   },
