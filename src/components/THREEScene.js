@@ -86,7 +86,7 @@ var THREEScene = React.createClass({
         this._THREErenderer.setSize(+props.width, +props.height);
         this._THREEraycaster = new THREE.Raycaster();
         //this.setApprovedDOMProperties(props);
-      THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, {}, props);
+        THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, {}, props);
 
         var transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
         transaction.perform(
@@ -97,6 +97,8 @@ var THREEScene = React.createClass({
 	  context
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
+        // hack for react-hot-loader
+        this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
 
         // can't look for refs until children get mounted
         var camera = props.camera;
@@ -207,6 +209,8 @@ var THREEScene = React.createClass({
 	  context
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
+        // hack for react-hot-loader
+        this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
 
         if (typeof props.camera === 'string') {
             this._THREEcamera = this._THREEObject3D.getObjectByName(props.camera);
@@ -220,6 +224,8 @@ var THREEScene = React.createClass({
     },
 
     componentWillUnmount() {
+        // hack for react-hot-loader
+        this._reactInternalInstance._renderedComponent._renderedChildren = null;
         this.unmountChildren();
         ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
         if (typeof this._rAFID !== 'undefined') {
