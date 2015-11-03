@@ -123,7 +123,7 @@ var THREEScene = React.createClass({
             // background color should be a number, check it
             warning(backgroundtype === 'number', "The background property of "+
                 "the scene component must be a number, not " + backgroundtype);
-            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 1 : 0);
+            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 0 : 1);
         }
 
         this._THREEcamera = camera;
@@ -195,7 +195,7 @@ var THREEScene = React.createClass({
             // background color should be a number, check it
             warning(backgroundtype === 'number', "The background property of "+
                 "the scene component must be a number, not " + backgroundtype);
-            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 1 : 0);
+            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 0 : 1);
         }
 
         THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, oldProps, props);
