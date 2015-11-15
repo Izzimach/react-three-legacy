@@ -52,11 +52,19 @@ var ExampleScene = React.createClass({
       ReactTHREE.PerspectiveCamera,
       {name:'maincamera', fov:'75', aspect:this.props.width/this.props.height, near:1, far:5000, position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)});
 
-    return React.createElement(
-      ReactTHREE.Scene,
-      {width:this.props.width, height:this.props.height, camera:'maincamera'},
-      MainCameraElement,
-      React.createElement(Cupcake, this.props.cupcakedata)
+    return (
+        React.createElement(ReactTHREE.Renderer, { disableHotLoader: true, width:this.props.width, height:this.props.height },
+            React.createElement(ReactTHREE.Scene,
+                {disableHotLoader:true, width:this.props.width, height:this.props.height, camera:'maincamera'}
+                ,MainCameraElement
+                ,React.createElement(Cupcake, this.props.cupcakedata)
+            ),
+            React.createElement(ReactTHREE.Scene,
+                {disableHotLoader:true, width:this.props.width, height:this.props.height, camera:'maincamera'}
+                ,MainCameraElement
+                ,React.createElement(Cupcake, this.props.cupcakedata2)
+            )
+        )
     );
   }
 });
@@ -67,8 +75,12 @@ var cupcakestart = function() { // eslint-disable-line no-unused-vars
   var w = window.innerWidth-6;
   var h = window.innerHeight-6;
 
-  var sceneprops = {width:w, height:h, cupcakedata:{position:new THREE.Vector3(0,0,0), quaternion:new THREE.Quaternion()}};
+  var sceneprops = {width:w, height:h,
+    cupcakedata:{position:new THREE.Vector3(0,0,0), quaternion:new THREE.Quaternion()},
+    cupcakedata2:{position:new THREE.Vector3(0,0,0), quaternion:new THREE.Quaternion()}
+  };
   var cupcakeprops = sceneprops.cupcakedata;
+  var cupcakeprops2 = sceneprops.cupcakedata2;
   var rotationangle = 0;
 
   ReactTHREE.render(React.createElement(ExampleScene,sceneprops), renderelement);
@@ -77,7 +89,9 @@ var cupcakestart = function() { // eslint-disable-line no-unused-vars
     rotationangle = t * 0.001;
     cupcakeprops.quaternion.setFromEuler(new THREE.Euler(rotationangle,rotationangle*3,0));
     cupcakeprops.position.x = 300  * Math.sin(rotationangle);
-    
+    cupcakeprops2.quaternion.setFromEuler(new THREE.Euler(rotationangle,rotationangle*3,0));
+    cupcakeprops2.position.x = 300  * Math.sin(-rotationangle);
+
     ReactTHREE.render(React.createElement(ExampleScene,sceneprops), renderelement);
 
     requestAnimationFrame(spincupcake);
