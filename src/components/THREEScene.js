@@ -22,72 +22,32 @@ var THREEScene = React.createClass({
     displayName: 'THREEScene',
     mixins: [THREEContainerMixin],
 
+    mountComponent(rootID, transaction, context) {
+
+        var props = this._currentElement.props;
+        /* jshint unused: vars */
+        this._THREEObject3D.userData = this;
+
+        this.mountAndAddChildren(props.children, transaction, context);
+        return this._THREEObject3D;
+    },
+
     propTypes: {
-        enableRapidRender: React.PropTypes.bool,
-        pixelRatio: React.PropTypes.number,
         pointerEvents: React.PropTypes.arrayOf(React.PropTypes.string),
-        transparent: React.PropTypes.bool,
         disableHotLoader: React.PropTypes.bool
     },
 
     getDefaultProps() {
         return {
-            enableRapidRender: true,
-            pixelRatio: 1,
-            transparent: false,
             disableHotLoader: false
         };
     },
 
-    setApprovedDOMProperties(nextProps) {
-        var prevProps = this.props;
-
-        var prevPropsSubset = {
-            accesskey: prevProps.accesskey,
-            className: prevProps.className,
-            draggable: prevProps.draggable,
-            role: prevProps.role,
-            style: prevProps.style,
-            tabindex: prevProps.tabindex,
-            title: prevProps.title
-        };
-
-        var nextPropsSubset = {
-            accesskey: nextProps.accesskey,
-            className: nextProps.className,
-            draggable: nextProps.draggable,
-            role: nextProps.role,
-            style: nextProps.style,
-            tabindex: nextProps.tabindex,
-            title: nextProps.title
-        };
-
-        this.props = nextPropsSubset;
-        this._updateDOMProperties(prevPropsSubset);
-
-        // Reset to normal state
-        this.props = prevProps;
-    },
-
     componentDidMount() {
-        let renderelement = this.props.canvas || ReactDOM.findDOMNode(this);
         let props = this.props;
         let context = this._reactInternalInstance._context;
 
         this._THREEObject3D = new THREE.Scene();
-        this._THREErenderer = new THREE.WebGLRenderer({
-            alpha: this.props.transparent,
-            canvas: renderelement,
-            antialias: props.antialias === undefined ? true : props.antialias
-        });
-        this._THREErenderer.shadowMap.enabled = props.shadowMapEnabled !== undefined ? props.shadowMapEnabled : false;
-        if (props.shadowMapType !== undefined) {
-            this._THREErenderer.shadowMap.type = props.shadowMapType;
-        }
-        this._THREErenderer.setPixelRatio(props.pixelRatio);
-        this._THREErenderer.setSize(+props.width, +props.height);
-        this._THREEraycaster = new THREE.Raycaster();
-        //this.setApprovedDOMProperties(props);
         THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, {}, props);
 
         var transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
@@ -96,7 +56,7 @@ var THREEScene = React.createClass({
           this,
           props.children,
           transaction,
-	  context
+      	  context
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
         // hack for react-hot-loader
@@ -122,38 +82,9 @@ var THREEScene = React.createClass({
             }
         }
 
-        var backgroundtype = typeof props.background;
-        if (backgroundtype !== 'undefined') {
-            // background color should be a number, check it
-            warning(backgroundtype === 'number', "The background property of "+
-                "the scene component must be a number, not " + backgroundtype);
-            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 0 : 1);
-        }
-
         this._THREEcamera = camera;
 
         this.mountOrbitControls(props);
-
-        this.renderScene();
-
-        // The canvas gets re-rendered every frame even if no props/state changed.
-        // This is because some three.js items like skinned meshes need redrawing
-        // every frame even if nothing changed in React props/state.
-        //
-        // See https://github.com/Izzimach/react-three/issues/28
-
-        if (this.props.enableRapidRender) {
-            const rapidrender = (timestamp) => {
-
-                this._timestamp = timestamp;
-                this._rAFID = window.requestAnimationFrame( rapidrender );
-
-                // render the stage
-                this.renderScene();
-            }
-
-            this._rAFID = window.requestAnimationFrame( rapidrender );
-        }
 
         // warn users of the old listenToClick prop
         warning(typeof props.listenToClick === 'undefined', "the `listenToClick` prop has been replaced with `pointerEvents`");
@@ -176,31 +107,11 @@ var THREEScene = React.createClass({
                   event => this.projectPointerEvent(event, eventName) );
             });
         }
-
-        renderelement.onselectstart = function() { return false; };
     },
 
     componentDidUpdate(oldProps) {
         let props = this.props;
         let context = this._reactInternalInstance._context;
-
-        if (props.pixelRatio != oldProps.pixelRatio) {
-            this._THREErenderer.setPixelRatio(props.pixelRatio);
-        }
-
-        if (props.width != oldProps.width ||
-            props.width != oldProps.height ||
-            props.pixelRatio != oldProps.pixelRatio) {
-            this._THREErenderer.setSize(+props.width, +props.height);
-        }
-
-        var backgroundtype = typeof props.background;
-        if (backgroundtype !== 'undefined') {
-            // background color should be a number, check it
-            warning(backgroundtype === 'number', "The background property of "+
-                "the scene component must be a number, not " + backgroundtype);
-            this._THREErenderer.setClearColor(props.background, this.props.transparent ? 0 : 1);
-        }
 
         THREEObject3DMixin.applyTHREEObject3DPropsToObject(this._THREEObject3D, oldProps, props);
 
@@ -210,7 +121,7 @@ var THREEScene = React.createClass({
           this,
           this.props.children,
           transaction,
-	  context
+      	  context
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
         // hack for react-hot-loader
@@ -225,8 +136,6 @@ var THREEScene = React.createClass({
         }
 
         this.mountOrbitControls(props);
-
-        this.renderScene();
     },
 
     componentWillUnmount() {
@@ -236,9 +145,6 @@ var THREEScene = React.createClass({
         }
         this.unmountChildren();
         ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
-        if (typeof this._rAFID !== 'undefined') {
-            window.cancelAnimationFrame(this._rAFID);
-        }
     },
 
     mountOrbitControls(props) {
@@ -249,15 +155,8 @@ var THREEScene = React.createClass({
         }
     },
 
-    renderScene() {
-        this._THREErenderer.render(this._THREEObject3D, this._THREEcamera);
-    },
-
     render() {
-        if (this.props.canvas) return null;
-
-        // the three.js renderer will get applied to this canvas element
-        return React.createElement("canvas");
+      return null;
     },
 
     projectPointerEvent (event, eventName) {
