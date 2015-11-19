@@ -26,14 +26,16 @@ var THREEScene = React.createClass({
         enableRapidRender: React.PropTypes.bool,
         pixelRatio: React.PropTypes.number,
         pointerEvents: React.PropTypes.arrayOf(React.PropTypes.string),
-        transparent: React.PropTypes.bool
+        transparent: React.PropTypes.bool,
+        disableHotLoader: React.PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             enableRapidRender: true,
             pixelRatio: 1,
-            transparent: false
+            transparent: false,
+            disableHotLoader: false
         };
     },
 
@@ -98,7 +100,9 @@ var THREEScene = React.createClass({
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
         // hack for react-hot-loader
-        this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
+        if (!this.props.disableHotLoader) {
+          this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
+        }
 
         // can't look for refs until children get mounted
         var camera = props.camera;
@@ -210,7 +214,9 @@ var THREEScene = React.createClass({
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
         // hack for react-hot-loader
-        this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
+        if (!this.props.disableHotLoader) {
+          this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
+        }
 
         if (typeof props.camera === 'string') {
             this._THREEcamera = this._THREEObject3D.getObjectByName(props.camera);
@@ -225,7 +231,9 @@ var THREEScene = React.createClass({
 
     componentWillUnmount() {
         // hack for react-hot-loader
-        this._reactInternalInstance._renderedComponent._renderedChildren = null;
+        if (!this.props.disableHotLoader) {
+          this._reactInternalInstance._renderedComponent._renderedChildren = null;
+        }
         this.unmountChildren();
         ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
         if (typeof this._rAFID !== 'undefined') {
