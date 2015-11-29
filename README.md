@@ -156,6 +156,8 @@ Then open the example index in your browser at `http://localhost:8080/`
 Testing
 =======
 
+The test runner requires Firefox to be installed. You can get Firefox from http://firefox.com.
+
 Some tests require WebGL and cannot be run on the CI test server. Because of
 this, it is recommended that you run the tests locally before submitting a pull request.
 
