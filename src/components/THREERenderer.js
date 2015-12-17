@@ -44,6 +44,10 @@ const THREERenderer = React.createClass({
         const props = this.props;
         const context = this._reactInternalInstance._context;
 
+        // manually mounting things in a 'createClass' component messes up react internals
+        // need to fix up some fields
+        this._rootNodeID = "";
+
         this._THREErenderer = new THREE.WebGLRenderer({
             alpha: this.props.transparent,
             canvas: renderelement,
@@ -55,7 +59,6 @@ const THREERenderer = React.createClass({
         }
         this._THREErenderer.setPixelRatio(props.pixelRatio);
         this._THREErenderer.setSize(+props.width, +props.height);
-        this._THREEraycaster = new THREE.Raycaster();
 
         const transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
         transaction.perform(
@@ -63,13 +66,26 @@ const THREERenderer = React.createClass({
             this,
             props.children,
             transaction,
-        	  context
+            context
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
 
+        // bind pointer events in child scenes
+        const renderedComponent = this._reactInternalInstance._renderedComponent;
+        const renderedChildren = this._renderedChildren;
+        if (renderedChildren) {
+            for (var childkey in renderedChildren) {
+                if (renderedChildren.hasOwnProperty(childkey)) {
+                    let child = renderedChildren[childkey];
+                    child.bindPointerEvents(renderedComponent._rootNodeID, renderelement, child._currentElement.props);
+                }
+            }
+        }
+        
         // hack for react-hot-loader
-        if (!this.props.disableHotLoader) {
-          this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
+        if (!this.props.disableHotLoader &&
+          renderedComponent._currentElement !== null) {
+          renderedComponent._renderedChildren = this._renderedChildren;
         }
 
         const backgroundtype = typeof props.background;
@@ -140,8 +156,10 @@ const THREERenderer = React.createClass({
         ReactUpdates.ReactReconcileTransaction.release(transaction);
         
         // hack for react-hot-loader
-        if (!this.props.disableHotLoader) {
-            this._reactInternalInstance._renderedComponent._renderedChildren = this._renderedChildren;
+        const renderedComponent = this._reactInternalInstance._renderedComponent;
+        if (!this.props.disableHotLoader &&
+            renderedComponent._currentElement !== null) {
+            renderedComponent._renderedChildren = this._renderedChildren;
         }
 
         this.renderScene();
@@ -149,8 +167,10 @@ const THREERenderer = React.createClass({
 
     componentWillUnmount() {
         // hack for react-hot-loader
-        if (!this.props.disableHotLoader) {
-          this._reactInternalInstance._renderedComponent._renderedChildren = null;
+        const renderedComponent = this._reactInternalInstance._renderedComponent;
+        if (!this.props.disableHotLoader &&
+          renderedComponent._currentElement !== null) {
+          renderedComponent._renderedChildren = null;
         }
         this.unmountChildren();
         ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
@@ -168,13 +188,14 @@ const THREERenderer = React.createClass({
         this._THREErenderer.clear();
 
         Object.keys(children).forEach(key => {
-          const scene = children[key]._instance;
-          if (scene._THREEObject3D && scene._THREEcamera) {
-              this._THREErenderer.render(
-                  scene._THREEObject3D,
-                  scene._THREEcamera
-              );
-          }
+            const scene = children[key];
+            if (scene._THREEObject3D &&
+                scene._THREEMetaData.camera !== null) {
+                this._THREErenderer.render(
+                    scene._THREEObject3D,
+                    scene._THREEMetaData.camera
+                );
+            }
         });
 
     },
