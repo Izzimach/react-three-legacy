@@ -30,13 +30,14 @@ function drawTestRenders(mountpoint, testimage) {
       var cameraprops = _.clone(defaultcameraprops);
       cameraprops.aspectratio = this.props.width/this.props.height;
 
-      return React.createElement(ReactTHREE.Scene,
-        // props
-        {width:this.props.width, height:this.props.height, background:0xff00ff, camera:'maincamera', ref:'scene'},
-        // children
-        React.createElement(ReactTHREE.Mesh, this.props.meshprops),
-        React.createElement(ReactTHREE.PerspectiveCamera, cameraprops)
-        );
+      return React.createElement(ReactTHREE.Renderer,
+                                 {},
+                                 React.createElement(ReactTHREE.Scene,
+                                                     // props
+                                                     {width:this.props.width, height:this.props.height, background:0xff00ff, camera:'maincamera', ref:'scene'},
+                                                     // children
+                                                     React.createElement(ReactTHREE.Mesh, this.props.meshprops),
+                                                     React.createElement(ReactTHREE.PerspectiveCamera, cameraprops)));
     }
   });
   var MeshTest = React.createFactory(MeshTestComponent);

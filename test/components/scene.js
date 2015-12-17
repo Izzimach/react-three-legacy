@@ -76,10 +76,10 @@ describe("THREE Scene Component", function() {
 
 	// note that object3d  x/y/z are not passed down in the props, but must
 	// be obtained from the context
-	return React.createElement(ReactTHREE.Scene,
-				   sceneprops,
-				   React.createElement(Object3DFromContext)
-				  );
+	return React.createElement(ReactTHREE.Renderer,
+                                   React.createElement(ReactTHREE.Scene,
+				                       sceneprops,
+				                       React.createElement(Object3DFromContext)));
       }
     });
 						   

@@ -1,5 +1,6 @@
 
 describe("ReactTHREE composite components", function() {
+  var Renderer = React.createFactory(ReactTHREE.Renderer);
   var Scene = React.createFactory(ReactTHREE.Scene);
   var Object3D = React.createFactory(ReactTHREE.Object3D);
   var Mesh = React.createFactory(ReactTHREE.Mesh);
@@ -16,8 +17,9 @@ describe("ReactTHREE composite components", function() {
     //
     // This occurs when a composite element is updated in-place. To create this (admittedly uncommon)
     // situation we create a composite component that changes the key of its child while everything else
-    // (including the key of the composite element) remains unchanged.  In this case _updateChildren in ReactMultiChildMixin
-    // will update in-place and then updateComponent in ReactCompositeComponentMixin will try to nuke and replace the child
+    // (including the key of the composite element) remains unchanged.  In this case _updateChildren
+    // in ReactMultiChildMixin will update in-place and then updateComponent in
+    // ReactCompositeComponentMixin will try to nuke and replace the child
     // component since the keys don't match.
     //
     var injectedKeyComponent = React.createClass({
@@ -33,8 +35,10 @@ describe("ReactTHREE composite components", function() {
     var injectedKeyStage = React.createClass({
       displayName: 'injectedKeyStage',
       render: function () {
-        return Scene({width:this.props.width, height:this.props.height, ref:'scene'},
-        injectedKeyFactory({x:100, y:100, key: 'argh', injectedkey:this.props.injectedkey}));
+        const injectedprops = {x:100, y:100, key: 'argh', injectedkey:this.props.injectedkey};
+        return Renderer({width:this.props.width, height:this.props.height},
+                        Scene({ref:'scene'},
+                              injectedKeyFactory(injectedprops)));
       }
     });
     var injectedKeyStageFactory = React.createFactory(injectedKeyStage);
@@ -93,8 +97,9 @@ describe("ReactTHREE composite components", function() {
     });
     var changedChildSceneFactory = React.createFactory(React.createClass({
       render: function() {
-        return Scene({width:300,height:300,ref:'scene'},
-          React.createElement(changedChildComponent, this.props));
+        return Renderer({width:300,height:300},
+                        Scene({ref:'scene'}, 
+                              React.createElement(changedChildComponent, this.props)));
         }
     }));
 

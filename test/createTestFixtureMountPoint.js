@@ -26,9 +26,16 @@ var BasicTestFixture = React.createClass({
 
     if (typeof this.props.subcomponentfactory === 'undefined' ||
         this.props.subcomponentfactory === null) {
-      return React.createElement(ReactTHREE.Scene, sceneprops);
+      return React.createElement(ReactTHREE.Renderer,
+                                 {},
+                                 React.createElement(ReactTHREE.Scene,
+                                                     sceneprops));
     } else {
-      return React.createElement(ReactTHREE.Scene, sceneprops, this.props.subcomponentfactory(this.props.subcomponentprops));
+      return React.createElement(ReactTHREE.Renderer,
+                                 {},
+                                 React.createElement(ReactTHREE.Scene,
+                                                     sceneprops,
+                                                     this.props.subcomponentfactory(this.props.subcomponentprops)));
     }
   }
 });
