@@ -25,7 +25,7 @@ var THREEScene = createTHREEComponent(
         createTHREEObject: function() {
             return new THREE.Scene();
         },
-        
+
         applySpecificTHREEProps: function (oldProps, newProps) {
             // can't bind the camera here since children may not be mounted yet
         },
@@ -39,6 +39,11 @@ var THREEScene = createTHREEComponent(
             };
             this.bindCamera(props);
             this.bindOrbitControls(rootID, props);
+
+            if (props.projectPointerEventRef) {
+              props.projectPointerEventRef(this.projectPointerEvent.bind(this));
+            }
+
             // this now gets called by the renderer so that canvas is provided
             //this.bindPointerEvents(rootID, props);
             return this._THREEObject3D;
@@ -100,7 +105,7 @@ var THREEScene = createTHREEComponent(
             const container = ReactMount.findReactContainerForID(rootID);
             return container;
         },
-        
+
         findDocumentContainer: function() {
             let container = this.findRootDOMNode();
             if (container) {
