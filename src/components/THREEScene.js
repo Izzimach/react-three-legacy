@@ -57,8 +57,7 @@ var THREEScene = createTHREEComponent(
         },
 
         unmountComponent: function() {
-            THREEObject3DMixin.umountComponent.call(this);
-            ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
+            THREEObject3DMixin.unmountComponent.call(this);
         },
 
         bindCamera: function(props) {
