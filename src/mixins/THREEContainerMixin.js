@@ -11,6 +11,8 @@ var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
         var childTHREEObject3D = child._mountImage; // should be a three.js Object3D
         var THREEObject3D = this._THREEObject3D;
 
+        if (!THREEObject3D) return; // for THREERenderer, which has no _THREEObject3D
+
         var childindex = THREEObject3D.children.indexOf(childTHREEObject3D);
         if (childindex === -1) {
             throw new Error('The object to move needs to already be a child');
@@ -53,12 +55,15 @@ var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
             context
         );
         // Each mount image corresponds to one of the flattened children
+        const thisTHREEObject3D = this._THREEObject3D;
         var i = 0;
         for (var key in this._renderedChildren) {
             if (this._renderedChildren.hasOwnProperty(key)) {
                 var child = this._renderedChildren[key];
                 child._mountImage = mountedImages[i];
-                this._THREEObject3D.add(child._mountImage);
+
+                // THREERenderer has no _THREEObject3D
+                if (thisTHREEObject3D) thisTHREEObject3D.add(child._mountImage);
                 i++;
             }
         }
