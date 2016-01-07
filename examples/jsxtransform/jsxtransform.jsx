@@ -10,6 +10,7 @@ var boxgeometry = new THREE.BoxGeometry( 200,200,200);
 // <ReactTHREE.Scene ...> but I haven't actually tried that
 //
 
+var Renderer = ReactTHREE.Renderer;
 var Scene = ReactTHREE.Scene;
 var Mesh = ReactTHREE.Mesh;
 var Object3D = ReactTHREE.Object3D;
@@ -52,10 +53,12 @@ var ExampleScene = React.createClass({
     var aspectratio = this.props.width / this.props.height;
     var cameraprops = {fov:75, aspect:aspectratio, near:1, far:5000, position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)};
 
-    return  <Scene width={this.props.width} height={this.props.height} camera="maincamera">
-              <PerspectiveCamera name="maincamera" {...cameraprops} />
-              <Cupcake {...this.props.cupcakedata} />
-            </Scene>;
+    return <Renderer width={this.props.width} height={this.props.height}>
+        <Scene width={this.props.width} height={this.props.height} camera="maincamera">
+            <PerspectiveCamera name="maincamera" {...cameraprops} />
+            <Cupcake {...this.props.cupcakedata} />
+        </Scene>
+    </Renderer>;
   }
 });
 
