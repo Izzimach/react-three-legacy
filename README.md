@@ -156,7 +156,7 @@ Examples
 Examples are set up in the examples/ directory. You can run
 
 ```
-npm run dev
+npm run examples
 ```
 
 Then open the example index in your browser at `http://localhost:8080/`
