@@ -26,6 +26,7 @@ var monkeypatch = require('./ReactTHREEMonkeyPatch');
 monkeypatch();
 
 module.exports =  {
+    Renderer : require('./components/THREERenderer'),
     Scene : require('./components/THREEScene'),
     PerspectiveCamera : require('./components/cameras/THREEPerspectiveCamera'),
     OrthographicCamera : require('./components/cameras/THREEOrthographicCamera'),

@@ -270,13 +270,17 @@ var CubeApp = React.createClass({
   },
   render: function() {
     return React.createElement(
-      ReactTHREE.Scene,
-      {width: this.state.width, height: this.state.height, pointerEvents: ['onClick'], background:0x202020, camera:'maincamera'},
-      [
-        React.createElement(OrbitCamera, {key:'camera', distance:600, azimuth:this.state.cameraazimuth, tilt:this.state.cameratilt, aspectratio:this.state.width / this.state.height}),
-        React.createElement(RemovableCubes, {key:'cubes', cubes:this.props.cubes}),
-        React.createElement(CubeAppButtons, {key:'gui'})
-      ]
+      ReactTHREE.Renderer,
+      {width:this.state.width, height:this.state.height},
+      React.createElement(
+        ReactTHREE.Scene,
+        {width: this.state.width, height: this.state.height, pointerEvents: ['onClick'], background:0x202020, camera:'maincamera'},
+        [
+          React.createElement(OrbitCamera, {key:'camera', distance:600, azimuth:this.state.cameraazimuth, tilt:this.state.cameratilt, aspectratio:this.state.width / this.state.height}),
+          React.createElement(RemovableCubes, {key:'cubes', cubes:this.props.cubes}),
+          React.createElement(CubeAppButtons, {key:'gui'})
+        ]
+      )
     );
   }
 });

@@ -4,10 +4,11 @@ import warning from 'fbjs/lib/warning';
 
 export function createTHREEComponent(name, ...mixins) {
   let ReactTHREEComponent = function(/*props*/) {
-    this.node = null;
-    this._mountImage = null;
-    this._renderedChildren = null;
-    this._THREEObject3D = null;
+      this.node = null;
+      this._mountImage = null;
+      this._renderedChildren = null;
+      this._THREEObject3D = null;
+      this._THREEMetaData = null;
   };
   ReactTHREEComponent.displayName = name;
 

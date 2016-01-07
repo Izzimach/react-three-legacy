@@ -22,13 +22,21 @@
 var BasicTestFixture = React.createClass({
   displayName: 'BasicTestFixture',
   render: function() {
+    var rendererprops = {width:this.props.width, height:this.props.height};
     var sceneprops = {width:this.props.width, height:this.props.height, ref:'scene'};
 
     if (typeof this.props.subcomponentfactory === 'undefined' ||
         this.props.subcomponentfactory === null) {
-      return React.createElement(ReactTHREE.Scene, sceneprops);
+      return React.createElement(ReactTHREE.Renderer,
+                                 rendererprops,
+                                 React.createElement(ReactTHREE.Scene,
+                                                     sceneprops));
     } else {
-      return React.createElement(ReactTHREE.Scene, sceneprops, this.props.subcomponentfactory(this.props.subcomponentprops));
+      return React.createElement(ReactTHREE.Renderer,
+                                 rendererprops,
+                                 React.createElement(ReactTHREE.Scene,
+                                                     sceneprops,
+                                                     this.props.subcomponentfactory(this.props.subcomponentprops)));
     }
   }
 });
@@ -37,7 +45,7 @@ var createTestFixture = React.createFactory(BasicTestFixture);
 
 function createTestFixtureMountPoint() {
   var testDOMelement = window.document.getElementById('test-fixture');
-  if (testDOMelement == null) {
+  if (testDOMelement === null) {
     testDOMelement = window.document.createElement('div');
     testDOMelement.id = 'test-fixture';
     window.document.body.appendChild(testDOMelement);
