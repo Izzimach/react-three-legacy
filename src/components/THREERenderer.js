@@ -77,6 +77,7 @@ const THREERenderer = React.createClass({
             for (var childkey in renderedChildren) {
                 if (renderedChildren.hasOwnProperty(childkey)) {
                     let child = renderedChildren[childkey];
+                    // THREEScene bind pointer events but needs a canvas/DOM element to bind to
                     child.bindPointerEvents(renderedComponent._rootNodeID, renderelement, child._currentElement.props);
                 }
             }
