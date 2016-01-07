@@ -70,14 +70,16 @@ const THREERenderer = React.createClass({
         );
         ReactUpdates.ReactReconcileTransaction.release(transaction);
 
-        // bind pointer events in child scenes
+        // THREEScene binds the pointer events and orbit camera but needs a canvas/DOM element to bind to.
+        // The canvas is stored in the renderer, though, so we have to get the canvas here in the renderer and
+        // then bind pointer events/orbit controls in child scenes
         const renderedComponent = this._reactInternalInstance._renderedComponent;
         const renderedChildren = this._renderedChildren;
         if (renderedChildren) {
             for (var childkey in renderedChildren) {
                 if (renderedChildren.hasOwnProperty(childkey)) {
                     let child = renderedChildren[childkey];
-                    // THREEScene bind pointer events but needs a canvas/DOM element to bind to
+                    child.bindOrbitControls(renderedComponent._rootNodeID, renderelement, child._currentElement.props);
                     child.bindPointerEvents(renderedComponent._rootNodeID, renderelement, child._currentElement.props);
                 }
             }

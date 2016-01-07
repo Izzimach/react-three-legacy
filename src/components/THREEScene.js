@@ -38,7 +38,6 @@ var THREEScene = createTHREEComponent(
                 raycaster : new THREE.Raycaster()
             };
             this.bindCamera(props);
-            this.bindOrbitControls(rootID, props);
 
             if (props.projectPointerEventRef) {
               props.projectPointerEventRef(this.projectPointerEvent.bind(this));
@@ -52,8 +51,6 @@ var THREEScene = createTHREEComponent(
         receiveComponent: function (nextElement, transaction, context) {
             let newProps = nextElement.props;
             THREEObject3DMixin.receiveComponent.call(this, nextElement, transaction, context);
-            this.bindCamera(newProps);
-            this.bindOrbitControls(newProps);
         },
 
         unmountComponent: function() {
@@ -80,10 +77,15 @@ var THREEScene = createTHREEComponent(
 
             this._THREEMetaData.camera = camera;
         },
-
+      
         bindOrbitControls: function(rootID, canvas, props) {
+            if (props.orbitControls && typeof props.orbitControls === 'function') {
+                if (!this._THREEMetaData.orbitControls && canvas) {
+                    this._THREEMetaData.orbitControls = new props.orbitControls(this._THREEMetaData.camera, canvas);
+                }
+            }
         },
-
+        
         bindPointerEvents: function (rootID, canvas, props) {
             if (props.pointerEvents) {
                 if (canvas) {
