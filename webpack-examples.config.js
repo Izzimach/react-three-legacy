@@ -7,11 +7,14 @@ var _ = require('lodash');
 var defaultconfig = require('./webpack.config.js');
 var examplesconfig = _.cloneDeep(defaultconfig);
 
-examplesconfig.entry = path.join(__dirname, "examples", "jsxtransform", "jsxtransform.jsx");
+examplesconfig.entry = {
+  jsxtransform: path.join(__dirname, "examples", "jsxtransform", "jsxtransform.jsx")
+};
+
 examplesconfig.output = {
-    path: path.join(__dirname, "examples/jsxtransform"),
-    filename: "jsxtransform.js",
-    publicPath: "/examples/jsxtransform/"
+  path: path.join(__dirname, "examples", "build"),
+  filename: "[name].js",
+  publicPath: "/examples/build/"
 };
 
 // add a jsx processor
