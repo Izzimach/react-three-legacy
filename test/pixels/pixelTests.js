@@ -30,8 +30,8 @@ function drawTestRenders(mountpoint, testimage) {
       var cameraprops = _.clone(defaultcameraprops);
       cameraprops.aspectratio = this.props.width/this.props.height;
 
-      var rendererprops = { width : this.props.width, height : this.props.height, ref : 'renderer' };
-      var sceneprops = _.assign({ background : 0xff00ff, camera : 'maincamera', ref : 'scene' }, rendererprops);
+      var rendererprops = { width : this.props.width, height : this.props.height, ref : 'renderer', background: 0xff00ff };
+      var sceneprops = _.assign({ camera : 'maincamera', ref : 'scene' }, rendererprops);
       
 
       return React.createElement(ReactTHREE.Renderer,
