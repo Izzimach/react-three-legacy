@@ -24,10 +24,14 @@ render: function() {
      position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)});
 
   return React.createElement(
-      ReactTHREE.Scene,
-      {width:this.props.width, height:this.props.height, camera:'maincamera'},
-      MainCameraElement,
-      React.createElement(Cupcake, this.props.cupcakedata)
+      ReactTHREE.Renderer,
+      {width:this.props.width, height:this.props.height},
+      React.createElement(
+          ReactTHREE.Scene,
+          {width:this.props.width, height:this.props.height, camera:'maincamera'},
+          MainCameraElement,
+          React.createElement(Cupcake, this.props.cupcakedata)
+      )
   );
 }
 ```
@@ -35,16 +39,20 @@ render: function() {
 or if you want to use JSX,
 
 ```
-render: function() {
-  var aspectratio = this.props.width / this.props.height;
-  var cameraprops = {fov:75, aspect:aspectratio, near:1, far:5000,
-    position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)};
+  render: function() {
+    var aspectratio = this.props.width / this.props.height;
+    var cameraprops = {fov : 75, aspect : aspectratio, 
+                       near : 1, far : 5000, 
+                       position : new THREE.Vector3(0,0,600), 
+                       lookat : new THREE.Vector3(0,0,0)};
 
-  return  <Scene width={this.props.width} height={this.props.height} camera="maincamera">
+    return <Renderer width={this.props.width} height={this.props.height}>
+        <Scene width={this.props.width} height={this.props.height} camera="maincamera">
             <PerspectiveCamera name="maincamera" {...cameraprops} />
             <Cupcake {...this.props.cupcakedata} />
-          </Scene>;
-}
+        </Scene>
+    </Renderer>;
+  }
 ```
 
 Install and Use with npm
