@@ -19,9 +19,9 @@ describe("THREE Scene Component", function() {
     var reactinstance = ReactTHREE.render(scenecomponent,mountpoint);
 
     // hm, probably need some equivalent of getDOMNode
-    expect(reactinstance.refs['scene']._THREEObject3D).toBeDefined();
-    expect(reactinstance.refs['scene']._THREErenderer).toBeDefined();
-    expect(reactinstance.refs['scene']._THREEObject3D instanceof THREE.Scene).toBe(true);
+    expect(reactinstance.refs.scene).toBeDefined();
+    expect(reactinstance.refs.scene).toBeDefined();
+    expect(reactinstance.refs.scene instanceof THREE.Scene).toBe(true);
   });
 
   it("destroys the canvas when the stage is unmounted", function() {
@@ -72,11 +72,13 @@ describe("THREE Scene Component", function() {
 	};
       },
       render: function() {
+        var rendererprops = {width:this.props.width, height:this.props.height};
 	var sceneprops = {width:this.props.width, height:this.props.height, ref:'scene'};
 
 	// note that object3d  x/y/z are not passed down in the props, but must
 	// be obtained from the context
 	return React.createElement(ReactTHREE.Renderer,
+                                   rendererprops,
                                    React.createElement(ReactTHREE.Scene,
 				                       sceneprops,
 				                       React.createElement(Object3DFromContext)));
@@ -97,7 +99,7 @@ describe("THREE Scene Component", function() {
 
     // if the context was passed in the sprite x/y should have been
     // determined by the x/y values in the context
-    var scene = reactinstance.refs.scene._THREEObject3D;
+    var scene = reactinstance.refs.scene;
     expect(scene.children[0].position.x).toBe(51);
     expect(scene.children[0].position.y).toBe(52);
     expect(scene.children[0].position.z).toBe(53);

@@ -44,7 +44,7 @@ describe("THREE Object3D Component", function() {
   it("maintains proper references to the parent Object3D", function() {
     var reactinstance = ReactTHREE.render(VariableChildrenTest(1),mountpoint);
 
-    var scene = reactinstance.refs['scene']._THREEObject3D;
+    var scene = reactinstance.refs.scene;
     var testpoint = scene.children[0];
 
     expect(testpoint.parent).toBe(scene);
@@ -64,7 +64,7 @@ describe("THREE Object3D Component", function() {
       expect(mountpoint.childNodes[0].childNodes.length).toBe(0);
 
       // examine the three.js objects
-      var scene = reactinstance.refs['scene']._THREEObject3D;
+      var scene = reactinstance.refs.scene;
       var testpoint = scene.children[0];
 
       expect(scene.children.length).toBe(1);
@@ -97,7 +97,7 @@ describe("THREE Object3D Component", function() {
       expect(mountpoint.childNodes[0].childNodes.length).toBe(0);
 
       // examine the three.js objects
-      var scene = reactinstance.refs['scene']._THREEObject3D;
+      var scene = reactinstance.refs.scene;
       var testpoint = scene.children[0];
 
       expect(scene.children.length).toBe(1);
@@ -127,7 +127,7 @@ describe("THREE Object3D Component", function() {
       expect(mountpoint.childNodes[0].childNodes.length).toBe(0);
 
       // examine the pixi objects
-      var scene = reactinstance.refs['scene']._THREEObject3D;
+      var scene = reactinstance.refs.scene;
       var testpoint = scene.children[0];
 
       expect(scene.children.length).toBe(1);
@@ -200,7 +200,7 @@ describe("THREE Object3D Component", function() {
     expect(mountpoint.childNodes[0].childNodes.length).toBe(0);
 
     // examine the three.js objects
-    var scene = reactinstance.refs['scene']._THREEObject3D;
+    var scene = reactinstance.refs.scene;
     expect(scene.children.length).toBe(1);
   })
 });

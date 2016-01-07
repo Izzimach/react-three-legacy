@@ -74,7 +74,7 @@ describe("ReactTHREE composite components", function() {
     expect(mountpoint.childNodes[0].childNodes.length).toBe(0);
 
     // examine the three.js objects
-    var scene = reactinstance.refs['scene']._THREEObject3D;
+    var scene = reactinstance.refs.scene;
     expect(scene.children.length).toBe(1);
   });
 
@@ -105,7 +105,7 @@ describe("ReactTHREE composite components", function() {
 
     var reactinstance = ReactTHREE.render(changedChildSceneFactory({thingindex:1,text:'newtext'}), mountpoint);
 
-    var scene = reactinstance.refs['scene']._THREEObject3D;
+    var scene = reactinstance.refs.scene;
     expect(scene.children.length).toBe(1);
 
     // should switch from Object3D to Camera node... the old node shouldn't be

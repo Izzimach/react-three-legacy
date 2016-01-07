@@ -30,11 +30,15 @@ function drawTestRenders(mountpoint, testimage) {
       var cameraprops = _.clone(defaultcameraprops);
       cameraprops.aspectratio = this.props.width/this.props.height;
 
+      var rendererprops = { width : this.props.width, height : this.props.height, ref : 'renderer' };
+      var sceneprops = _.assign({ background : 0xff00ff, camera : 'maincamera', ref : 'scene' }, rendererprops);
+      
+
       return React.createElement(ReactTHREE.Renderer,
-                                 {},
+                                 rendererprops, 
                                  React.createElement(ReactTHREE.Scene,
                                                      // props
-                                                     {width:this.props.width, height:this.props.height, background:0xff00ff, camera:'maincamera', ref:'scene'},
+                                                     sceneprops,
                                                      // children
                                                      React.createElement(ReactTHREE.Mesh, this.props.meshprops),
                                                      React.createElement(ReactTHREE.PerspectiveCamera, cameraprops)));
@@ -63,7 +67,7 @@ function drawTestRenders(mountpoint, testimage) {
 
     // Convert the rendered image to a data blob we can use. We do this by
     // getting a data URL from the scene canvas
-    var renderURL = ReactDOM.findDOMNode(reactinstance.refs['scene']).toDataURL('image/png');
+    var renderURL = ReactDOM.findDOMNode(reactinstance.refs['renderer']).toDataURL('image/png');
 
     renderresults.push(renderURL);
   });
