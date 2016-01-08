@@ -26,4 +26,6 @@ examplesconfig.module.loaders.push(
   }
 );
 
+examplesconfig.devtool = 'cheap-module-eval-source-map',
+
 module.exports = examplesconfig;
