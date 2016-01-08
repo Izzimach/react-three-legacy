@@ -7,8 +7,11 @@ var _ = require('lodash');
 var defaultconfig = require('./webpack.config.js');
 var examplesconfig = _.cloneDeep(defaultconfig);
 
+var examplesdirectory = path.join(__dirname, "examples");
+
 examplesconfig.entry = {
-  jsxtransform: path.join(__dirname, "examples", "jsxtransform", "jsxtransform.jsx")
+  jsxtransform: path.join(examplesdirectory, "jsxtransform", "jsxtransform.jsx"),
+  shader: path.join(examplesdirectory, 'shader', 'shader.jsx')
 };
 
 examplesconfig.output = {
@@ -22,7 +25,7 @@ examplesconfig.module.loaders.push(
   {
     test: /\.jsx$/,
     loader: 'babel',
-    include: path.join(__dirname, 'examples', 'jsxtransform')
+    include: path.join(__dirname, 'examples')
   }
 );
 
