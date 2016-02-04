@@ -1,3 +1,8 @@
+0.8.0
+=====
+Now use separate renderer and scene components - gilbox
+Replaced 'dev' build/webserver with 'examples'
+Add opengl shader examples - oveddan
 
 0.7.5
 =====
