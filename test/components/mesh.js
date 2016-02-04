@@ -33,13 +33,13 @@ describe("THREE Mesh Component", function() {
           expect(data.isSameDimensions).toEqual(true);
           // we allow for a fairly big mismatch since we may be comparing
           // WebGL-rendered images to canvas-rendered images and vice-versa
-          if (data.misMatchPercentage > 5) {
+          if (data.misMatchPercentage > 7) {
             console.log("mismatch is " + data.misMatchPercentage.toString());
             console.log("reference image URI is " + refimageURI);
             console.log("test image URI is " + testimageURI);
             console.log("mismatch image data URI is " + data.getImageDataUrl());
           }
-          expect(data.misMatchPercentage).toBeLessThan(5);
+          expect(data.misMatchPercentage).toBeLessThan(7);
 
           comparesperformed++;
           if (comparesperformed === results.length) {
