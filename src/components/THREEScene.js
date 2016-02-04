@@ -128,8 +128,7 @@ var THREEScene = createTHREEComponent(
             var mousecoords = new THREE.Vector3(x,y,0.5);
             let { raycaster, camera } = this._THREEMetaData;
 
-            mousecoords.unproject(camera);
-            raycaster.ray.set( camera.position, mousecoords.sub( camera.position ).normalize() );
+            raycaster.setFromCamera(mousecoords, camera);
 
             var intersections = raycaster.intersectObjects( this._THREEObject3D.children, true );
             var firstintersection = ( intersections.length ) > 0 ? intersections[ 0 ] : null;
