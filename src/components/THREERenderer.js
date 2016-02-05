@@ -27,7 +27,8 @@ const THREERenderer = React.createClass({
         pixelRatio: React.PropTypes.number,
         pointerEvents: React.PropTypes.arrayOf(React.PropTypes.string),
         transparent: React.PropTypes.bool,
-        disableHotLoader: React.PropTypes.bool
+        disableHotLoader: React.PropTypes.bool,
+        customRender: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -47,7 +48,8 @@ const THREERenderer = React.createClass({
         // manually mounting things in a 'createClass' component messes up react internals
         // need to fix up some fields
         this._rootNodeID = "";
-
+        
+        this._customRender = this.props.customRender;
         this._THREErenderer = new THREE.WebGLRenderer({
             alpha: this.props.transparent,
             canvas: renderelement,
@@ -194,10 +196,19 @@ const THREERenderer = React.createClass({
             const scene = children[key];
             if (scene._THREEObject3D &&
                 scene._THREEMetaData.camera !== null) {
-                this._THREErenderer.render(
-                    scene._THREEObject3D,
-                    scene._THREEMetaData.camera
-                );
+                if (this._customRender) {
+                    this._customRender(
+                        this._THREErenderer,
+                        scene._THREEObject3D,
+                        scene._THREEMetaData.camera
+                    );
+                }
+                else {
+                    this._THREErenderer.render(
+                        scene._THREEObject3D,
+                        scene._THREEMetaData.camera
+                    );
+                }
             }
         });
 
