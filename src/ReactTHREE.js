@@ -32,6 +32,7 @@ module.exports =  {
     OrthographicCamera : require('./components/cameras/THREEOrthographicCamera'),
     AxisHelper : require('./components/objects/THREEAxisHelper'),
     Line : require('./components/objects/THREELine'),
+    LineSegments : require('./components/objects/THREELineSegments'),
     PointCloud : require('./components/objects/THREEPointCloud'),
     Object3D : require('./components/objects/THREEObject3D'),
     Mesh : require('./components/objects/THREEMesh'),

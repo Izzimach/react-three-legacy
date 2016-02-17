@@ -2,12 +2,12 @@ var THREE = require('three');
 var createTHREEComponent = require('../../Utils').createTHREEComponent;
 var THREEObject3DMixin = require('../../mixins/THREEObject3DMixin');
 
-var THREELine = createTHREEComponent(
-    'Line',
+var THREELineSegments = createTHREEComponent(
+    'LineSegments',
     THREEObject3DMixin,
     {
         createTHREEObject: function() {
-            return new THREE.Line();
+            return new THREE.LineSegments();
         },
 
         applySpecificTHREEProps: function(oldProps, newProps) {
@@ -16,4 +16,4 @@ var THREELine = createTHREEComponent(
         }
     }
 );
-module.exports = THREELine;
+module.exports = THREELineSegments;
