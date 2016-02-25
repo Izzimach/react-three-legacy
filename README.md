@@ -19,7 +19,7 @@ Usage
 An example render function from the examples:
 
 
-```
+```js
 render: function() {
   var MainCameraElement = React.createElement(
     ReactTHREE.PerspectiveCamera,
@@ -42,7 +42,7 @@ render: function() {
 
 or if you want to use JSX,
 
-```
+```js
   render: function() {
     var aspectratio = this.props.width / this.props.height;
     var cameraprops = {fov : 75, aspect : aspectratio, 
