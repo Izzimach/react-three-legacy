@@ -44,6 +44,7 @@ module.exports =  {
     DirectionalLight: require('./components/lights/THREEDirectionalLight'),
     HemisphereLight: require('./components/lights/THREEHemisphereLight'),
     SpotLight: require('./components/lights/THREESpotLight'),
+    Helper: require('./components/extras/THREEDecoratorHelper'),
     Constants: require('./Constants'),
     render: ReactDOM.render,
     unmountComponentAtNode: ReactDOM.unmountComponentAtNode
