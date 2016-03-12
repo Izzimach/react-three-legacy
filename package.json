@@ -60,6 +60,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "dev": "webpack-dev-server --progress-colors",
     "examples": "webpack-dev-server --progress --colors --config webpack-examples.config.js",
     "build-commonjs": "webpack --config webpack-commonjs.config.js",
     "lint": "eslint src examples",
