@@ -17,11 +17,11 @@ module.exports = {
 	test: /\.js$/,
 	loader: 'babel',
 	include: path.join(__dirname, 'src'),
+        exclude: /(node_modules|bower_components)/,
 	query: {
-	  // When generating a standalone library, this makes sure to
-	  // use babel-runtime to wrap our code and
-	  // avoid global polyfills.
-	  optional: ['runtime']
+          cacheDirectory: true,
+          presets: ['es2015', 'stage-2'],
+          plugins: ['transform-runtime']
 	}
       }
     ]
