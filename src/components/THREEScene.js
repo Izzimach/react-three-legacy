@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactMount from 'react/lib/ReactMount';
 import ReactUpdates from 'react/lib/ReactUpdates';
-import ReactBrowserEventEmitter, {putListener, listenTo} from 'react/lib/ReactBrowserEventEmitter';
+import ReactBrowserEventEmitter, {listenTo} from 'react/lib/ReactBrowserEventEmitter';
+import EventPluginHub from 'react/lib/EventPluginHub';
 
 import THREE from 'three';
 import THREEContainerMixin from '../mixins/THREEContainerMixin';
@@ -82,7 +83,7 @@ var THREEScene = createTHREEComponent(
       this._THREEMetaData.camera = camera;
     },
     
-    bindOrbitControls: function(rootID, canvas, props) {
+    bindOrbitControls: function(inst, canvas, props) {
       if (props.orbitControls && typeof props.orbitControls === 'function') {
         if (!this._THREEMetaData.orbitControls && canvas) {
           this._THREEMetaData.orbitControls = new props.orbitControls(this._THREEMetaData.camera, canvas);
@@ -90,13 +91,13 @@ var THREEScene = createTHREEComponent(
       }
     },
     
-    bindPointerEvents: function (rootID, canvas, props) {
+    bindPointerEvents: function (inst, canvas, props) {
       if (props.pointerEvents) {
         if (canvas) {
           props.pointerEvents.forEach(eventName => {
             listenTo(eventName, canvas);
-            putListener(
-              rootID,
+            EventPluginHub.putListener(
+              inst,
               eventName,
               event => this.projectPointerEvent(event, eventName, canvas) );
           });

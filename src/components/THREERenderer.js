@@ -8,7 +8,8 @@ import THREE from 'three';
 import THREEContainerMixin from '../mixins/THREEContainerMixin';
 import THREEObject3DMixin from '../mixins/THREEObject3DMixin';
 
-import ReactBrowserEventEmitter, {putListener, listenTo} from 'react/lib/ReactBrowserEventEmitter';
+import ReactBrowserEventEmitter, { listenTo } from 'react/lib/ReactBrowserEventEmitter';
+import EventPluginHub from 'react/lib/EventPluginHub';
 
 const ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
 
@@ -80,8 +81,8 @@ const THREERenderer = React.createClass({
       for (var childkey in renderedChildren) {
         if (renderedChildren.hasOwnProperty(childkey)) {
           let child = renderedChildren[childkey];
-          child.bindOrbitControls(renderedComponent._rootNodeID, renderelement, child._currentElement.props);
-          child.bindPointerEvents(renderedComponent._rootNodeID, renderelement, child._currentElement.props);
+          child.bindOrbitControls(renderedComponent, renderelement, child._currentElement.props);
+          child.bindPointerEvents(renderedComponent, renderelement, child._currentElement.props);
         }
       }
     }
@@ -177,7 +178,7 @@ const THREERenderer = React.createClass({
       renderedComponent._renderedChildren = null;
     }
     this.unmountChildren();
-    ReactBrowserEventEmitter.deleteAllListeners(this._reactInternalInstance._rootNodeID);
+    EventPluginHub.deleteAllListeners(this._reactInternalInstance._rootNodeID);
     if (typeof this._rAFID !== 'undefined') {
       window.cancelAnimationFrame(this._rAFID);
     }

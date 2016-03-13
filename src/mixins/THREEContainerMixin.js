@@ -7,28 +7,30 @@ import assign from 'react/lib/Object.assign';
 //
 
 var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
-  moveChild: function(child, toIndex) {
-    var childTHREEObject3D = child._mountImage; // should be a three.js Object3D
-    var THREEObject3D = this._THREEObject3D;
+  moveChild: function(prevChild, lastPlacedNode, nextIndex, lastIndex) {
+    // no-op for the renderer
+    if (typeof this.renderScene !== 'undefined') { return; }
+    
+    //var prevChildTHREEObject3D = prevChild._mountImage; // should be a three.js Object3D
+    let prevChildTHREEObject3D = prevChild.getNativeNode();
+    //var THREEObject3D = this._THREEObject3D;
+    let THREEObject3D = this.getNativeNode();
 
-    if (!THREEObject3D) return; // for THREERenderer, which has no _THREEObject3D
-
-    var childindex = THREEObject3D.children.indexOf(childTHREEObject3D);
-    if (childindex === -1) {
-      throw new Error('The object to move needs to already be a child');
+    var prevChildIndex = THREEObject3D.children.indexOf(prevChildTHREEObject3D);
+    if (prevChildIndex !== -1) {
+      THREEObject3D.children.splice(prevChildIndex,1);
     }
 
     // remove from old location, put in the new location
-    THREEObject3D.children.splice(childindex,1);
-    THREEObject3D.children.splice(toIndex,0,childTHREEObject3D);
+    THREEObject3D.children.splice(nextIndex,0,prevChildTHREEObject3D);
   },
 
-  createChild: function(child, childTHREEObject3D) {
+  createChild: function(child, afterNode, childTHREEObject3D) {
     child._mountImage = childTHREEObject3D;
     this._THREEObject3D.add(childTHREEObject3D);
   },
 
-  removeChild: function(child) {
+  removeChild: function(child, node) {
     var childTHREEObject3D = child._mountImage;
 
     this._THREEObject3D.remove(childTHREEObject3D);
