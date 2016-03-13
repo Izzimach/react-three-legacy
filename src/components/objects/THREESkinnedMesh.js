@@ -1,6 +1,6 @@
-var THREE = require('three');
-var createTHREEComponent = require('../../Utils').createTHREEComponent;
-var THREEObject3DMixin = require('../../mixins/THREEObject3DMixin');
+import THREE from 'three';
+import { createTHREEComponent } from '../../Utils';
+import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 
 var THREESkinnedMesh = createTHREEComponent(
     'SkinnedMesh',
@@ -23,4 +23,4 @@ var THREESkinnedMesh = createTHREEComponent(
     }
 );
 
-module.exports = THREESkinnedMesh;
+export default THREESkinnedMesh;

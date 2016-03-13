@@ -1,8 +1,9 @@
-var createTHREEComponent = require('../../Utils').createTHREEComponent;
-var THREEObject3DMixin = require('../../mixins/THREEObject3DMixin');
+import THREE from 'three';
+import { createTHREEComponent } from '../../Utils';
+import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 
 var THREEObject3D = createTHREEComponent(
     'Object3D',
     THREEObject3DMixin);
 
-module.exports = THREEObject3D;
+export default THREEObject3D;

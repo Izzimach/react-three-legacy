@@ -1,6 +1,6 @@
-var THREE = require('three');
-var createTHREEComponent = require('../../Utils').createTHREEComponent;
-var THREEObject3DMixin = require('../../mixins/THREEObject3DMixin');
+import THREE from 'three';
+import { createTHREEComponent } from '../../Utils';
+import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 
 var THREEPointCloud = createTHREEComponent(
     'PointCloud',
@@ -18,4 +18,4 @@ var THREEPointCloud = createTHREEComponent(
 
 );
 
-module.exports = THREEPointCloud;
+export default THREEPointCloud;

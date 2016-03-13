@@ -1,22 +1,22 @@
-var THREE = require('three');
-var createTHREEComponent = require('../../Utils').createTHREEComponent;
-var THREEObject3DMixin = require('../../mixins/THREEObject3DMixin');
+import THREE from 'three';
+import { createTHREEComponent } from '../../Utils';
+import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 
 var THREEOrthographicCamera = createTHREEComponent(
-    'OrthographicCamera',
-    THREEObject3DMixin,
-    {
-        createTHREEObject: function() {
-            return new THREE.OrthographicCamera();
-        },
+  'OrthographicCamera',
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.OrthographicCamera();
+    },
 
-        applySpecificTHREEProps: function(oldProps, newProps) {
-            this.transferTHREEObject3DPropsByName(oldProps, newProps,
-                ['left','right','top','bottom','near','far']);
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      this.transferTHREEObject3DPropsByName(oldProps, newProps,
+                                            ['left','right','top','bottom','near','far']);
 
-            this._THREEObject3D.updateProjectionMatrix();
-        }
+      this._THREEObject3D.updateProjectionMatrix();
     }
+  }
 );
 
-module.exports = THREEOrthographicCamera;
+export default THREEOrthographicCamera;

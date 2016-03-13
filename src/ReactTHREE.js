@@ -19,33 +19,54 @@
 // Lots of code here is based on react-art: https://github.com/facebook/react-art
 //
 
-var ReactDOM = require('react-dom');
+import ReactDOM from 'react-dom';
 
 // monkey patch to workaround some assumptions that we're working with the DOM
-var monkeypatch = require('./ReactTHREEMonkeyPatch');
+import monkeypatch from './ReactTHREEMonkeyPatch';
 monkeypatch();
 
-module.exports =  {
-    Renderer : require('./components/THREERenderer'),
-    Scene : require('./components/THREEScene'),
-    PerspectiveCamera : require('./components/cameras/THREEPerspectiveCamera'),
-    OrthographicCamera : require('./components/cameras/THREEOrthographicCamera'),
-    AxisHelper : require('./components/objects/THREEAxisHelper'),
-    Line : require('./components/objects/THREELine'),
-    LineSegments : require('./components/objects/THREELineSegments'),
-    PointCloud : require('./components/objects/THREEPointCloud'),
-    Object3D : require('./components/objects/THREEObject3D'),
-    Mesh : require('./components/objects/THREEMesh'),
-    SkinnedMesh : require('./components/objects/THREESkinnedMesh'),
-    Sprite : require('./components/objects/THREESprite'),
-    AmbientLight : require('./components/lights/THREEAmbientLight'),
-    PointLight : require('./components/lights/THREEPointLight'),
-    AreaLight: require('./components/lights/THREEAreaLight'),
-    DirectionalLight: require('./components/lights/THREEDirectionalLight'),
-    HemisphereLight: require('./components/lights/THREEHemisphereLight'),
-    SpotLight: require('./components/lights/THREESpotLight'),
-    Helper: require('./components/extras/THREEDecoratorHelper'),
-    Constants: require('./Constants'),
-    render: ReactDOM.render,
-    unmountComponentAtNode: ReactDOM.unmountComponentAtNode
+import Renderer from './components/THREERenderer';
+import Scene from './components/THREEScene';
+import PerspectiveCamera from './components/cameras/THREEPerspectiveCamera';
+import OrthographicCamera from './components/cameras/THREEOrthographicCamera';
+import AxisHelper from './components/objects/THREEAxisHelper';
+import Line from './components/objects/THREELine';
+import LineSegments from './components/objects/THREELineSegments';
+import PointCloud from './components/objects/THREEPointCloud';
+import Object3D from './components/objects/THREEObject3D';
+import Mesh from './components/objects/THREEMesh';
+import SkinnedMesh from './components/objects/THREESkinnedMesh';
+import Sprite from './components/objects/THREESprite';
+import AmbientLight from './components/lights/THREEAmbientLight';
+import PointLight from './components/lights/THREEPointLight';
+import AreaLight from './components/lights/THREEAreaLight';
+import DirectionalLight from './components/lights/THREEDirectionalLight';
+import HemisphereLight from './components/lights/THREEHemisphereLight';
+import SpotLight from './components/lights/THREESpotLight';
+import Helper from './components/extras/THREEDecoratorHelper';
+import Constants from './Constants';
+
+module.exports = {
+  Renderer,
+  Scene,
+  PerspectiveCamera,
+  OrthographicCamera,
+  AxisHelper,
+  Line,
+  LineSegments,
+  PointCloud,
+  Object3D,
+  Mesh,
+  SkinnedMesh,
+  Sprite,
+  AmbientLight,
+  PointLight,
+  AreaLight,
+  DirectionalLight,
+  HemisphereLight,
+  SpotLight,
+  Helper,
+  Constants,
+  render: ReactDOM.render,
+  unmountComponentAtNode: ReactDOM.unmountComponentAtNode
 };

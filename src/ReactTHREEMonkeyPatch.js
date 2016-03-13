@@ -8,12 +8,11 @@
 
 "use strict";
 
-var ReactCompositeComponent = require('react/lib/ReactCompositeComponent');
-var ReactCompositeComponentMixin = ReactCompositeComponent.Mixin;
-var ReactReconciler = require('react/lib/ReactReconciler');
+import ReactCompositeComponent, {Mixin as ReactCompositeComponentMixin} from 'react/lib/ReactCompositeComponent';
+import ReactReconciler from 'react/lib/ReactReconciler';
 
-var shouldUpdateReactComponent = require('react/lib/shouldUpdateReactComponent');
-var warning = require('fbjs/lib/warning');
+import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
+import warning from 'fbjs/lib/warning';
 
 //
 // Composite components don't have an Object3D. So we have to do some work to find
@@ -154,5 +153,5 @@ var ReactTHREEMonkeyPatch = function() {
   }
 };
 
-module.exports = ReactTHREEMonkeyPatch;
+export default ReactTHREEMonkeyPatch;
 

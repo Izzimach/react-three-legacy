@@ -1,6 +1,6 @@
-var THREE = require('three');
+import THREE from 'three';
 
-module.exports = {
+export default {
 
     X_AXIS: new THREE.Vector3(1,0,0),
     Y_AXIS: new THREE.Vector3(0,1,0),

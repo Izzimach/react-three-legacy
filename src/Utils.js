@@ -3,12 +3,15 @@ import assign from 'react/lib/Object.assign';
 import warning from 'fbjs/lib/warning';
 
 export function createTHREEComponent(name, ...mixins) {
-  let ReactTHREEComponent = function(/*props*/) {
-      this.node = null;
-      this._mountImage = null;
-      this._renderedChildren = null;
-      this._THREEObject3D = null;
-      this._THREEMetaData = null;
+  let ReactTHREEComponent = function(element) {
+    this.node = null;
+    this._mountImage = null;
+    this._nativeParent = null;
+    this._nativeContainerInfo = null;
+    this._renderedChildren = null;
+    this._THREEObject3D = null;
+    this._THREEMetaData = null;
+    this._currentElement = element;
   };
   ReactTHREEComponent.displayName = name;
 

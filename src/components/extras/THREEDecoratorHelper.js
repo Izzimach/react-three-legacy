@@ -1,6 +1,7 @@
 import THREE from 'three';
 import { createTHREEComponent } from '../../Utils';
 import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
+import _ from 'lodash';
 
 export default createTHREEComponent(
   'THREEDecoratorHelper',
@@ -14,33 +15,54 @@ export default createTHREEComponent(
       // can't apply helpers here since the children haven't be mounted yet
     },
 
-    applyHelpers(helperTypeList) {
+    applyHelpers(newHelperTypes) {
       // an array of helper instances
-      let helpers = this._THREEMetaData;
+      let currentHelpers = this._THREEMetaData;
 
-      // do we have helpers for all of the types requested? Add any that are not there
+      // The actual threejs nodes. The immediate child is wrapped by helpers, and helpers
+      // get put in the base object for this component.
+      let helperContainerNode = this._THREEObject3D;
+      let helperWrapNode = helperContainerNode.children[0];
+
+      // figure out which helpers to add and remove
+      let helperAddTypeList = _.differenceWith(newHelperTypes, currentHelpers, (a,b) => b instanceof a);
+      let helperRemoveList = _.differenceWith(currentHelpers, newHelperTypes, (a,b) => a instanceof b);
       
+      for (let newHelperType of helperAddTypeList) {
+        let newHelper = new newHelperType(helperWrapNode);
+        currentHelpers.push(newHelper);
+        currentHelperTypes.push(newHelperType);
+        helperContainerNode.children.push(newHelper);
+      }
+
+      for (let removeHelper of helperRemoveList) {
+        _.remove(currentHelpers, removeHelper);
+        _.remove(helperContainerNode.children, removeHelper);
+      }
     },
 
-    mountComponent() {
+    mountComponent(rootID, transaction, context) {
       let props = this._currentElement.props;
       THREEObject3DMixin.mountComponent.call(this, rootID, transaction, context);
 
       // for this component the metadata is a set of helper objects that 'wrap' the child
       this._THREEMetaData = [];
-      this.applyHelpers(props.helpers);
+
+      let helpers = props.helpers || [];
+      this.applyHelpers(helpers);
+
+      return this._THREEObject3D;
     },
 
-    receiveComponent() {
+    receiveComponent(nextElement, transaction, context) {
       let newProps = nextElement.props;
       THREEObject3DMixin.receiveComponent.call(this, nextElement, transaction, context);
       this.applyHelpers(newProps.helpers);
     },
 
-    unmountComponent() {
+      unmountComponent() {
+        this.applyHelpers([]); // should remove all helpers
       THREEObject3DMixin.unmountComponent.call(this);
     }
   }
-)
-
-
+);

@@ -1,4 +1,4 @@
-import {setNewLightColor} from '../Utils';
+import { setNewLightColor } from '../Utils';
 
 var LightObjectMixin = {
     applySpecificTHREEProps: function (oldProps, newProps) {

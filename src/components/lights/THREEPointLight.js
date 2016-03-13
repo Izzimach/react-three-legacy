@@ -1,21 +1,22 @@
-var THREE = require('three');
-var createTHREEComponent = require('../../Utils').createTHREEComponent;
-var THREEObject3DMixin = require('../../mixins/THREEObject3DMixin');
-var LightObjectMixin = require('../../mixins/LightObjectMixin');
+import THREE from 'three';
+import { createTHREEComponent } from '../../Utils';
+import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
+import LightObjectMixin from '../../mixins/LightObjectMixin';
 
 var THREEPointLight = createTHREEComponent(
-    'PointLight',
-    THREEObject3DMixin,
-    {
-        createTHREEObject: function() {
-            return new THREE.PointLight(0xffffff, 1, 100);
-        },
+  'PointLight',
+  THREEObject3DMixin,
+  {
+    createTHREEObject: function() {
+      return new THREE.PointLight(0xffffff, 1, 100);
+    },
 
-        applySpecificTHREEProps: function(oldProps, newProps) {
-            LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
+    applySpecificTHREEProps: function(oldProps, newProps) {
+      LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
 
-            this.transferTHREEObject3DPropsByName(oldProps, newProps, ['intensity','distance']);
-        }
+      this.transferTHREEObject3DPropsByName(oldProps, newProps, ['intensity','distance']);
     }
+  }
 );
-module.exports = THREEPointLight;
+
+export default THREEPointLight;
