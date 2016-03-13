@@ -1,19 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactMount from 'react/lib/ReactMount';
-import ReactUpdates from 'react/lib/ReactUpdates';
-import ReactBrowserEventEmitter, {listenTo} from 'react/lib/ReactBrowserEventEmitter';
+import { listenTo } from 'react/lib/ReactBrowserEventEmitter';
 import EventPluginHub from 'react/lib/EventPluginHub';
 
 import THREE from 'three';
-import THREEContainerMixin from '../mixins/THREEContainerMixin';
 import THREEObject3DMixin from '../mixins/THREEObject3DMixin';
 import {createTHREEComponent} from '../Utils';
 
 import warning from 'fbjs/lib/warning';
 
-
-var ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
+const ELEMENT_TYPE_NODE = 1; // can't access this in ReactDOMComponent
 
 //
 // The 'Scene' component includes the three.js scene
@@ -27,7 +22,7 @@ var THREEScene = createTHREEComponent(
       return new THREE.Scene();
     },
 
-    applySpecificTHREEProps: function (oldProps, newProps) {
+    applySpecificTHREEProps: function (oldProps, newProps) { // eslint-disable-line no-unused-vars
       // can't bind the camera here since children may not be mounted yet
     },
 
@@ -50,7 +45,6 @@ var THREEScene = createTHREEComponent(
     },
 
     receiveComponent: function (nextElement, transaction, context) {
-      let newProps = nextElement.props;
       THREEObject3DMixin.receiveComponent.call(this, nextElement, transaction, context);
     },
 

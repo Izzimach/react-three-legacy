@@ -8,7 +8,7 @@
 
 "use strict";
 
-import ReactCompositeComponent, {Mixin as ReactCompositeComponentMixin} from 'react/lib/ReactCompositeComponent';
+import {Mixin as ReactCompositeComponentMixin} from 'react/lib/ReactCompositeComponent';
 import ReactReconciler from 'react/lib/ReactReconciler';
 
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';

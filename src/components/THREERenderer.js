@@ -1,17 +1,12 @@
 import React from 'react';
 
 import ReactDOM from 'react-dom';
-import ReactMount from 'react/lib/ReactMount';
 import ReactUpdates from 'react/lib/ReactUpdates';
 import warning from 'fbjs/lib/warning';
 import THREE from 'three';
 import THREEContainerMixin from '../mixins/THREEContainerMixin';
-import THREEObject3DMixin from '../mixins/THREEObject3DMixin';
 
-import ReactBrowserEventEmitter, { listenTo } from 'react/lib/ReactBrowserEventEmitter';
 import EventPluginHub from 'react/lib/EventPluginHub';
-
-const ELEMENT_NODE_TYPE = 1; // some stuff isn't exposed by ReactDOMComponent
 
 //
 // The 'Scene' component includes both the three.js scene and

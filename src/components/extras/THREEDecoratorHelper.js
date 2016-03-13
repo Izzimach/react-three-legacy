@@ -31,7 +31,6 @@ export default createTHREEComponent(
       for (let newHelperType of helperAddTypeList) {
         let newHelper = new newHelperType(helperWrapNode);
         currentHelpers.push(newHelper);
-        currentHelperTypes.push(newHelperType);
         helperContainerNode.children.push(newHelper);
       }
 

@@ -1,5 +1,4 @@
 import ReactMultiChild from 'react/lib/ReactMultiChild';
-import emptyObject from 'fbjs/lib/emptyObject';
 import assign from 'react/lib/Object.assign';
 
 //
@@ -7,7 +6,7 @@ import assign from 'react/lib/Object.assign';
 //
 
 var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
-  moveChild: function(prevChild, lastPlacedNode, nextIndex, lastIndex) {
+  moveChild: function(prevChild, lastPlacedNode, nextIndex, lastIndex) { // eslint-disable-line no-unused-vars
     // no-op for the renderer
     if (typeof this.renderScene !== 'undefined') { return; }
     
@@ -30,7 +29,7 @@ var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
     this._THREEObject3D.add(childTHREEObject3D);
   },
 
-  removeChild: function(child, node) {
+  removeChild: function(child, node) { // eslint-disable-line no-unused-vars
     var childTHREEObject3D = child._mountImage;
 
     this._THREEObject3D.remove(childTHREEObject3D);
