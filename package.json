@@ -87,7 +87,8 @@
     "rules": {
       "strict": [
         0
-      ]
+      ],
+      "eqeqeq": 2
     }
   },
   "engines": {
