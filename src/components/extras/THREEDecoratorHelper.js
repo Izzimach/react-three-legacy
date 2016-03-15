@@ -57,10 +57,20 @@ export default createTHREEComponent(
       let newProps = nextElement.props;
       THREEObject3DMixin.receiveComponent.call(this, nextElement, transaction, context);
       this.applyHelpers(newProps.helpers);
-    },
 
-      unmountComponent() {
-        this.applyHelpers([]); // should remove all helpers
+      // call update methods where they exist on the helpers
+      let currentHelpers = this._THREEMetaData;
+      let helperContainerNode = this._THREEObject3D;
+      let helperWrapNode = helperContainerNode.children[0];
+      for (let helper of currentHelpers) {
+        if (helper.update) {
+          helper.update(helperWrapNode);
+        }
+      }
+    },
+    
+    unmountComponent() {
+      this.applyHelpers([]); // should remove all helpers
       THREEObject3DMixin.unmountComponent.call(this);
     }
   }
