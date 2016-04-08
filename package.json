@@ -30,8 +30,8 @@
     "object-assign": "^4.0.1"
   },
   "peerDependencies": {
-    "react": "^15.0.0-rc.1",
-    "react-dom": "^15.0.0-rc.1",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0",
     "three": "^0.74.0"
   },
   "devDependencies": {
