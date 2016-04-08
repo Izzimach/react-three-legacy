@@ -1,5 +1,5 @@
 import THREE from 'three';
-import assign from 'react/lib/Object.assign';
+import assign from 'object-assign';
 import warning from 'fbjs/lib/warning';
 
 export function createTHREEComponent(name, ...mixins) {

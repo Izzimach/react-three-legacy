@@ -26,7 +26,8 @@
   "es6": "src/ReactTHREE.js",
   "jsnext:main": "src/ReactTHREE.js",
   "dependencies": {
-    "fbjs": "^0.7.0"
+    "fbjs": "^0.7.0",
+    "object-assign": "^4.0.1"
   },
   "peerDependencies": {
     "react": "^15.0.0-rc.1",

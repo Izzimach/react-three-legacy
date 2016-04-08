@@ -1,5 +1,5 @@
 import THREE from 'three';
-import assign from 'react/lib/Object.assign';
+import assign from 'object-assign';
 import THREEContainerMixin from './THREEContainerMixin';
 
 //

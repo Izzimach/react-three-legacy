@@ -1,5 +1,5 @@
 import ReactMultiChild from 'react/lib/ReactMultiChild';
-import assign from 'react/lib/Object.assign';
+import assign from 'object-assign';
 
 //
 // Generates a React component by combining several mixin components
