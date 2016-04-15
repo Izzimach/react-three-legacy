@@ -1,6 +1,6 @@
 {
   "name": "react-three",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Construct three.js scenes using React",
   "keywords": [
     "react",
