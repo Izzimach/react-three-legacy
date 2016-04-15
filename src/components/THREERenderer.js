@@ -108,7 +108,9 @@ const THREERenderer = React.createClass({
       const rapidrender = (timestamp) => {
 
         this._timestamp = timestamp;
-        this._rAFID = window.requestAnimationFrame( rapidrender );
+        if (typeof this._rAFID != 'undefined') {
+          this._rAFID = window.requestAnimationFrame( rapidrender );
+        }
 
         // render the stage
         this.renderScene();
@@ -173,9 +175,10 @@ const THREERenderer = React.createClass({
       renderedComponent._renderedChildren = null;
     }
     this.unmountChildren();
-    EventPluginHub.deleteAllListeners(this._reactInternalInstance._rootNodeID);
+    EventPluginHub.deleteAllListeners(this._reactInternalInstance);
     if (typeof this._rAFID !== 'undefined') {
       window.cancelAnimationFrame(this._rAFID);
+      delete this._rAFID;
     }
   },
 
