@@ -72,7 +72,8 @@
     "pretest": "npm run build",
     "prerendertest": "npm run build",
     "prepublish": "npm run build-commonjs",
-    "preexamples": "npm run build"
+    "preexamples": "npm run build",
+    "dist-clojars": "node build-clojars.js"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",

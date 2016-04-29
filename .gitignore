@@ -19,7 +19,7 @@ coverage
 
 build
 dist
-dist-clojars
+dist-clojars/
 es5
 
 examples/jsxtransform/jsxtransform.js
