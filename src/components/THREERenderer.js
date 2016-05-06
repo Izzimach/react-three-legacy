@@ -23,7 +23,8 @@ const THREERenderer = React.createClass({
     pointerEvents: React.PropTypes.arrayOf(React.PropTypes.string),
     transparent: React.PropTypes.bool,
     disableHotLoader: React.PropTypes.bool,
-    customRender: React.PropTypes.func
+    customRender: React.PropTypes.func,
+    style: React.PropTypes.string
   },
 
   getDefaultProps() {
@@ -31,7 +32,8 @@ const THREERenderer = React.createClass({
       enableRapidRender: true,
       pixelRatio: 1,
       transparent: false,
-      disableHotLoader: false
+      disableHotLoader: false,
+      style: {}
     };
   },
 
@@ -108,7 +110,7 @@ const THREERenderer = React.createClass({
       const rapidrender = (timestamp) => {
 
         this._timestamp = timestamp;
-        if (typeof this._rAFID != 'undefined') {
+        if (typeof this._rAFID !== 'undefined') {
           this._rAFID = window.requestAnimationFrame( rapidrender );
         }
 
@@ -216,7 +218,7 @@ const THREERenderer = React.createClass({
     if (this.props.canvas) return null;
 
     // the three.js renderer will get applied to this canvas element
-    return React.createElement("canvas");
+    return React.createElement("canvas", {style: this.props.style});
   }
 });
 
