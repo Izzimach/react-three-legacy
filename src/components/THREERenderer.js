@@ -24,7 +24,7 @@ const THREERenderer = React.createClass({
     transparent: React.PropTypes.bool,
     disableHotLoader: React.PropTypes.bool,
     customRender: React.PropTypes.func,
-    style: React.PropTypes.string
+    style: React.PropTypes.object
   },
 
   getDefaultProps() {
