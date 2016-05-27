@@ -59,6 +59,8 @@ const THREERenderer = React.createClass({
     this._THREErenderer.setPixelRatio(props.pixelRatio);
     this._THREErenderer.setSize(+props.width, +props.height);
 
+    this._debugID = this._reactInternalInstance._debugID;
+
     const transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
     transaction.perform(
       this.mountAndAddChildren,
