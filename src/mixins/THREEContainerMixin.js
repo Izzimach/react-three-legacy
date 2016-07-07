@@ -10,10 +10,10 @@ var THREEContainerMixin = assign({},  ReactMultiChild.Mixin, {
     // no-op for the renderer
     if (typeof this.renderScene !== 'undefined') { return; }
     
-    //var prevChildTHREEObject3D = prevChild._mountImage; // should be a three.js Object3D
-    let prevChildTHREEObject3D = prevChild.getNativeNode();
-    //var THREEObject3D = this._THREEObject3D;
-    let THREEObject3D = this.getNativeNode();
+    let prevChildTHREEObject3D = prevChild._mountImage; // should be a three.js Object3D
+    //let prevChildTHREEObject3D = prevChild.getNativeNode();
+    let THREEObject3D = this._mountImage || this._THREEObject3D;
+    //let THREEObject3D = this.getNativeNode();
 
     var prevChildIndex = THREEObject3D.children.indexOf(prevChildTHREEObject3D);
     if (prevChildIndex !== -1) {
