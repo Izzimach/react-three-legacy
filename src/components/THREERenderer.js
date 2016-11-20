@@ -1,12 +1,12 @@
 import React from 'react';
 
 import ReactDOM from 'react-dom';
-import ReactUpdates from 'react/lib/ReactUpdates';
+import ReactUpdates from 'react-dom/lib/ReactUpdates';
 import warning from 'fbjs/lib/warning';
 import THREE from 'three';
 import THREEContainerMixin from '../mixins/THREEContainerMixin';
 
-import EventPluginHub from 'react/lib/EventPluginHub';
+import EventPluginHub from 'react-dom/lib/EventPluginHub';
 
 //
 // The 'Scene' component includes both the three.js scene and

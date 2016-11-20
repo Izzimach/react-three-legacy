@@ -1,4 +1,4 @@
-import ReactMultiChild from 'react/lib/ReactMultiChild';
+import ReactMultiChild from 'react-dom/lib/ReactMultiChild';
 import assign from 'object-assign';
 
 //

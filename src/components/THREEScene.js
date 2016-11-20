@@ -1,6 +1,6 @@
-import ReactMount from 'react/lib/ReactMount';
-import { listenTo } from 'react/lib/ReactBrowserEventEmitter';
-import EventPluginHub from 'react/lib/EventPluginHub';
+import ReactMount from 'react-dom/lib/ReactMount';
+import { listenTo } from 'react-dom/lib/ReactBrowserEventEmitter';
+import EventPluginHub from 'react-dom/lib/EventPluginHub';
 
 import THREE from 'three';
 import THREEObject3DMixin from '../mixins/THREEObject3DMixin';
