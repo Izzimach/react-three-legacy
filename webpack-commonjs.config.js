@@ -12,7 +12,9 @@ _.assign(commonjsconfig, {
   externals: [
     "three",
     "react",
-    /^react\/lib\/.+/  // any require that refers to internal react modules
+    "react-dom",
+    /^react\/lib\/.+/,  // any require that refers to internal react modules
+    /^react-dom\/lib\/.+/  // any require that refers to internal react modules
   ]
 });
 _.assign(commonjsconfig.output, {
