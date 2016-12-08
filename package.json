@@ -1,6 +1,6 @@
 {
   "name": "react-three",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Construct three.js scenes using React",
   "keywords": [
     "react",
@@ -30,8 +30,8 @@
     "object-assign": "^4.0.1"
   },
   "peerDependencies": {
-    "react": "^15.4.0",
-    "react-dom": "^15.4.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
     "three": "^0.74.0"
   },
   "devDependencies": {
