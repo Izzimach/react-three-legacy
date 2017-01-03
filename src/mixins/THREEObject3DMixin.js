@@ -39,14 +39,10 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
 
     if (typeof props.quaternion !== 'undefined') {
       THREEObject3D.quaternion.copy(props.quaternion);
-    } else {
-      THREEObject3D.quaternion.set(0,0,0,1); // no rotation
-    }
-
-    if (typeof props.rotation !== 'undefined') {
+    } else if (typeof props.rotation !== 'undefined') {
       THREEObject3D.rotation.copy(props.rotation);
     } else {
-      THREEObject3D.rotation.set(0,0,0,'XYZ'); // no rotation
+      THREEObject3D.quaternion.set(0,0,0,1); // no rotation
     }
 
     if (typeof props.visible !== 'undefined') {
