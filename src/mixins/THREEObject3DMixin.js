@@ -1,6 +1,7 @@
 import THREE from 'three';
 import assign from 'object-assign';
 import THREEContainerMixin from './THREEContainerMixin';
+import warning from 'fbjs/lib/warning';
 
 //
 // The container methods are use by both the THREEScene composite component
@@ -38,6 +39,15 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
       // prevent the matrix from being over-written on render
       // (see https://threejs.org/docs/manual/introduction/Matrix-transformations.html)
       THREEObject3D.matrixAutoUpdate = false;
+
+      warning(typeof props.position === 'undefined', "The `position` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
+      warning(typeof props.rotation === 'undefined', "The `rotation` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
+      warning(typeof props.quaternion === 'undefined', "The `quaternion` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
+      warning(typeof props.scale === 'undefined', "The `scale` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
     } else {
       if (typeof props.position !== 'undefined') {
         THREEObject3D.position.copy(props.position);
