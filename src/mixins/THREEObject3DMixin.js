@@ -1,6 +1,7 @@
 import THREE from 'three';
 import assign from 'object-assign';
 import THREEContainerMixin from './THREEContainerMixin';
+import warning from 'fbjs/lib/warning';
 
 //
 // The container methods are use by both the THREEScene composite component
@@ -30,38 +31,54 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
   },
 
   applyTHREEObject3DPropsToObject: function(THREEObject3D, oldProps, props) {
-    // these props have defaults
-    if (typeof props.position !== 'undefined') {
-      THREEObject3D.position.copy(props.position);
-    } else {
-      THREEObject3D.position.set(0,0,0);
-    }
+    // if a matrix transformation is defined, it will handle position,
+    // rotation, and scaling
+    if (typeof props.matrix !== 'undefined') {
+      THREEObject3D.matrix.copy(props.matrix);
 
-    if (typeof props.quaternion !== 'undefined') {
-      THREEObject3D.quaternion.copy(props.quaternion);
-    } else {
-      THREEObject3D.quaternion.set(0,0,0,1); // no rotation
-    }
+      // prevent the matrix from being over-written on render
+      // (see https://threejs.org/docs/manual/introduction/Matrix-transformations.html)
+      THREEObject3D.matrixAutoUpdate = false;
 
-    if (typeof props.rotation !== 'undefined') {
-      THREEObject3D.rotation.copy(props.rotation);
+      warning(typeof props.position === 'undefined', "The `position` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
+      warning(typeof props.rotation === 'undefined', "The `rotation` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
+      warning(typeof props.quaternion === 'undefined', "The `quaternion` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
+      warning(typeof props.scale === 'undefined', "The `scale` property "+
+              "of 3D objects is ignored when the `matrix` property is specified");
     } else {
-      THREEObject3D.rotation.set(0,0,0,'XYZ'); // no rotation
+      if (typeof props.position !== 'undefined') {
+        THREEObject3D.position.copy(props.position);
+      } else {
+        THREEObject3D.position.set(0,0,0);
+      }
+
+      // rotation be specified using either Euler angles or a quaternion
+      if (typeof props.rotation !== 'undefined') {
+        THREEObject3D.rotation.copy(props.rotation);
+      } else if (typeof props.quaternion !== 'undefined') {
+        THREEObject3D.quaternion.copy(props.quaternion);
+      } else {
+        THREEObject3D.quaternion.set(0,0,0,1); // no rotation
+      }
+
+      // scale supports a single number or a Vector3
+      if (typeof props.scale === "number") {
+        THREEObject3D.scale.set(props.scale, props.scale, props.scale);
+      } else if (props.scale instanceof THREE.Vector3) {
+        // copy over scale values
+        THREEObject3D.scale.copy(props.scale);
+      } else {
+        THREEObject3D.scale.set(1,1,1);
+      }
     }
 
     if (typeof props.visible !== 'undefined') {
       THREEObject3D.visible = props.visible;
     } else {
       THREEObject3D.visible = true;
-    }
-
-    if (typeof props.scale === "number") {
-      THREEObject3D.scale.set(props.scale, props.scale, props.scale);
-    } else if (props.scale instanceof THREE.Vector3) {
-      // copy over scale values
-      THREEObject3D.scale.copy(props.scale);
-    } else {
-      THREEObject3D.scale.set(1,1,1);
     }
 
     if (typeof props.up !== 'undefined') {
