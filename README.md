@@ -148,7 +148,6 @@ The `THREERenderer` component has a few extra props that aren't in the standard 
 
 * `enableRapidRender`: if set to `true` will re-render the scene every frame even if nothing was modified by React. This is for handling non-static THREE entities such as animated meshes and particle systems.
 * `background`: is the background color specified as a number, usually hex (for example `0x202020`). This basically maps to the clear color.
-* `pointerEvents`: an array of strings containing the names of events that will be processed and forwarded to objects in the scene. The code uses ray casting to find which object gets the event. For example `['onClick', 'onMouseMove']` will send mouse clicks and move events to whatever object is under the mouse. To handle events, add handler functions as props to your component with `3D` appended - so use the `onClick3D` prop to handle mouse clicks on your object. See the 'interactive' example for more details.
 * `customRender` is a user-defined function that can be used to intercept and modify the render path. It takes arguments `(renderer, scene, camera)` for each scene. Normal behavior would be to call `renderer(scene, camera)` but you can do what you want. Be sure to handle the case of multiple scenes!
 
 
@@ -157,6 +156,7 @@ Also, the `THREEScene` component has a few extra props that aren't in the standa
 * `width`, `height` : these are passed into the renderer but also need to be passed in each scene in order to configure the camera.
 * `camera`: specifies the name of the camera to use when rendering. The default is `maincamera`
 * `orbitControls`: you can specify an orbit controller (typically `THREE.OrbitControls`) for the scene. Note that this consumes mouse input so will not work well with `pointerEvents`. The 'orbitcontrols' example shows how to use this prop.
+* `pointerEvents`: an array of strings containing the names of events that will be processed and forwarded to objects in the scene. The code uses ray casting to find which object gets the event. For example `['onClick', 'onMouseMove']` will send mouse clicks and move events to whatever object is under the mouse. To handle events, add handler functions as props to your component with `3D` appended - so use the `onClick3D` prop to handle mouse clicks on your object. See the 'interactive' example for more details.
 
 
 
