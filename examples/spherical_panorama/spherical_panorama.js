@@ -51,10 +51,14 @@ var SpherePanoramaScene = React.createClass({
         );
 
         return React.createElement(
+          ReactTHREE.Renderer,
+          {width: this.props.width, height: this.props.height, background:0x202020},
+          React.createElement(
             ReactTHREE.Scene,
             sceneProps,
             mainCamera,
             sphere
+          )
         );
     }
 });
