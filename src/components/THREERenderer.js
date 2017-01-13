@@ -138,7 +138,7 @@ const THREERenderer = React.createClass({
     }
 
     if (props.width !== oldProps.width ||
-        props.width !== oldProps.height ||
+        props.height !== oldProps.height ||
         props.pixelRatio !== oldProps.pixelRatio) {
       this._THREErenderer.setSize(+props.width, +props.height);
     }
