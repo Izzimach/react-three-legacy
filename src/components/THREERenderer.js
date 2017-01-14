@@ -51,7 +51,7 @@ const THREERenderer = React.createClass({
     this._THREErenderer = new THREE.WebGLRenderer({
       alpha: this.props.transparent,
       canvas: renderelement,
-      antialias: props.antialias === undefined ? true : props.antialias
+      antialias: props.antialias === undefined ? true : props.antialias,
       ...this.props.rendererProps
     });
     this._THREErenderer.shadowMap.enabled = props.shadowMapEnabled !== undefined ? props.shadowMapEnabled : false;
