@@ -33,7 +33,8 @@ const THREERenderer = React.createClass({
       pixelRatio: 1,
       transparent: false,
       disableHotLoader: false,
-      style: {}
+      style: {},
+      rendererProps: {}
     };
   },
 
@@ -45,12 +46,13 @@ const THREERenderer = React.createClass({
     // manually mounting things in a 'createClass' component messes up react internals
     // need to fix up some fields
     this._rootNodeID = "";
-    
+
     this._customRender = this.props.customRender;
     this._THREErenderer = new THREE.WebGLRenderer({
       alpha: this.props.transparent,
       canvas: renderelement,
-      antialias: props.antialias === undefined ? true : props.antialias
+      antialias: props.antialias === undefined ? true : props.antialias,
+      ...this.props.rendererProps
     });
     this._THREErenderer.shadowMap.enabled = props.shadowMapEnabled !== undefined ? props.shadowMapEnabled : false;
     if (props.shadowMapType !== undefined) {
@@ -85,7 +87,7 @@ const THREERenderer = React.createClass({
         }
       }
     }
-    
+
     // hack for react-hot-loader
     if (!this.props.disableHotLoader &&
         renderedComponent._currentElement !== null) {
@@ -160,7 +162,7 @@ const THREERenderer = React.createClass({
       context
     );
     ReactUpdates.ReactReconcileTransaction.release(transaction);
-    
+
     // hack for react-hot-loader
     const renderedComponent = this._reactInternalInstance._renderedComponent;
     if (!this.props.disableHotLoader &&
