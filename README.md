@@ -1,8 +1,6 @@
 react-three
 ===========
 
-[![Build Status](https://travis-ci.org/Izzimach/react-three.svg?branch=master)](https://travis-ci.org/Izzimach/react-three)
-
 Create/control a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
 To use React for drawing 2D using WebGL, try [react-pixi](https://github.com/Izzimach/react-pixi).
