@@ -15,13 +15,14 @@ var MeshFactory = React.createFactory(ReactTHREE.Mesh);
 // Cupcake component is two cube meshes textured with cupcake textures
 //
 
-var boxgeometry = new THREE.SphereGeometry(15,32,32);
+var boxgeometry = new THREE.BoxGeometry(200,200,200);
 
+var textureLoader = new THREE.TextureLoader();
 var cupcaketexture = THREE.ImageUtils.loadTexture( assetpath('cupCake.png') );
 var cupcakematerial = new THREE.MeshBasicMaterial( { map: cupcaketexture } );
 
 var creamtexture = THREE.ImageUtils.loadTexture( assetpath('creamPink.png') );
-var creammaterial = new THREE.MeshBasicMaterial( { color:0xffff00});
+var creammaterial = new THREE.MeshBasicMaterial( { map: creamtexture });
 
 var Cupcake = React.createClass({
   displayName: 'Cupcake',
@@ -30,22 +31,15 @@ var Cupcake = React.createClass({
     quaternion: React.PropTypes.instanceOf(THREE.Quaternion).isRequired
   },
   render: function() {
-
-    const geometry = new THREE.SphereGeometry(5, 32, 32);
-    const material = new THREE.MeshBasicMaterial({color: 0xffff00});
-
-    const Moon = React.createElement(
-      ReactTHREE.Mesh,
-      {
-        position: new THREE.Vector3(0,0,0),
-        geometry: geometry,
-        material: material
-      }
+    return React.createElement(
+      ReactTHREE.Object3D,
+      {quaternion:this.props.quaternion, position:this.props.position || new THREE.Vector3(0,0,0)},
+      MeshFactory({position:new THREE.Vector3(0,-100,0), geometry:boxgeometry, material:cupcakematerial}),
+      MeshFactory({position:new THREE.Vector3(0, 100,0), geometry:boxgeometry, material:creammaterial})
     );
-
-    return Moon;
   }
 });
+
 
 //
 // The top level component
