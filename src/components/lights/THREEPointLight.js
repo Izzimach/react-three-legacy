@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import { createTHREEComponent } from '../../Utils';
 import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 import LightObjectMixin from '../../mixins/LightObjectMixin';

@@ -1,9 +1,8 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import { createTHREEComponent } from '../../Utils';
 import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 import LightObjectMixin from '../../mixins/LightObjectMixin';
-
-var CommonShadowmapProps = require('./CommonShadowmapProps');
+import transferCommonShadowmapProps from './CommonShadowmapProps';
 
 var THREEDirectionalLight = createTHREEComponent(
   'DirectionalLight',
@@ -16,7 +15,7 @@ var THREEDirectionalLight = createTHREEComponent(
     applySpecificTHREEProps: function(oldProps, newProps) {
       LightObjectMixin.applySpecificTHREEProps.call(this, oldProps, newProps);
 
-      this.transferTHREEObject3DPropsByName(oldProps, newProps, CommonShadowmapProps);
+      transferCommonShadowmapProps(this._THREEObject3D, newProps);
 
       this.transferTHREEObject3DPropsByName(oldProps, newProps,
                                             ['target',
@@ -41,4 +40,3 @@ var THREEDirectionalLight = createTHREEComponent(
 );
 
 export default THREEDirectionalLight;
-

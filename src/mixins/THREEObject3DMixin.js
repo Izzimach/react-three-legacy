@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import assign from 'object-assign';
 import THREEContainerMixin from './THREEContainerMixin';
 import warning from 'fbjs/lib/warning';
@@ -126,7 +126,7 @@ var THREEObject3DMixin = assign({}, THREEContainerMixin, {
     var props = this._currentElement.props;
     this._nativeParent = nativeParent;
     this._nativeContainerInfo = nativeContainerInfo;
-    
+
     /* jshint unused: vars */
     this._THREEObject3D = this.createTHREEObject(arguments);
     this._THREEObject3D.userData = this;

@@ -2,7 +2,7 @@ import ReactMount from 'react-dom/lib/ReactMount';
 import { listenTo } from 'react-dom/lib/ReactBrowserEventEmitter';
 import EventPluginHub from 'react-dom/lib/EventPluginHub';
 
-import THREE from 'three';
+import * as THREE from 'three';
 import THREEObject3DMixin from '../mixins/THREEObject3DMixin';
 import {createTHREEComponent} from '../Utils';
 
@@ -76,7 +76,7 @@ var THREEScene = createTHREEComponent(
 
       this._THREEMetaData.camera = camera;
     },
-    
+
     bindOrbitControls: function(inst, canvas, props) {
       if (props.orbitControls && typeof props.orbitControls === 'function') {
         if (!this._THREEMetaData.orbitControls && canvas) {
@@ -84,7 +84,7 @@ var THREEScene = createTHREEComponent(
         }
       }
     },
-    
+
     bindPointerEvents: function (inst, canvas, props) {
       if (props.pointerEvents) {
         if (canvas) {

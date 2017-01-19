@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import { createTHREEComponent } from '../../Utils';
 import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 import _ from 'lodash';
@@ -27,7 +27,7 @@ export default createTHREEComponent(
       // figure out which helpers to add and remove
       let helperAddTypeList = _.differenceWith(newHelperTypes, currentHelpers, (a,b) => b instanceof a);
       let helperRemoveList = _.differenceWith(currentHelpers, newHelperTypes, (a,b) => a instanceof b);
-      
+
       for (let newHelperType of helperAddTypeList) {
         let newHelper = new newHelperType(helperWrapNode);
         currentHelpers.push(newHelper);
@@ -68,7 +68,7 @@ export default createTHREEComponent(
         }
       }
     },
-    
+
     unmountComponent() {
       this.applyHelpers([]); // should remove all helpers
       THREEObject3DMixin.unmountComponent.call(this);
