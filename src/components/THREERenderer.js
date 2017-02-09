@@ -180,7 +180,6 @@ const THREERenderer = React.createClass({
         renderedComponent._currentElement !== null) {
       renderedComponent._renderedChildren = null;
     }
-    this.unmountChildren();
     EventPluginHub.deleteAllListeners(this._reactInternalInstance);
     if (typeof this._rAFID !== 'undefined') {
       window.cancelAnimationFrame(this._rAFID);
