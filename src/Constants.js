@@ -1,4 +1,4 @@
-import THREE from 'three';
+var THREE = require('three');
 
 export default {
 

@@ -1,4 +1,4 @@
-import THREE from 'three';
+var THREE = require('three');
 import { createTHREEComponent } from '../../Utils';
 import THREEObject3DMixin from '../../mixins/THREEObject3DMixin';
 import _ from 'lodash';

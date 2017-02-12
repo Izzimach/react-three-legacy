@@ -2,7 +2,7 @@ import ReactMount from 'react-dom/lib/ReactMount';
 import { listenTo } from 'react-dom/lib/ReactBrowserEventEmitter';
 import EventPluginHub from 'react-dom/lib/EventPluginHub';
 
-import THREE from 'three';
+var THREE = require('three');
 import THREEObject3DMixin from '../mixins/THREEObject3DMixin';
 import {createTHREEComponent} from '../Utils';
 
