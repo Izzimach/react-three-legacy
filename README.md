@@ -5,11 +5,14 @@ Create/control a [three.js](http://threejs.org/) canvas using [React](https://gi
 
 To use React for drawing 2D using WebGL, try [react-pixi](https://github.com/Izzimach/react-pixi).
 
-If you want a high-performance 3D renderer or automatic managing of resources like geometry and materials
-then you should look at [react-three-renderer](https://github.com/toxicFork/react-three-renderer).
-Look [here](https://github.com/toxicFork/react-three-renderer/issues/28) for more details.
+react-three works with React 15
+===============================
 
-You can view an interactive demo (hopefully) at [my github demo page](http://izzimach.github.io/demos/react-three-interactive/index.html). This demo is also available as a standalone project at [r3test](https://github.com/Izzimach/r3test/)
+If you want to render 3D scenes with React 16 (fiber) there are some other options:
+
+* [react-three-fiber](https://github.com/drcmda/react-three-fiber)
+* [react-three-renderer](https://github.com/toxicFork/react-three-renderer).
+
 
 Usage
 =====
